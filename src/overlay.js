@@ -13,7 +13,9 @@ async function styleChatOverlay(parent, options, fullscreenEnabled) {
 
   // critical section
   // moving node reloads frame (and clears style if already set)
-  videoContainer.appendChild(liveChat);
+  if (liveChat.parentNode !== videoContainer) {
+    videoContainer.appendChild(liveChat);
+  }
 
   // ...wait for iframe to reload
   const liveChatBox = await queryIFrameNode(liveChatFrame, "yt-live-chat-renderer");

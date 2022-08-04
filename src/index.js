@@ -23,6 +23,9 @@ window.onload = () => {
     const video = parent.querySelector("ytd-watch-flexy");
     registerFullscreenListener(video, fullscreenCallback);
 
+    const chatFrame = parent.querySelector("#chatframe");
+    chatFrame.onload = () => styleChatOverlay(parent, options, video.hasAttribute("fullscreen"));
+
     fullscreenCallback(false);
 
     function fullscreenCallback(fullscreenEnabled) {
