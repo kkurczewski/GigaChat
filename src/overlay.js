@@ -22,7 +22,7 @@ async function styleChatOverlay(parent, options, fullscreenEnabled) {
 
   // ...before applying style
   setChatOpacity(liveChatBox, options.opacity);
-  hideScrollbar();
+  styleScrollbar();
   hideHeader(true); // TODO config
   hideToggleButton(true); // TODO config
 
@@ -63,8 +63,16 @@ async function styleChatOverlay(parent, options, fullscreenEnabled) {
     }
   }
 
-  async function hideScrollbar() {
-     (await queryIFrameNode(liveChatFrame, "#item-scroller")).style.overflow = "hidden";
+  async function styleScrollbar() {
+     const itemScroll = await queryIFrameNode(liveChatFrame, "#item-scroller");
+     if (options.position === "left") {
+       // show scrollbar always on edge of screen
+       itemScroll.style.direction = "rtl";
+       // ...but keep chat as usual
+       itemScroll.querySelector("#items").style.direction = "ltr";
+     } else {
+       itemScroll.style.direction = "";
+     }
   }
 
   async function hideHeader(enabled) {
