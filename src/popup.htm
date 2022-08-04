@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Youtube Chat Overlay</title>
+    <link rel="stylesheet" type="text/css" href="popup.css"/>
+</head>
+<body>
+<form>
+    <label for="enabled">Enabled</label>
+    <input id="enabled" type="checkbox" checked/>
+
+    <label for="opacity">Opacity</label>
+    <input id="opacity" type="range" min="0" max="10" value="6"/>
+
+    <label for="height">Height</label>
+    <input id="height" type="range" min="0" max="10" value="6"/>
+
+    <label for="position">Position</label>
+    <div id="position">
+        <input id="positionLeft" type="radio" name="position" value="left"/>
+        <label for="positionLeft">Left</label>
+
+        <input id="positionRight" type="radio" name="position" value="right" checked/>
+        <label for="positionRight">Right</label>
+    </div>
+</form>
+<script type="text/javascript" src="popup.js"></script>
+</body>
+</html>

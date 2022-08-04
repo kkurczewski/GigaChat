@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Youtube Live Chat Overlay",
+  "version": "1.0",
+  "description": "Add live chat overlay on fullscreen video",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "host_permissions": [
+    "https://www.youtube.com/watch?v=*"
+  ],
+  "action": {
+    "default_popup": "popup.htm"
+  },
+  "content_scripts": [
+    {
+      "run_at": "document_start",
+      "matches": [
+        "https://www.youtube.com/watch?v=*"
+      ],
+      "js": [
+        "fadingPromise.js",
+        "overlay.js",
+        "index.js"
+      ]
+    }
+  ],
+  "permissions": [
+    "storage"
+  ]
+}
