@@ -76,16 +76,24 @@ async function styleChatOverlay(parent, options, fullscreenEnabled) {
   }
 
   async function hideHeader(enabled) {
+    const header = await queryIFrameNode(liveChatFrame, "yt-live-chat-header-renderer");
     if (!enabled) {
-      (await queryIFrameNode(liveChatFrame, "yt-live-chat-header-renderer")).style.display = "none";
+      header.style.display = "none";
+    } else {
+      header.style.display = "";
     }
   }
 
   async function hideToggleButton(enabled) {
+    const toggleButton = document.querySelector("#show-hide-button");
+    const separator = await queryIFrameNode(liveChatFrame, "#input-panel");
+    toggleButton.style.opacity = options.opacity;
     if (!enabled) {
-      (document.querySelector("#show-hide-button")).style.display = "none";
-      // hide 1px separator
-      (await queryIFrameNode(liveChatFrame, "#input-panel")).style.display = "none";
+      toggleButton.style.display = "none";
+      separator.style.display = "none";
+    } else {
+      toggleButton.style.display = "";
+      separator.style.display = "";
     }
   }
 
