@@ -91,15 +91,15 @@ async function styleChatOverlay(parent, options, fullscreenEnabled) {
 
   function setChatOpacity(node, opacity) {
     const backgroundColor = window.getComputedStyle(node).backgroundColor;
-    if (!backgroundColor) {
-      console.error("Couldn't extract background color for node:", node);
-      return;
-    }
     node.style.background = addTransparency(backgroundColor);
 
     function addTransparency(rgbColor) {
       // color returned from style property is string of format "rgb(xx,yy,zz)"
-      return rgbColor.replace(")", ", " + opacity + ")"); // add transparency
+      if (rgbColor.startsWith('rgba')) {
+        return rgbColor.replace(/[0-9]+[)]/, opacity + ')')
+      } else {
+        return rgbColor.replace(")", ", " + opacity + ")");
+      }
     }
   }
 
