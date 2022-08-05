@@ -15,6 +15,8 @@ window.onload = () => {
       enabled.checked = options.enabled;
       opacity.value = options.opacity * 10.0;
       height.value = options.height * 10.0;
+      header.checked = options.header;
+      toggleButton.checked = options.toggleButton;
       if (options.position != null) {
         document.querySelector(`input[name=position][value=${options.position}]`).checked = true;
       } else {
@@ -27,6 +29,8 @@ window.onload = () => {
       options.enabled = enabled.checked;
       options.opacity = opacity.value / 10.0;
       options.height = height.value / 10.0;
+      options.header = header.checked;
+      options.toggleButton = toggleButton.checked;
       options.position = document.querySelector("input[name=position][checked]").value;
       saveOptions();
 
@@ -37,6 +41,8 @@ window.onload = () => {
       enabled.oninput = event => saveProperty(event.target.id, event.target.checked);
       opacity.oninput = event => saveProperty(event.target.id, event.target.value / 10.0);
       height.oninput = event => saveProperty(event.target.id, event.target.value / 10.0);
+      header.oninput = event => saveProperty(event.target.id, event.target.checked);
+      toggleButton.oninput = event => saveProperty(event.target.id, event.target.checked);
 
       document
         .querySelectorAll("input[type=radio]")

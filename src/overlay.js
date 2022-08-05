@@ -23,8 +23,8 @@ async function styleChatOverlay(parent, options, fullscreenEnabled) {
   // ...before applying style
   setChatOpacity(liveChatBox, options.opacity);
   styleScrollbar();
-  hideHeader(true); // TODO config
-  hideToggleButton(true); // TODO config
+  hideHeader(options.header);
+  hideToggleButton(options.toggleButton);
 
   console.info("Overlay applied");
 
@@ -76,13 +76,13 @@ async function styleChatOverlay(parent, options, fullscreenEnabled) {
   }
 
   async function hideHeader(enabled) {
-    if (enabled) {
+    if (!enabled) {
       (await queryIFrameNode(liveChatFrame, "yt-live-chat-header-renderer")).style.display = "none";
     }
   }
 
   async function hideToggleButton(enabled) {
-    if (enabled) {
+    if (!enabled) {
       (document.querySelector("#show-hide-button")).style.display = "none";
       // hide 1px separator
       (await queryIFrameNode(liveChatFrame, "#input-panel")).style.display = "none";
