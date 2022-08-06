@@ -8,7 +8,7 @@ function fadingPromise(timeout, resolveConsumer) {
       if (cancel) cancel();
       clearTimeout(timeoutId);
     }
-  }).finally(finalizer);
+  }).catch(console.error).finally(finalizer);
 }
 
 function intervalCallback(interval, resolveConsumer) {

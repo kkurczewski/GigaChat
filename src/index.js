@@ -4,7 +4,7 @@ window.onload = () => {
   chrome.storage.local.get("options", data => loadOptions(data.options));
 
   chrome.storage.onChanged.addListener((changes, namespace) => {
-    loadOptions(changes.options.newValue);
+    loadOptions(changes.options.newValue).catch(console.error);
   });
 
   async function loadOptions(options) {
