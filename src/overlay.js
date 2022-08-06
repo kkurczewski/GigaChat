@@ -77,6 +77,7 @@ async function styleChatOverlay(parent, options, fullscreenEnabled) {
 
   async function hideHeader(enabled) {
     const header = await queryIFrameNode(liveChatFrame, "yt-live-chat-header-renderer");
+    header.style.opacity = Math.min(options.opacity + 0.1, 1.0);
     if (!enabled) {
       header.style.display = "none";
     } else {
@@ -87,7 +88,7 @@ async function styleChatOverlay(parent, options, fullscreenEnabled) {
   async function hideToggleButton(enabled) {
     const toggleButton = document.querySelector("#show-hide-button");
     const separator = await queryIFrameNode(liveChatFrame, "#input-panel");
-    toggleButton.style.opacity = options.opacity;
+    toggleButton.style.opacity = Math.min(options.opacity + 0.1, 1.0);
     if (!enabled) {
       toggleButton.style.display = "none";
       separator.style.display = "none";
