@@ -35,7 +35,7 @@ async function styleChatOverlay(parent, options, fullscreenEnabled) {
       top: 0,
       bottom: "65px",
       width: "33%",
-      height: "auto",
+      height: options.height === 1 ? "auto" : (options.height * 60 + 28) + '%',
       minHeight: "auto",
       margin: 0,
       border: 0,
