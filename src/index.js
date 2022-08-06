@@ -20,6 +20,11 @@ window.onload = () => {
 
     console.debug("Node listeners finished work");
 
+    if (!chat) {
+      console.debug("Didn't found a chat object, ignore settings.");
+      return;
+    }
+
     const video = parent.querySelector("ytd-watch-flexy");
     registerFullscreenListener(video, fullscreenCallback);
 
