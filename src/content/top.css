@@ -1,0 +1,29 @@
+#ytd-player #container #chat {
+      position: absolute;
+      z-index: 10;
+      top: 0;
+      bottom: 65px !important;
+      width: 33%;
+      height: auto !important;
+      min-height: auto !important;
+      margin: 0 !important;
+      border: 0;
+}
+
+#ytd-player #container #chat.left {
+      left: 0;
+      right: auto;
+}
+
+#ytd-player #container #chat.right {
+      left: auto;
+      right: 0;
+}
+
+#ytd-player #container #chat #show-hide-button {
+      opacity: calc(var(--opacity) + 0.1);
+}
+
+#ytd-player #container #chat #show-hide-button.hidden {
+      display: none;
+}

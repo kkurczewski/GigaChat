@@ -1,0 +1,24 @@
+yt-live-chat-app.overlay yt-live-chat-renderer {
+      background: rgba(var(--chat-bg-color), var(--opacity));
+}
+
+yt-live-chat-app.overlay yt-live-chat-header-renderer {
+      opacity: calc(var(--opacity) + 0.1);
+}
+
+yt-live-chat-app.overlay yt-live-chat-header-renderer.hidden {
+      display: none;
+}
+
+yt-live-chat-app.overlay #show-hide-button.hidden {
+      display: none;
+}
+
+/* 1 px separator between chat and toggle button */
+yt-live-chat-app.overlay #input-panel.hidden::after {
+      display: none;
+}
+
+yt-live-chat-app.overlay ::-webkit-scrollbar {
+      display: none;
+}

@@ -1,0 +1,64 @@
+const CSS_ROOT = ":root";
+const CHAT_FRAME_ROOT = "yt-live-chat-app";
+const CHAT_HEADER = "yt-live-chat-header-renderer";
+const CHAT_SEPARATOR = "#input-panel";
+
+const CHAT_BG_COLOR_VAR = "--yt-live-chat-background-color";
+const CHAT_BG_RAW_COLOR_VAR = "--chat-bg-color";
+const OPACITY_VAR = "--opacity";
+
+const OVERLAY_CLASS = "overlay";
+const HIDDEN_CLASS = "hidden";
+
+const STORAGE_OPTIONS = "options";
+
+window.onload = async () => {
+  const cssRoot = document.querySelector(CSS_ROOT);
+  const chatFrame = document.querySelector(CHAT_FRAME_ROOT);
+  const options = (await chrome.storage.local.get(STORAGE_OPTIONS)).options;
+
+  console.log("Loading options:", options);
+
+  chrome.storage.onChanged.addListener(changes => {
+    const options = changes.options.newValue;
+    console.log("Reloading options:", options);
+    onOptionsUpdated(options);
+  });
+
+  addChatBgColorConst();
+  onOptionsUpdated(options);
+
+  function onOptionsUpdated(options) {
+    chatFrame.classList.toggle(OVERLAY_CLASS, options.enabled);
+
+    updateOpacity();
+    updateChatHeader();
+
+    function updateChatHeader() {
+      chatFrame.querySelector(CHAT_HEADER).classList.toggle(HIDDEN_CLASS, !options.header);
+      chatFrame.querySelector(CHAT_SEPARATOR).classList.toggle(HIDDEN_CLASS, !options.toggleButton);
+    }
+
+    function updateOpacity() {
+      cssRoot.style.setProperty(OPACITY_VAR, options.opacity);
+    }
+  }
+
+  function addChatBgColorConst() {
+    const bgHex = getComputedStyle(cssRoot).getPropertyValue(CHAT_BG_COLOR_VAR).trim();
+    cssRoot.style.setProperty(CHAT_BG_RAW_COLOR_VAR, asRgbColor(bgHex));
+
+    function asRgbColor(hex) {
+      return hex
+        .replace("#", "")
+        .split(/(..)/)
+        .filter(String)
+        .map(s => parseInt(s, 16))
+        .join(',');
+    }
+  }
+}
+
+function notifyFullscreenFlag(isFullscreenEnabled) {
+  // TODO
+}
