@@ -1,37 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Youtube Chat Overlay</title>
-    <link rel="stylesheet" type="text/css" href="popup.css"/>
+    <link rel="stylesheet" type="text/css" href="popup.css" />
 </head>
+
 <body>
-Version 1.0.0<br/>
-<form>
-    <label for="enabled">Enabled</label>
-    <input id="enabled" type="checkbox" checked/>
+    <p>Version 1.1.0</p>
+    <form>
+        <label for="enabled">Enabled</label>
+        <input id="enabled" type="checkbox" checked />
 
-    <label for="opacity">Opacity</label>
-    <input id="opacity" type="range" min="0" max="10" value="6"/>
+        <label for="opacity">Opacity</label>
+        <input id="opacity" type="range" min="0" max="10" value="6" />
 
-    <label for="height">Height</label>
-    <input id="height" type="range" min="0" max="10" value="6"/>
+        <label for="height">Height</label>
+        <input id="height" type="range" min="0" max="10" value="6" />
 
-    <label for="header">Chat header</label>
-    <input id="header" type="checkbox" checked/>
+        <label for="header">Chat header</label>
+        <input id="header" type="checkbox" checked />
 
-    <label for="toggleButton">Toggle button</label>
-    <input id="toggleButton" type="checkbox" checked/>
+        <label for="toggleButton">Toggle button</label>
+        <input id="toggleButton" type="checkbox" checked />
 
-    <label for="position">Position</label>
-    <div id="position">
-        <input id="positionLeft" type="radio" name="position" value="left"/>
-        <label for="positionLeft">Left</label>
+        <label for="position">Position</label>
+        <div id="position">
+            <input id="positionLeft" type="radio" name="position" value="left" />
+            <label for="positionLeft">Left</label>
 
-        <input id="positionRight" type="radio" name="position" value="right" checked/>
-        <label for="positionRight">Right</label>
-    </div>
-</form>
-<script type="text/javascript" src="popup.js"></script>
+            <input id="positionRight" type="radio" name="position" value="right" checked />
+            <label for="positionRight">Right</label>
+        </div>
+    </form>
+    <script type="text/javascript" src="popup.js"></script>
 </body>
+
 </html>
