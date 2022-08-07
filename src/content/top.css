@@ -1,4 +1,4 @@
-#ytd-player #container #chat {
+#ytd-player #container .ytp-fullscreen + #chat {
       position: absolute;
       z-index: 10;
       top: 0;
@@ -10,20 +10,20 @@
       border: 0;
 }
 
-#ytd-player #container #chat.left {
+#ytd-player #container .ytp-fullscreen + #chat.left {
       left: 0;
       right: auto;
 }
 
-#ytd-player #container #chat.right {
+#ytd-player #container .ytp-fullscreen + #chat.right {
       left: auto;
       right: 0;
 }
 
-#ytd-player #container #chat #show-hide-button {
+#ytd-player #container .ytp-fullscreen + #chat #show-hide-button {
       opacity: calc(var(--opacity) + 0.1);
 }
 
-#ytd-player #container #chat #show-hide-button.hidden {
+#ytd-player #container .ytp-fullscreen + #chat #show-hide-button.hidden {
       display: none;
 }
