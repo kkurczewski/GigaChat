@@ -1,8 +1,9 @@
+const STORAGE_OPTIONS = "options";
+
 window.onload = () => {
-  console.debug("YLCHO started (popup)");
   const options = {};
 
-  chrome.storage.local.get("options", loadOptions);
+  chrome.storage.local.get(STORAGE_OPTIONS, loadOptions);
 
   function loadOptions(data) {
     console.debug("Load options:", data.options);
@@ -12,38 +13,57 @@ window.onload = () => {
 
     function syncForm(data) {
       Object.assign(options, data.options);
-      enabled.checked = options.enabled;
-      opacity.value = options.opacity * 10.0;
-      height.value = options.height * 10.0;
-      header.checked = options.header;
-      toggleButton.checked = options.toggleButton;
-      if (options.position != null) {
-        document.querySelector(`input[name=position][value=${options.position}]`).checked = true;
-      } else {
-        document.querySelector("input[name=position][checked]").checked = true;
-      }
+      document.querySelectorAll("input[type=checkbox]")
+        .forEach(cbox => {
+          cbox.checked = options[cbox.id];
+        });
+      document
+        .querySelectorAll("input[type=range]")
+        .forEach(slider => {
+          slider.value = options[slider.id] * 10.0;
+        });
+      document
+        .querySelectorAll("input[type=radio]")
+        .forEach(radio => {
+          if (radio.value === options[radio.name]) {
+            radio.checked = true;
+          }
+        });
       console.debug("Form synced");
     }
 
     function syncOptions() {
-      options.enabled = enabled.checked;
-      options.opacity = opacity.value / 10.0;
-      options.height = height.value / 10.0;
-      options.header = header.checked;
-      options.toggleButton = toggleButton.checked;
-      options.position = document.querySelector("input[name=position][checked]").value;
+      document
+        .querySelectorAll("input[type=checkbox]")
+        .forEach(cbox => {
+          options[cbox.id] = cbox.checked;
+        });
+      document
+        .querySelectorAll("input[type=range]")
+        .forEach(slider => {
+          options[slider.id] = slider.value / 10.0;
+        });
+      document
+        .querySelectorAll("input[type=radio][checked]")
+        .forEach(radio => {
+          options[radio.name] = radio.value;
+        });
       saveOptions();
 
       console.debug("Options synced");
     }
 
     function addListeners() {
-      enabled.oninput = event => saveProperty(event.target.id, event.target.checked);
-      opacity.oninput = event => saveProperty(event.target.id, event.target.value / 10.0);
-      height.oninput = event => saveProperty(event.target.id, event.target.value / 10.0);
-      header.oninput = event => saveProperty(event.target.id, event.target.checked);
-      toggleButton.oninput = event => saveProperty(event.target.id, event.target.checked);
-
+      document
+        .querySelectorAll("input[type=checkbox]")
+        .forEach(cbox => {
+          cbox.oninput = event => saveProperty(event.target.id, event.target.checked);
+        });
+      document
+        .querySelectorAll("input[type=range]")
+        .forEach(slider => {
+          slider.oninput = event => saveProperty(event.target.id, event.target.value / 10.0);
+        });
       document
         .querySelectorAll("input[type=radio]")
         .forEach(radioBtn => {
@@ -59,8 +79,6 @@ window.onload = () => {
 
   function saveOptions() {
     console.debug("Save options:", options);
-    chrome.storage.local.set({options});
+    chrome.storage.local.set({ options });
   }
-
-  console.debug("YLCHO initialized");
 }
