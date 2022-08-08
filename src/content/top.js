@@ -19,23 +19,22 @@ const CHAT_HEIGHT_VAR = "--chat-height";
 const STORAGE_OPTIONS = "options";
 
 window.onload = async () => {
-  const options = (await chrome.storage.local.get(STORAGE_OPTIONS)).options;
+  let options = (await chrome.storage.local.get(STORAGE_OPTIONS)).options;
   console.log("Loading options:", options);
 
   const cssRoot = document.querySelector(CSS_ROOT);
   const appRoot = document.querySelector(APP_ROOT);
 
-  const videoContainer = appRoot.querySelector(VIDEO_CONTAINER);
+  const videoContainer = await pollNode(appRoot, VIDEO_CONTAINER);
   const video = await pollNode(appRoot, VIDEO);
 
   const chat = await tryLoad(CHAT); if (!chat) return;
   const chatSibling = appRoot.querySelector(CHAT_SIBLING);
 
   setupListeners();
+  onOptionsUpdated();
 
-  onOptionsUpdated(options);
-
-  function onOptionsUpdated(options) {
+  function onOptionsUpdated() {
     updateTreePosition();
     updateCssPosition();
     updateStyleVariables();
@@ -70,6 +69,7 @@ window.onload = async () => {
         case RIGHT_CLASS:
           chat.classList.add(RIGHT_CLASS);
           chat.classList.remove(LEFT_CLASS);
+          console.debug(chat.classList);
           break;
       }
     }
@@ -84,7 +84,7 @@ window.onload = async () => {
     }
 
     function styleFrame() {
-      chatFrame.contentDocument.body.classList.toggle(OVERLAY_CLASS, overlayActive());
+      chatframe.contentDocument.body.classList.toggle(OVERLAY_CLASS, overlayActive());
     }
 
     function overlayActive() {
@@ -97,20 +97,20 @@ window.onload = async () => {
   }
 
   function setupListeners() {
+    chrome.storage.onChanged.addListener(changes => {
+      options = changes.options.newValue;
+      console.log("Reloading options:", options);
+      onOptionsUpdated();
+    });
+
     chatframe.onload = () => {
       console.debug("Frame reloaded");
-      onOptionsUpdated(options);
+      onOptionsUpdated();
     }
 
     registerAttributeObserver(video, FULLSCREEN_ATTRIBUTE, () => {
       console.log("Fullscreen toggled");
-      onOptionsUpdated(options);
-    });
-
-    chrome.storage.onChanged.addListener(changes => {
-      const options = changes.options.newValue;
-      console.log("Reloading options:", options);
-      onOptionsUpdated(options);
+      onOptionsUpdated();
     });
   }
 
