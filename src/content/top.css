@@ -24,6 +24,6 @@
       opacity: calc(var(--opacity) + 0.1);
 }
 
-.ytp-fullscreen + #chat #show-hide-button.hidden {
+.ytp-fullscreen + #chat #show-hide-button.x-hidden {
       display: none;
 }

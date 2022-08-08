@@ -7,8 +7,7 @@ const CHAT_BG_COLOR_VAR = "--yt-live-chat-background-color";
 const CHAT_BG_RAW_COLOR_VAR = "--chat-bg-color";
 const OPACITY_VAR = "--opacity";
 
-const OVERLAY_CLASS = "overlay";
-const HIDDEN_CLASS = "hidden";
+const HIDDEN_CLASS = "x-hidden";
 
 const STORAGE_OPTIONS = "options";
 
@@ -29,8 +28,6 @@ window.onload = async () => {
   onOptionsUpdated(options);
 
   function onOptionsUpdated(options) {
-    chatFrame.classList.toggle(OVERLAY_CLASS, options.enabled);
-
     updateOpacity();
     updateChatHeader();
 
@@ -57,8 +54,4 @@ window.onload = async () => {
         .join(',');
     }
   }
-}
-
-function notifyFullscreenFlag(isFullscreenEnabled) {
-  // TODO
 }

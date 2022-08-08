@@ -7,7 +7,7 @@ const VIDEO = "ytd-watch-flexy";
 const TOGGLE_BUTTON = "#show-hide-button";
 
 const OVERLAY_CLASS = "overlay";
-const HIDDEN_CLASS = "hidden";
+const HIDDEN_CLASS = "x-hidden";
 const LEFT_CLASS = "left";
 const RIGHT_CLASS = "right";
 
@@ -24,30 +24,27 @@ window.onload = async () => {
 
   const cssRoot = document.querySelector(CSS_ROOT);
   const appRoot = document.querySelector(APP_ROOT);
-  const chat = await tryLoad(CHAT); if (!chat) return;
-  const chatSibling = document.querySelector(CHAT_SIBLING);
 
-  const videoContainer = document.querySelector(VIDEO_CONTAINER);
-  const video = await tryLoad(VIDEO); if (!video) return;
+  const videoContainer = appRoot.querySelector(VIDEO_CONTAINER);
+  const video = await pollNode(appRoot, VIDEO);
+
+  const chat = await tryLoad(CHAT); if (!chat) return;
+  const chatSibling = appRoot.querySelector(CHAT_SIBLING);
+
+  setupListeners();
 
   onOptionsUpdated(options);
-  registerAttributeObserver(video, FULLSCREEN_ATTRIBUTE, () => onOptionsUpdated(options));
-
-  chrome.storage.onChanged.addListener(changes => {
-    const options = changes.options.newValue;
-    console.log("Reloading options:", options);
-    onOptionsUpdated(options);
-  });
 
   function onOptionsUpdated(options) {
     updateTreePosition();
     updateCssPosition();
     updateStyleVariables();
     updateToggleButton();
+    styleFrame();
 
     function updateTreePosition() {
       console.debug("Updating tree position:", options.enabled);
-      if (!(options.enabled && isFullscreen())) {
+      if (!overlayActive()) {
         restoreOldPosition();
       } else if (chat.parentNode !== videoContainer) {
         console.debug("Chat old parent node:", chat.parentNode);
@@ -60,10 +57,6 @@ window.onload = async () => {
           console.debug("Restoring original parent node:", originalParent);
           originalParent.insertBefore(chat, chatSibling);
         }
-      }
-
-      function isFullscreen() {
-        return video.hasAttribute(FULLSCREEN_ATTRIBUTE);
       }
     }
 
@@ -89,6 +82,36 @@ window.onload = async () => {
     function updateToggleButton() {
       chat.querySelector(TOGGLE_BUTTON).classList.toggle(HIDDEN_CLASS, !options.toggleButton);
     }
+
+    function styleFrame() {
+      chatFrame.contentDocument.body.classList.toggle(OVERLAY_CLASS, overlayActive());
+    }
+
+    function overlayActive() {
+      return options.enabled && isFullscreen();
+
+      function isFullscreen() {
+        return video.hasAttribute(FULLSCREEN_ATTRIBUTE);
+      }
+    }
+  }
+
+  function setupListeners() {
+    chatframe.onload = () => {
+      console.debug("Frame reloaded");
+      onOptionsUpdated(options);
+    }
+
+    registerAttributeObserver(video, FULLSCREEN_ATTRIBUTE, () => {
+      console.log("Fullscreen toggled");
+      onOptionsUpdated(options);
+    });
+
+    chrome.storage.onChanged.addListener(changes => {
+      const options = changes.options.newValue;
+      console.log("Reloading options:", options);
+      onOptionsUpdated(options);
+    });
   }
 
   async function tryLoad(selector) {
@@ -98,7 +121,7 @@ window.onload = async () => {
       if (e instanceof Error) {
         console.error("Failed to load", selector, e);
       } else {
-        console.warn("Failed to load", selector, e);
+        console.debug("Failed to load", selector, e);
       }
       return null;
     }

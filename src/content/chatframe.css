@@ -1,24 +1,24 @@
-yt-live-chat-app.overlay yt-live-chat-renderer {
+.overlay yt-live-chat-renderer {
       background: rgba(var(--chat-bg-color), var(--opacity));
 }
 
-yt-live-chat-app.overlay yt-live-chat-header-renderer {
+.overlay yt-live-chat-header-renderer {
       opacity: calc(var(--opacity) + 0.1);
 }
 
-yt-live-chat-app.overlay yt-live-chat-header-renderer.hidden {
+.overlay yt-live-chat-header-renderer.x-hidden {
       display: none;
 }
 
-yt-live-chat-app.overlay #show-hide-button.hidden {
+.overlay #show-hide-button.x-hidden {
       display: none;
 }
 
 /* 1 px separator between chat and toggle button */
-yt-live-chat-app.overlay #input-panel.hidden::after {
+.overlay #input-panel.x-hidden::after {
       display: none;
 }
 
-yt-live-chat-app.overlay ::-webkit-scrollbar {
+.overlay ::-webkit-scrollbar {
       display: none;
 }
