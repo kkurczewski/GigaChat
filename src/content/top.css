@@ -1,4 +1,4 @@
-.ytp-fullscreen + #chat {
+#ytd-player #container #chat {
       position: absolute;
       z-index: 10;
       top: 0;
@@ -10,20 +10,20 @@
       border: 0;
 }
 
-.ytp-fullscreen + #chat.left {
+#ytd-player #container #chat.left {
       left: 0;
       right: auto;
 }
 
-.ytp-fullscreen + #chat.right {
+#ytd-player #container #chat.right {
       left: auto;
       right: 0;
 }
 
-.ytp-fullscreen + #chat #show-hide-button {
+#ytd-player #container #chat #show-hide-button {
       opacity: calc(var(--opacity) + 0.1);
 }
 
-.ytp-fullscreen + #chat #show-hide-button.x-hidden {
+#ytd-player #container #chat #show-hide-button.x-hidden {
       display: none;
 }

@@ -46,7 +46,7 @@ window.onload = async () => {
       if (!overlayActive()) {
         restoreOldPosition();
       } else if (chat.parentNode !== videoContainer) {
-        console.debug("Chat old parent node:", chat.parentNode);
+        console.debug("Moving chat, old parent:", chat.parentNode);
         videoContainer.appendChild(chat);
       }
 
@@ -88,7 +88,7 @@ window.onload = async () => {
     }
 
     function overlayActive() {
-      return options.enabled && isFullscreen();
+      return options.enabled && (options.preview || isFullscreen());
 
       function isFullscreen() {
         return video.hasAttribute(FULLSCREEN_ATTRIBUTE);
