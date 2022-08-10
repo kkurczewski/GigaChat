@@ -66,7 +66,7 @@ window.onload = () => {
         });
       document.querySelectorAll("input[type=range]")
         .forEach(slider => {
-          slider.oninput = event => saveProperty(event.target.id, event.target.value0);
+          slider.oninput = event => saveProperty(event.target.id, event.target.value);
         });
       addCustomListeners();
 
