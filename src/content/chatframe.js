@@ -1,6 +1,6 @@
 const CSS_ROOT = ":root";
 const CHAT_FRAME_ROOT = "yt-live-chat-app";
-const CHAT_HEADER = "yt-live-chat-header-renderer";
+const CHAT_MESSAGES = "#chat-messages";
 const CHAT_SEPARATOR = "#input-panel";
 
 const CHAT_BG_COLOR_VAR = "--yt-live-chat-background-color";
@@ -32,7 +32,7 @@ window.onload = async () => {
     updateChatHeader();
 
     function updateChatHeader() {
-      chatFrame.querySelector(CHAT_HEADER).classList.toggle(HIDDEN_CLASS, !options.header);
+      chatFrame.querySelector(CHAT_MESSAGES).classList.toggle(HIDDEN_CLASS, !options.header);
       chatFrame.querySelector(CHAT_SEPARATOR).classList.toggle(HIDDEN_CLASS, !options.toggleButton);
     }
 

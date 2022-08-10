@@ -6,11 +6,11 @@
       opacity: calc(var(--opacity) + 0.1);
 }
 
-.overlay yt-live-chat-header-renderer.x-hidden {
+.overlay #chat-messages.x-hidden yt-live-chat-header-renderer {
       display: none;
 }
 
-.overlay #show-hide-button.x-hidden {
+.overlay #chat-messages.x-hidden #separator {
       display: none;
 }
 
