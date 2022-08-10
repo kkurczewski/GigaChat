@@ -20,7 +20,7 @@ window.onload = () => {
       document
         .querySelectorAll("input[type=range]")
         .forEach(slider => {
-          slider.value = options[slider.id] * 10.0;
+          slider.value = options[slider.id];
         });
       document
         .querySelectorAll("input[type=radio]")
@@ -41,7 +41,7 @@ window.onload = () => {
       document
         .querySelectorAll("input[type=range]")
         .forEach(slider => {
-          options[slider.id] = slider.value / 10.0;
+          options[slider.id] = slider.value;
         });
       document
         .querySelectorAll("input[type=radio][checked]")
@@ -60,15 +60,30 @@ window.onload = () => {
           cbox.oninput = event => saveProperty(event.target.id, event.target.checked);
         });
       document
-        .querySelectorAll("input[type=range]")
-        .forEach(slider => {
-          slider.oninput = event => saveProperty(event.target.id, event.target.value / 10.0);
-        });
-      document
         .querySelectorAll("input[type=radio]")
         .forEach(radioBtn => {
           radioBtn.oninput = (event) => saveProperty(event.target.name, event.target.value);
         });
+      document.querySelectorAll("input[type=range]")
+        .forEach(slider => {
+          slider.oninput = event => saveProperty(event.target.id, event.target.value0);
+        });
+      addCustomListeners();
+
+      function addCustomListeners() {
+        chatHeight.oninput = event => {
+          const newValue = event.target.value;
+          topMargin.value = Math.min(1.0 - newValue, topMargin.value);
+          saveProperty(event.target.id, newValue);
+          saveProperty(topMargin.id, topMargin.value);
+        };
+        topMargin.oninput = event => {
+          const newValue = event.target.value;
+          chatHeight.value = Math.min(1.0 - newValue, chatHeight.value);
+          saveProperty(event.target.id, newValue);
+          saveProperty(chatHeight.id, chatHeight.value);
+        };
+      }
 
       function saveProperty(nodeId, nodeValue) {
         options[nodeId] = nodeValue;
