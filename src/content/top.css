@@ -1,12 +1,13 @@
 #ytd-player #container #chat {
+      --minChatHeight: 30%;
+      --maxBottomMargin: calc(100% - var(--minChatHeight));
+      --playerBar: 55px;
       position: absolute;
-      z-index: 10;
-      top: var(--top-margin, 0%);
-      bottom: 55px !important;
+      bottom: calc(min(var(--bottom-margin), var(--maxBottomMargin)) + var(--playerBar)) !important;
+      height: calc(max(var(--chat-height), var(--minChatHeight)) - var(--playerBar)) !important;
+      min-height: 33% !important;
       width: 33%;
-      /* progress bar has 51px of height so bottom margin has to be greater */
-      height: calc(var(--chat-height, 100%) - 55px) !important;
-      min-height: auto !important;
+      z-index: 10;
       margin: 0 !important;
       border: 0;
 }

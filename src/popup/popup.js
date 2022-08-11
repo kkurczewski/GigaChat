@@ -64,24 +64,19 @@ window.onload = () => {
         .forEach(radioBtn => {
           radioBtn.oninput = (event) => saveProperty(event.target.name, event.target.value);
         });
-      document.querySelectorAll("input[type=range]")
-        .forEach(slider => {
-          slider.oninput = event => saveProperty(event.target.id, event.target.value);
-        });
-      addCustomListeners();
+      document
+        .querySelectorAll("input[type=range]")
+        .forEach(slider => applySliderListener(slider));
 
-      function addCustomListeners() {
-        chatHeight.oninput = event => {
+      function applySliderListener(slider) {
+        const convolute = document.getElementById(slider.dataset.convolute);
+        slider.oninput = event => {
           const newValue = event.target.value;
-          topMargin.value = Math.min(1.0 - newValue, topMargin.value);
           saveProperty(event.target.id, newValue);
-          saveProperty(topMargin.id, topMargin.value);
-        };
-        topMargin.oninput = event => {
-          const newValue = event.target.value;
-          chatHeight.value = Math.min(1.0 - newValue, chatHeight.value);
-          saveProperty(event.target.id, newValue);
-          saveProperty(chatHeight.id, chatHeight.value);
+          if (convolute) {
+            convolute.value = Math.min(slider.max - newValue, convolute.value);
+            saveProperty(convolute.id, convolute.value);
+          }
         };
       }
 
