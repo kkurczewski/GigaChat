@@ -4,6 +4,7 @@
 
 .overlay yt-live-chat-header-renderer {
       opacity: calc(var(--opacity) + 0.1);
+      z-index: 1;
 }
 
 .overlay #chat-messages.x-hidden yt-live-chat-header-renderer {
