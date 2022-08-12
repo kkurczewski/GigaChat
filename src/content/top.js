@@ -14,7 +14,7 @@ const RIGHT_CLASS = "right";
 const FULLSCREEN_ATTRIBUTE = "fullscreen";
 
 const OPACITY_VAR = "--opacity";
-const CHAT_HEIGHT_VAR = "--chat-height";
+const TOP_MARGIN_VAR = "--top-margin";
 const BOTTOM_MARGIN_VAR = "--bottom-margin";
 
 const STORAGE_OPTIONS = "options";
@@ -77,8 +77,8 @@ window.onload = async () => {
 
     function updateStyleVariables() {
       cssRoot.style.setProperty(OPACITY_VAR, options.opacity);
-      cssRoot.style.setProperty(CHAT_HEIGHT_VAR, options.chatHeight + "%");
-      cssRoot.style.setProperty(BOTTOM_MARGIN_VAR, options.topMargin + "%");
+      cssRoot.style.setProperty(TOP_MARGIN_VAR, options.topMargin + "%");
+      cssRoot.style.setProperty(BOTTOM_MARGIN_VAR, options.bottomMargin + "%");
     }
 
     function updateToggleButton() {

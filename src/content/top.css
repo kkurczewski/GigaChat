@@ -1,11 +1,13 @@
 #ytd-player #container #chat {
-      --minChatHeight: 30%;
-      --maxBottomMargin: calc(100% - var(--minChatHeight));
-      --playerBar: 55px;
+      --player-bar: 55px;
+      --min-height-ratio: 0.3;
+      --total-margin-ratio: calc(1 - var(--min-height-ratio));
+
       position: absolute;
-      bottom: calc(min(var(--bottom-margin), var(--maxBottomMargin)) + var(--playerBar)) !important;
-      height: calc(max(var(--chat-height), var(--minChatHeight)) - var(--playerBar)) !important;
-      min-height: 33% !important;
+      top: max(calc(var(--total-margin-ratio) * var(--top-margin, 0%) - var(--player-bar)), 0%);
+      bottom: max(calc(var(--total-margin-ratio) * var(--bottom-margin, 0%)), var(--player-bar));
+      height: auto;
+      min-height: auto !important;
       width: 33%;
       z-index: 10;
       margin: 0 !important;
