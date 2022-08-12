@@ -7,6 +7,10 @@
       z-index: 1;
 }
 
+.overlay #live-chat-message-input {
+      background: rgba(var(--chat-input-bg-color), calc(var(--opacity) + 0.1));
+}
+
 .overlay #chat-messages.x-hidden yt-live-chat-header-renderer {
       display: none;
 }

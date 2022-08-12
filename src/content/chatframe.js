@@ -4,7 +4,11 @@ const CHAT_MESSAGES = "#chat-messages";
 const CHAT_SEPARATOR = "#input-panel";
 
 const CHAT_BG_COLOR_VAR = "--yt-live-chat-background-color";
+const CHAT_INPUT_BG_COLOR_VAR = "--yt-spec-brand-background-primary"
+
 const CHAT_BG_RAW_COLOR_VAR = "--chat-bg-color";
+const CHAT_INPUT_BG_RAW_COLOR_VAR = "--chat-input-bg-color";
+
 const OPACITY_VAR = "--opacity";
 
 const HIDDEN_CLASS = "x-hidden";
@@ -25,6 +29,7 @@ window.onload = async () => {
   });
 
   addChatBgColorConst();
+  addChatInputBgColorConst();
   onOptionsUpdated(options);
 
   function onOptionsUpdated(options) {
@@ -52,6 +57,18 @@ window.onload = async () => {
         .filter(String)
         .map(s => parseInt(s, 16))
         .join(',');
+    }
+  }
+
+  function addChatInputBgColorConst() {
+    const bgRgba = getComputedStyle(cssRoot).getPropertyValue(CHAT_INPUT_BG_COLOR_VAR).trim();
+    cssRoot.style.setProperty(CHAT_INPUT_BG_RAW_COLOR_VAR, asRgbColor(bgRgba));
+
+    function asRgbColor(rgba) {
+      return rgba
+        .replace("rgba(", "")
+        .replace(/,[^,]*[)]/, "")
+        .trim();
     }
   }
 }
