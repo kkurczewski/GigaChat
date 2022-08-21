@@ -24,6 +24,10 @@
       display: none;
 }
 
+.overlay #menu.yt-live-chat-text-message-renderer {
+      background: none;
+}
+
 .overlay ::-webkit-scrollbar {
       display: none;
 }
