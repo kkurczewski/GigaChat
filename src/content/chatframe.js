@@ -3,7 +3,7 @@ const CHAT_FRAME_ROOT = "yt-live-chat-app";
 const CHAT = "#chat-messages";
 const CHAT_SEPARATOR = "#input-panel";
 const CHAT_HEADER_MENU = "#trigger #label";
-const CHAT_HEADER_OPTION = "#menu a:not(.iron-selected)";
+const CHAT_HEADER_OPTIONS = "#menu a";
 const CHAT_INPUT = "#input-panel"
 
 const CHAT_MSG_BG_COLOR = "--yt-live-chat-background-color";
@@ -14,6 +14,9 @@ const RAW_COLOR_POSTFIX = "-raw";
 const OPACITY_VAR = "--opacity";
 
 const HIDDEN_CLASS = "x-hidden";
+
+const TOP_CHAT_MODE = "topChat";
+const LIVE_CHAT_MODE = "liveChat";
 
 const STORAGE_OPTIONS = "options";
 
@@ -40,11 +43,18 @@ window.onload = async () => {
     updateChatInput();
 
     function updateChatMode() {
-      if (options.liveChat) {
-        const chatMenu = chatFrame.querySelector(CHAT_HEADER_MENU);
-        if (chatMenu.innerText === 'Top chat replay') {
-          chatMenu.click();
-          chatFrame.querySelector(CHAT_HEADER_OPTION).click();
+      const chatMenu = chatFrame.querySelector(CHAT_HEADER_MENU);
+      chatMenu.click();
+
+      const index = getOptionIndex(options.chatMode);
+      chatFrame.querySelectorAll(CHAT_HEADER_OPTIONS)[index].click();
+
+      function getOptionIndex(chatMode) {
+        switch (chatMode) {
+          case TOP_CHAT_MODE:
+            return 0;
+          case LIVE_CHAT_MODE:
+            return 1;
         }
       }
     }
