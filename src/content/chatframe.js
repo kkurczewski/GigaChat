@@ -6,11 +6,10 @@ const CHAT_HEADER_MENU = "#trigger #label";
 const CHAT_HEADER_OPTION = "#menu a:not(.iron-selected)";
 const CHAT_INPUT = "#input-panel"
 
-const CHAT_BG_COLOR_VAR = "--yt-live-chat-background-color";
-const CHAT_INPUT_BG_COLOR_VAR = "--yt-spec-brand-background-primary"
-
-const CHAT_BG_RAW_COLOR_VAR = "--chat-bg-color";
-const CHAT_INPUT_BG_RAW_COLOR_VAR = "--chat-input-bg-color";
+const CHAT_MSG_BG_COLOR = "--yt-live-chat-background-color";
+const CHAT_INPUT_BG_COLOR = "--yt-spec-brand-background-primary"
+const CHAT_HIGHLIGHT_MSG_BG_COLOR = "--yt-live-chat-message-highlight-background-color";
+const RAW_COLOR_POSTFIX = "-raw";
 
 const OPACITY_VAR = "--opacity";
 
@@ -31,8 +30,7 @@ window.onload = async () => {
     onOptionsUpdated(options);
   });
 
-  addChatBgColorConst();
-  addChatInputBgColorConst();
+  createRawColors();
   onOptionsUpdated(options);
 
   function onOptionsUpdated(options) {
@@ -65,29 +63,38 @@ window.onload = async () => {
     }
   }
 
-  function addChatBgColorConst() {
-    const bgHex = getComputedStyle(cssRoot).getPropertyValue(CHAT_BG_COLOR_VAR).trim();
-    cssRoot.style.setProperty(CHAT_BG_RAW_COLOR_VAR, asRgbColor(bgHex));
+  function createRawColors() {
+    [
+      CHAT_MSG_BG_COLOR,
+      CHAT_INPUT_BG_COLOR,
+      CHAT_HIGHLIGHT_MSG_BG_COLOR,
+    ].forEach(createRawColorProperty);
 
-    function asRgbColor(hex) {
-      return hex
-        .replace("#", "")
-        .split(/(..)/)
-        .filter(String)
-        .map(s => parseInt(s, 16))
-        .join(',');
-    }
-  }
+    function createRawColorProperty(property) {
+      const color = getComputedStyle(cssRoot).getPropertyValue(property).trim();
+      cssRoot.style.setProperty(property + RAW_COLOR_POSTFIX, extractRawColor(color));
 
-  function addChatInputBgColorConst() {
-    const bgRgba = getComputedStyle(cssRoot).getPropertyValue(CHAT_INPUT_BG_COLOR_VAR).trim();
-    cssRoot.style.setProperty(CHAT_INPUT_BG_RAW_COLOR_VAR, asRgbColor(bgRgba));
+      function extractRawColor(color) {
+        return color.startsWith("#")
+          ? extractRawColorFromHex(color)
+          : extractRawColorFromRgb(color);
 
-    function asRgbColor(rgba) {
-      return rgba
-        .replace("rgba(", "")
-        .replace(/,[^,]*[)]/, "")
-        .trim();
+        function extractRawColorFromHex(hexColor) {
+          return hexColor
+            .replace("#", "")
+            .split(/(..)/)
+            .filter(String)
+            .map(s => parseInt(s, 16))
+            .join(',');
+        }
+
+        function extractRawColorFromRgb(rgbColor) {
+          return rgbColor
+            .replace("rgba(", "")
+            .replace(/,[^,]*[)]/, "")
+            .trim();
+        }
+      }
     }
   }
 }
