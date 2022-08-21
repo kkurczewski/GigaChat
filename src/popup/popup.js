@@ -23,11 +23,9 @@ window.onload = () => {
           slider.value = options[slider.id];
         });
       document
-        .querySelectorAll("input[type=radio]")
-        .forEach(radio => {
-          if (radio.value === options[radio.name]) {
-            radio.checked = true;
-          }
+        .querySelectorAll("select")
+        .forEach(select => {
+          select.value = options[select.id];
         });
       console.debug("Form synced");
     }
@@ -44,9 +42,9 @@ window.onload = () => {
           options[slider.id] = slider.value;
         });
       document
-        .querySelectorAll("input[type=radio][checked]")
-        .forEach(radio => {
-          options[radio.name] = radio.value;
+        .querySelectorAll("select")
+        .forEach(select => {
+          options[select.id] = select.value;
         });
       saveOptions();
 
@@ -60,9 +58,9 @@ window.onload = () => {
           cbox.oninput = event => saveProperty(event.target.id, event.target.checked);
         });
       document
-        .querySelectorAll("input[type=radio]")
-        .forEach(radioBtn => {
-          radioBtn.oninput = (event) => saveProperty(event.target.name, event.target.value);
+        .querySelectorAll("select")
+        .forEach(select => {
+          select.onchange = (event) => saveProperty(event.target.id, event.target.value);
         });
       document
         .querySelectorAll("input[type=range]")
