@@ -32,8 +32,9 @@
       display: none;
 }
 
+/* gradient background visible on hover */
 .overlay #menu.yt-live-chat-text-message-renderer {
-      background: none;
+      background: none !important;
 }
 
 .overlay ::-webkit-scrollbar {
