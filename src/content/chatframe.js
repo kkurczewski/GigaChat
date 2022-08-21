@@ -1,9 +1,10 @@
 const CSS_ROOT = ":root";
 const CHAT_FRAME_ROOT = "yt-live-chat-app";
-const CHAT_MESSAGES = "#chat-messages";
+const CHAT = "#chat-messages";
 const CHAT_SEPARATOR = "#input-panel";
 const CHAT_HEADER_MENU = "#trigger #label";
 const CHAT_HEADER_OPTION = "#menu a:not(.iron-selected)";
+const CHAT_INPUT = "#input-panel"
 
 const CHAT_BG_COLOR_VAR = "--yt-live-chat-background-color";
 const CHAT_INPUT_BG_COLOR_VAR = "--yt-spec-brand-background-primary"
@@ -38,6 +39,7 @@ window.onload = async () => {
     updateOpacity();
     updateChatHeader();
     updateChatMode();
+    updateChatInput();
 
     function updateChatMode() {
       if (options.liveChat) {
@@ -50,8 +52,12 @@ window.onload = async () => {
     }
 
     function updateChatHeader() {
-      chatFrame.querySelector(CHAT_MESSAGES).classList.toggle(HIDDEN_CLASS, !options.header);
+      chatFrame.querySelector(CHAT).classList.toggle(HIDDEN_CLASS, !options.header);
       chatFrame.querySelector(CHAT_SEPARATOR).classList.toggle(HIDDEN_CLASS, !options.toggleButton);
+    }
+
+    function updateChatInput() {
+      chatFrame.querySelector(CHAT_INPUT).classList.toggle(HIDDEN_CLASS, !options.chatInput);
     }
 
     function updateOpacity() {

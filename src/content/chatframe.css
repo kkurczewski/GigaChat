@@ -19,6 +19,10 @@
       display: none;
 }
 
+.overlay #input-panel.x-hidden {
+      display: none;
+}
+
 /* 1 px separator between chat and toggle button */
 .overlay #input-panel.x-hidden::after {
       display: none;
