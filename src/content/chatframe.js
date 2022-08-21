@@ -2,6 +2,8 @@ const CSS_ROOT = ":root";
 const CHAT_FRAME_ROOT = "yt-live-chat-app";
 const CHAT_MESSAGES = "#chat-messages";
 const CHAT_SEPARATOR = "#input-panel";
+const CHAT_HEADER_MENU = "#trigger #label";
+const CHAT_HEADER_OPTION = "#menu a:not(.iron-selected)";
 
 const CHAT_BG_COLOR_VAR = "--yt-live-chat-background-color";
 const CHAT_INPUT_BG_COLOR_VAR = "--yt-spec-brand-background-primary"
@@ -35,6 +37,17 @@ window.onload = async () => {
   function onOptionsUpdated(options) {
     updateOpacity();
     updateChatHeader();
+    updateChatMode();
+
+    function updateChatMode() {
+      if (options.liveChat) {
+        const chatMenu = chatFrame.querySelector(CHAT_HEADER_MENU);
+        if (chatMenu.innerText === 'Top chat replay') {
+          chatMenu.click();
+          chatFrame.querySelector(CHAT_HEADER_OPTION).click();
+        }
+      }
+    }
 
     function updateChatHeader() {
       chatFrame.querySelector(CHAT_MESSAGES).classList.toggle(HIDDEN_CLASS, !options.header);
