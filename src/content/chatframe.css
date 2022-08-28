@@ -6,6 +6,10 @@
       background: rgba(var(--yt-live-chat-message-highlight-background-color-raw), var(--opacity));
 }
 
+.overlay yt-live-chat-ticker-renderer {
+      background: rgba(var(--yt-live-chat-header-background-color-raw), var(--opacity));
+}
+
 .overlay yt-live-chat-header-renderer {
       background: rgba(var(--yt-spec-brand-background-primary-raw), var(--opacity));
 }

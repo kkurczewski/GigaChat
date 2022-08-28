@@ -9,6 +9,7 @@ const CHAT_INPUT = "#input-panel"
 const CHAT_MSG_BG_COLOR = "--yt-live-chat-background-color";
 const CHAT_INPUT_BG_COLOR = "--yt-spec-brand-background-primary"
 const CHAT_HIGHLIGHT_MSG_BG_COLOR = "--yt-live-chat-message-highlight-background-color";
+const CHAT_HEADER_COLOR = "--yt-live-chat-header-background-color"
 const RAW_COLOR_POSTFIX = "-raw";
 
 const OPACITY_VAR = "--opacity";
@@ -78,6 +79,7 @@ window.onload = async () => {
       CHAT_MSG_BG_COLOR,
       CHAT_INPUT_BG_COLOR,
       CHAT_HIGHLIGHT_MSG_BG_COLOR,
+      CHAT_HEADER_COLOR,
     ].forEach(createRawColorProperty);
 
     function createRawColorProperty(property) {
