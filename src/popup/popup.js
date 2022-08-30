@@ -7,11 +7,10 @@ window.onload = () => {
 
   function loadOptions(data) {
     console.debug("Load options:", data.options);
-    if (data.options) syncForm(data);
-    else syncOptions();
+    syncForm();
     addListeners();
 
-    function syncForm(data) {
+    function syncForm() {
       Object.assign(options, data.options);
       document.querySelectorAll("input[type=checkbox]")
         .forEach(cbox => {
@@ -28,27 +27,6 @@ window.onload = () => {
           select.value = options[select.id];
         });
       console.debug("Form synced");
-    }
-
-    function syncOptions() {
-      document
-        .querySelectorAll("input[type=checkbox]")
-        .forEach(cbox => {
-          options[cbox.id] = cbox.checked;
-        });
-      document
-        .querySelectorAll("input[type=range]")
-        .forEach(slider => {
-          options[slider.id] = slider.value;
-        });
-      document
-        .querySelectorAll("select")
-        .forEach(select => {
-          options[select.id] = select.value;
-        });
-      saveOptions();
-
-      console.debug("Options synced");
     }
 
     function addListeners() {
