@@ -1,13 +1,20 @@
+/* chat */
 .overlay yt-live-chat-renderer {
       background: rgba(var(--yt-live-chat-background-color-raw), var(--opacity));
 }
 
+/* streamer message */
 .overlay yt-live-chat-text-message-renderer[author-is-owner] {
-      background: rgba(var(--yt-live-chat-message-highlight-background-color-raw), var(--opacity));
+      background: transparent;
 }
 
 .overlay yt-live-chat-ticker-renderer {
       background: rgba(var(--yt-live-chat-header-background-color-raw), var(--opacity));
+}
+
+/* welcome message card */
+.overlay #card {
+      display: none !important;
 }
 
 .overlay yt-live-chat-header-renderer {
@@ -15,7 +22,7 @@
 }
 
 .overlay #live-chat-message-input {
-      background: rgba(var(--yt-spec-brand-background-primary-raw), calc(var(--opacity) + 0.1));
+      background: transparent;
 }
 
 .overlay #chat-messages.x-hidden yt-live-chat-header-renderer {
