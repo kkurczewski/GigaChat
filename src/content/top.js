@@ -2,7 +2,7 @@ const CSS_ROOT = ":root";
 const APP_ROOT = "ytd-app";
 const CHAT = "#chat";
 const CHAT_SIBLING = "#chat-template";
-const VIDEO_CONTAINER = "#ytd-player #container";
+const VIDEO_CONTAINER = "#ytd-player #container #movie_player";
 const VIDEO = "ytd-watch-flexy";
 const TOGGLE_BUTTON = "#show-hide-button";
 
