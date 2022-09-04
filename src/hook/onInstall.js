@@ -12,7 +12,7 @@ const DEFAULT_OPTIONS = {
     chatInput: true,
 };
 
-chrome.runtime.onInstalled.addListener(details => {
+chrome.runtime.onInstalled.addListener(_details => {
     chrome.storage.local.set({ [STORAGE_OPTIONS]: DEFAULT_OPTIONS });
     console.log("Loaded default options");
 });

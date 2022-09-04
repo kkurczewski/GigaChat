@@ -29,15 +29,15 @@ window.onload = async () => {
   console.log("Loading options:", options);
 
   chrome.storage.onChanged.addListener(changes => {
-    const options = changes.options.newValue;
-    console.log("Reloading options:", options);
-    onOptionsUpdated(options);
+    const updatedOptions = changes.options.newValue;
+    console.log("Reloading options:", updatedOptions);
+    loadOptions(updatedOptions);
   });
 
   createRawColors();
-  onOptionsUpdated(options);
+  loadOptions(options);
 
-  function onOptionsUpdated(options) {
+  function loadOptions(options) {
     updateOpacity();
     updateChatHeader();
     updateChatMode();

@@ -19,7 +19,14 @@ const BOTTOM_MARGIN_VAR = "--bottom-margin";
 
 const STORAGE_OPTIONS = "options";
 
-window.onload = async () => {
+window.addEventListener("onload", applyOverlay);
+window.addEventListener("yt-navigate-start", cleanupStaleOverlay);
+window.addEventListener("yt-navigate-finish", applyOverlay);
+
+async function applyOverlay() {
+  if (window.location.pathname !== "/watch") {
+    return;
+  }
   let options = (await chrome.storage.local.get(STORAGE_OPTIONS)).options;
   console.log("Loading options:", options);
 
@@ -33,9 +40,9 @@ window.onload = async () => {
   const chatSibling = appRoot.querySelector(CHAT_SIBLING);
 
   setupListeners();
-  onOptionsUpdated();
+  loadOptions();
 
-  function onOptionsUpdated() {
+  function loadOptions() {
     updateTreePosition();
     updateCssPosition();
     updateStyleVariables();
@@ -102,17 +109,17 @@ window.onload = async () => {
     chrome.storage.onChanged.addListener(changes => {
       options = changes.options.newValue;
       console.log("Reloading options:", options);
-      onOptionsUpdated();
+      loadOptions();
     });
 
     chatframe.onload = () => {
       console.debug("Frame reloaded");
-      onOptionsUpdated();
+      loadOptions();
     }
 
     registerAttributeObserver(video, FULLSCREEN_ATTRIBUTE, () => {
       console.log("Fullscreen toggled");
-      onOptionsUpdated();
+      loadOptions();
     });
   }
 
@@ -127,5 +134,13 @@ window.onload = async () => {
       }
       return null;
     }
+  }
+}
+
+function cleanupStaleOverlay() {
+  const chat = document.querySelector(CHAT);
+  if (chat != null) {
+    console.debug("Removing stale chat");
+    chat.remove();
   }
 }

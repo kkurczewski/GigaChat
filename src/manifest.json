@@ -9,7 +9,7 @@
     "128": "icons/icon128.png"
   },
   "host_permissions": [
-    "https://www.youtube.com/watch?v=*"
+    "https://www.youtube.com/*"
   ],
   "action": {
     "default_popup": "popup/index.html"
@@ -20,7 +20,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.youtube.com/watch?v=*"
+        "https://www.youtube.com/*"
       ],
       "js": [
         "util/fadingPromise.js",
