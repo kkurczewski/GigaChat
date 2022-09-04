@@ -140,7 +140,15 @@ async function applyOverlay() {
 function cleanupStaleOverlay() {
   const chat = document.querySelector(CHAT);
   if (chat != null) {
-    console.debug("Removing stale chat");
-    chat.remove();
+    restoreOldPosition();
+  }
+
+  function restoreOldPosition() {
+    const chatSibling = document.querySelector(CHAT_SIBLING);
+    const originalParent = chatSibling.parentNode;
+    if (chat.parentNode !== originalParent) {
+      console.debug("Restoring original parent node:", originalParent);
+      originalParent.insertBefore(chat, chatSibling);
+    }
   }
 }
