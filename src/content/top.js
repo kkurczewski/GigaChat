@@ -36,13 +36,13 @@ async function applyOverlay() {
   const videoContainer = await pollNode(appRoot, VIDEO_CONTAINER);
   const video = await pollNode(appRoot, VIDEO);
 
-  const chat = await tryLoad(CHAT); if (!chat) return;
-  const chatSibling = appRoot.querySelector(CHAT_SIBLING);
-
   setupListeners();
   loadOptions();
 
-  function loadOptions() {
+  async function loadOptions() {
+    const chat = await tryLoad(CHAT); if (!chat) return;
+    const chatSibling = appRoot.querySelector(CHAT_SIBLING);
+    
     updateTreePosition();
     updateCssPosition();
     updateStyleVariables();
