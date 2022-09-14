@@ -1,6 +1,7 @@
 const CSS_ROOT = ":root";
 const APP_ROOT = "ytd-app";
 const CHAT = "#chat";
+const CHAT_FRAME = "#chatframe";
 const CHAT_SIBLING = "#chat-template";
 const VIDEO_CONTAINER = "#ytd-player #container #movie_player";
 const VIDEO = "ytd-watch-flexy";
@@ -105,22 +106,23 @@ async function applyOverlay() {
     }
   }
 
-  function setupListeners() {
+  async function setupListeners() {
     chrome.storage.onChanged.addListener(changes => {
       options = changes.options.newValue;
       console.log("Reloading options:", options);
       loadOptions();
     });
 
-    chatframe.onload = () => {
-      console.debug("Frame reloaded");
-      loadOptions();
-    }
-
     registerAttributeObserver(video, FULLSCREEN_ATTRIBUTE, () => {
       console.log("Fullscreen toggled");
       loadOptions();
     });
+
+    const chatFrame = await tryLoad(CHAT_FRAME); if (!chatFrame) return;
+    chatFrame.onload = () => {
+      console.debug("Frame reloaded");
+      loadOptions();
+    }
   }
 
   async function tryLoad(selector) {
