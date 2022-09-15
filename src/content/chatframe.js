@@ -24,11 +24,11 @@ window.onload = async () => {
   const chatFrame = document.querySelector(CHAT_FRAME_ROOT);
   const options = (await chrome.storage.local.get(STORAGE_OPTIONS)).options;
 
-  console.log("Loading options:", options);
+  logger.info("Loading options:", options);
 
   chrome.storage.onChanged.addListener(changes => {
     const updatedOptions = changes.options.newValue;
-    console.log("Reloading options:", updatedOptions);
+    logger.info("Reloading options:", updatedOptions);
     loadOptions(updatedOptions);
   });
 

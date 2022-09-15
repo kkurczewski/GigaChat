@@ -20,28 +20,33 @@ const BOTTOM_MARGIN_VAR = "--bottom-margin";
 
 const STORAGE_OPTIONS = "options";
 
-window.addEventListener("onload", applyOverlay);
+window.addEventListener("onload", () => applyOverlay("onload"));
 window.addEventListener("yt-navigate-start", cleanupStaleOverlay);
-window.addEventListener("yt-navigate-finish", applyOverlay);
+window.addEventListener("yt-navigate-finish", () => applyOverlay("navigate-finish"));
 
-async function applyOverlay() {
+async function applyOverlay(reason) {
+  logger.debug(`applyOverlay(${reason})`);
   if (window.location.pathname !== "/watch") {
+    logger.debug("Not video page, skipping...");
     return;
   }
   let options = (await chrome.storage.local.get(STORAGE_OPTIONS)).options;
-  console.log("Loading options:", options);
 
+  logger.group("Await nodes");
+  logger.info(options);
   const cssRoot = document.querySelector(CSS_ROOT);
   const appRoot = document.querySelector(APP_ROOT);
 
-  const videoContainer = await pollNode(appRoot, VIDEO_CONTAINER);
-  const video = await pollNode(appRoot, VIDEO);
+  const videoContainer = await awaitNode(appRoot, VIDEO_CONTAINER);
+  const video = await awaitNode(appRoot, VIDEO);
+  logger.groupEnd();
 
   setupListeners();
-  loadOptions();
+  updateOverlay(reason);
 
-  async function loadOptions() {
-    const chat = await tryLoad(CHAT); if (!chat) return;
+  async function updateOverlay(reason) {
+    logger.group(`Update overlay(${reason})`);
+    const chat = await awaitNode(appRoot, CHAT, false); if (!chat) return;
     const chatSibling = appRoot.querySelector(CHAT_SIBLING);
     
     updateTreePosition();
@@ -49,27 +54,26 @@ async function applyOverlay() {
     updateStyleVariables();
     updateToggleButton();
     styleFrame();
+    logger.groupEnd();
 
     function updateTreePosition() {
-      console.debug("Updating tree position:", options.enabled);
       if (!overlayActive()) {
         restoreOldPosition();
       } else if (chat.parentNode !== videoContainer) {
-        console.debug("Moving chat, old parent:", chat.parentNode);
+        logger.debug("Moving chat, old parent:", chat.parentNode);
         videoContainer.appendChild(chat);
       }
 
       function restoreOldPosition() {
         const originalParent = chatSibling.parentNode;
         if (chat.parentNode !== originalParent) {
-          console.debug("Restoring original parent node:", originalParent);
+          logger.debug("Restoring original parent node:", originalParent);
           originalParent.insertBefore(chat, chatSibling);
         }
       }
     }
 
     function updateCssPosition() {
-      console.debug("Update position:", options.position);
       switch (options.position) {
         case LEFT_CLASS:
           chat.classList.add(LEFT_CLASS);
@@ -78,7 +82,6 @@ async function applyOverlay() {
         case RIGHT_CLASS:
           chat.classList.add(RIGHT_CLASS);
           chat.classList.remove(LEFT_CLASS);
-          console.debug(chat.classList);
           break;
       }
     }
@@ -109,32 +112,14 @@ async function applyOverlay() {
   async function setupListeners() {
     chrome.storage.onChanged.addListener(changes => {
       options = changes.options.newValue;
-      console.log("Reloading options:", options);
-      loadOptions();
+      updateOverlay("optionsChanged");
     });
 
-    registerAttributeObserver(video, FULLSCREEN_ATTRIBUTE, () => {
-      console.log("Fullscreen toggled");
-      loadOptions();
-    });
+    attributeMutationsListener(video, FULLSCREEN_ATTRIBUTE, () => updateOverlay("fullscreenToggled"));
 
-    const chatFrame = await tryLoad(CHAT_FRAME); if (!chatFrame) return;
-    chatFrame.onload = () => {
-      console.debug("Frame reloaded");
-      loadOptions();
-    }
-  }
-
-  async function tryLoad(selector) {
-    try {
-      return await pollNode(appRoot, selector);
-    } catch (e) {
-      if (e instanceof Error) {
-        console.error("Failed to load", selector, e);
-      } else {
-        console.debug("Failed to load", selector, e);
-      }
-      return null;
+    const chatFrame = await awaitNode(appRoot, CHAT_FRAME, false);
+    if (chatFrame) {
+      chatFrame.onload = () => updateOverlay("frameReloaded");
     }
   }
 }
@@ -149,7 +134,7 @@ function cleanupStaleOverlay() {
     const chatSibling = document.querySelector(CHAT_SIBLING);
     const originalParent = chatSibling.parentNode;
     if (chat.parentNode !== originalParent) {
-      console.debug("Restoring original parent node:", originalParent);
+      logger.debug("Restoring original parent node:", originalParent);
       originalParent.insertBefore(chat, chatSibling);
     }
   }
