@@ -24,7 +24,17 @@ window.addEventListener("onload", () => applyOverlay("onload"));
 window.addEventListener("yt-navigate-start", cleanupStaleOverlay);
 window.addEventListener("yt-navigate-finish", () => applyOverlay("navigate-finish"));
 
-async function applyOverlay(reason) {
+function applyOverlay(reason) {
+  try {
+    const traceId = randomId();
+    _applyOverlay(traceId, reason);
+  } catch (e) {
+    logger.info(`[${traceId}]`, e);
+  }
+}
+
+async function _applyOverlay(traceId, reason) {
+  logger.debug(`Trace id: ${traceId}`);
   logger.debug(`applyOverlay(${reason})`);
   if (window.location.pathname !== "/watch") {
     logger.debug("Not video page, skipping...");
@@ -39,22 +49,32 @@ async function applyOverlay(reason) {
 
   const videoContainer = await awaitNode(appRoot, VIDEO_CONTAINER);
   const video = await awaitNode(appRoot, VIDEO);
+  const chat = await awaitNode(appRoot, CHAT, false); if (!chat) return;
+  const chatFrame = await awaitNode(appRoot, CHAT_FRAME);
+  const chatSibling = appRoot.querySelector(CHAT_SIBLING);
+
+  chat.classList.toggle(traceId);
   logger.groupEnd();
 
   setupListeners();
   updateOverlay(reason);
 
   async function updateOverlay(reason) {
-    logger.group(`Update overlay(${reason})`);
-    const chat = await awaitNode(appRoot, CHAT, false); if (!chat) return;
-    const chatSibling = appRoot.querySelector(CHAT_SIBLING);
-    
-    updateTreePosition();
-    updateCssPosition();
-    updateStyleVariables();
-    updateToggleButton();
-    styleFrame();
-    logger.groupEnd();
+    try {
+      const chatNodes = document.querySelectorAll(CHAT);
+      logger.debug(`[${traceId}] updateOverlay`, chatNodes, Array.from(chatNodes)
+        .map(el => "chat: " + el.className + ", parent: " + el.parentNode.classList));
+      logger.group(`Update overlay(${reason})`);
+
+      updateStyleVariables();
+      updateCssPosition();
+      updateToggleButton();
+      styleFrame();
+      updateTreePosition();
+      logger.groupEnd();
+    } catch (e) {
+      console.error(traceId, e);
+    }
 
     function updateTreePosition() {
       if (!overlayActive()) {
@@ -97,7 +117,7 @@ async function applyOverlay(reason) {
     }
 
     function styleFrame() {
-      chatframe.contentDocument.body.classList.toggle(OVERLAY_CLASS, overlayActive());
+      chatFrame.contentDocument.body.classList.toggle(OVERLAY_CLASS, overlayActive());
     }
 
     function overlayActive() {
@@ -117,10 +137,7 @@ async function applyOverlay(reason) {
 
     attributeMutationsListener(video, FULLSCREEN_ATTRIBUTE, () => updateOverlay("fullscreenToggled"));
 
-    const chatFrame = await awaitNode(appRoot, CHAT_FRAME, false);
-    if (chatFrame) {
-      chatFrame.onload = () => updateOverlay("frameReloaded");
-    }
+    chatFrame.onload = () => updateOverlay("frameReloaded");
   }
 }
 
@@ -129,6 +146,7 @@ function cleanupStaleOverlay() {
   if (chat != null) {
     restoreOldPosition();
   }
+  logger.debug(`[${traceId}] cleanuStaleOverlay`, document.querySelectorAll(CHAT));
 
   function restoreOldPosition() {
     const chatSibling = document.querySelector(CHAT_SIBLING);
