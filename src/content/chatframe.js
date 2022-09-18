@@ -4,10 +4,11 @@ const CHAT = "#chat-messages";
 const CHAT_SEPARATOR = "#input-panel";
 const CHAT_HEADER_MENU = "#trigger #label";
 const CHAT_HEADER_OPTIONS = "#menu a";
-const CHAT_INPUT = "#input-panel"
+const CHAT_INPUT = "#input-panel";
 
 const CHAT_MSG_BG_COLOR = "--yt-live-chat-background-color";
-const CHAT_HEADER_COLOR = "--yt-live-chat-header-background-color"
+const CHAT_HEADER_COLOR = "--yt-live-chat-header-background-color";
+
 const RAW_COLOR_POSTFIX = "-raw";
 
 const OPACITY_VAR = "--opacity";
