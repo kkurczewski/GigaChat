@@ -14,5 +14,5 @@ const DEFAULT_OPTIONS = {
 
 chrome.runtime.onInstalled.addListener(_details => {
     chrome.storage.local.set({ [STORAGE_OPTIONS]: DEFAULT_OPTIONS });
-    logger.log("Loaded default options");
+    console.log("Loaded default options");
 });

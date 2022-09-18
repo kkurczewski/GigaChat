@@ -6,7 +6,7 @@ window.onload = () => {
   chrome.storage.local.get(STORAGE_OPTIONS, loadOptions);
 
   function loadOptions(data) {
-    logger.debug("Load options:", data.options);
+    console.debug("Load options:", data.options);
     syncForm();
     addListeners();
 
@@ -26,7 +26,7 @@ window.onload = () => {
         .forEach(select => {
           select.value = options[select.id];
         });
-      logger.debug("Form synced");
+      console.debug("Form synced");
     }
 
     function addListeners() {
@@ -64,7 +64,7 @@ window.onload = () => {
   }
 
   function saveOptions() {
-    logger.debug("Save options:", options);
+    console.debug("Save options:", options);
     chrome.storage.local.set({ options });
   }
 }
