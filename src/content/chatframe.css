@@ -12,13 +12,49 @@
       background: rgba(var(--yt-live-chat-header-background-color-raw), var(--opacity));
 }
 
+/* banner shadow */
+.overlay yt-live-chat-banner-manager[has-active-banner] {
+      background: none !important;
+}
+
+/* banner background image */
+.overlay yt-live-interactivity-component-background {
+      opacity: var(--opacity);
+}
+
 /* welcome message card */
-.overlay #card {
+.overlay #card.yt-live-chat-viewer-engagement-message-renderer {
       display: none !important;
 }
 
+/* donate card */
+.overlay #card #header.yt-live-chat-paid-message-renderer {
+      /* color is defined outside root css hence hardcoded directly here */
+      --yt-live-chat-paid-message-header-background-color-raw: 0, 191, 165;
+      background: rgba(var(--yt-live-chat-paid-message-header-background-color-raw), var(--opacity));
+}
+
+/* donate card */
+.overlay #card #content.yt-live-chat-paid-message-renderer {
+      /* color is defined outside root css hence hardcoded directly here */
+      --yt-live-chat-paid-message-background-color-raw: 29, 233, 182;
+      background-color: rgba(var(--yt-live-chat-paid-message-background-color-raw), var(--opacity));
+}
+
+/* donate card */
+.overlay #card #header.yt-live-chat-paid-message-renderer #header-content #menu {
+      background: none !important;
+}
+
+/* donate card gradient background visible on hover */
 .overlay yt-live-chat-header-renderer {
       background: rgba(var(--yt-spec-brand-background-primary-raw), var(--opacity));
+}
+
+/* donate expiration bar */
+.overlay #ticker.yt-live-chat-renderer {
+      /* style is updated by script hence it is easier to hide rather than applying regular opacity */
+      display: none;
 }
 
 .overlay #live-chat-message-input {

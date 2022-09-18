@@ -1,5 +1,5 @@
 #ytd-player #container #chat {
-      --player-bar: 55px;
+      --player-bar: 60px;
       --min-height-ratio: 0.3;
       --total-margin-ratio: calc(1 - var(--min-height-ratio));
 
