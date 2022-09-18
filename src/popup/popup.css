@@ -1,6 +1,7 @@
 html {
   background-color: #f6f6f6;
   color: #484848;
+  width: 200px;
 }
 
 #version {
@@ -14,7 +15,7 @@ input {
 }
 
 input[type=range] {
-  width: 75px;
+  width: 90px;
 }
 
 input[type=checkbox] {
