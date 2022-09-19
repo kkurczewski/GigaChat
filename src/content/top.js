@@ -21,7 +21,6 @@ const BOTTOM_MARGIN_VAR = "--bottom-margin";
 const STORAGE_OPTIONS = "options";
 
 window.addEventListener("onload", () => applyOverlay("onload"));
-window.addEventListener("yt-navigate-start", cleanupStaleOverlay);
 window.addEventListener("yt-navigate-finish", () => applyOverlay("navigate-finish"));
 
 function applyOverlay(reason) {
@@ -40,6 +39,8 @@ async function _applyOverlay(traceId, reason) {
     logger.debug("Not video page, skipping...");
     return;
   }
+  window.addEventListener("yt-navigate-start", cleanupStaleOverlay(traceId));
+
   let options = (await chrome.storage.local.get(STORAGE_OPTIONS)).options;
 
   logger.group("Await nodes");
@@ -141,12 +142,12 @@ async function _applyOverlay(traceId, reason) {
   }
 }
 
-function cleanupStaleOverlay() {
+function cleanupStaleOverlay(traceId) {
+  logger.debug(`[${traceId}] cleanupStaleOverlay`, document.querySelectorAll(CHAT));
   const chat = document.querySelector(CHAT);
   if (chat != null) {
     restoreOldPosition();
   }
-  logger.debug(`[${traceId}] cleanuStaleOverlay`, document.querySelectorAll(CHAT));
 
   function restoreOldPosition() {
     const chatSibling = document.querySelector(CHAT_SIBLING);
