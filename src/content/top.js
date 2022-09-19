@@ -41,7 +41,8 @@ async function _applyOverlay(traceId, reason) {
   }
   window.addEventListener("yt-navigate-start", cleanupStaleOverlay(traceId));
 
-  let options = (await chrome.storage.local.get(STORAGE_OPTIONS)).options;
+  let {options} = await chrome.storage.local.get(STORAGE_OPTIONS);
+  logger.assert(options != null);
 
   logger.group("Await nodes");
   logger.info(options);
