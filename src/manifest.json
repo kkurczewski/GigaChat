@@ -23,7 +23,6 @@
         "https://www.youtube.com/*"
       ],
       "js": [
-        "util/logger.js",
         "util/fadingPromise.js",
         "util/nodeObservers.js",
         "util/awaitNode.js",
@@ -40,7 +39,6 @@
         "https://www.youtube.com/live_chat_replay?continuation=*"
       ],
       "js": [
-        "util/logger.js",
         "content/chatframe.js"
       ],
       "css": [

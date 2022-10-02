@@ -1,7 +1,7 @@
 const awaitNode = async (parent, selector, required = true, timeout = 15_000) => {
-    const awaitId = randomId();
-    logger.group(selector);
-    logger.time(selector);
+    const awaitGroup = `Await ${selector}`;
+    console.group(awaitGroup);
+    console.time(`Query ${selector}`);
 
     try {
         return await fadingPromise(timeout, callback);
@@ -9,18 +9,22 @@ const awaitNode = async (parent, selector, required = true, timeout = 15_000) =>
         if (required) {
             throw e;
         }
-        logger.info(e);
+        console.info(e);
     } finally {
-        logger.timeEnd(selector);
-        logger.groupEnd(selector);
+        console.timeEnd(`Query ${selector}`);
+        console.groupEnd(awaitGroup);
     }
 
     function callback(resolve) {
-        const cancel = elementInsertedCallback(parent, selector, resolve);
+        const cancel = elementInsertedCallback(parent, selector, (node) => {
+            resolve(node);
+            console.debug("Resolved promise using observer");
+        });
         const node = parent.querySelector(selector);
         if (node) {
-            resolve(node);
             cancel();
+            resolve(node);
+            console.debug("Resolved promise using selector");
         }
         return cancel;
     }

@@ -7,7 +7,7 @@
  */
 function fadingPromise(timeout, callback) {
   const promiseId = randomId();
-  logger.debug(`Starting promise [${promiseId}]`);
+  console.debug(`Starting promise [${promiseId}]`);
 
   let tearDown;
   return new Promise((resolve, reject) => {
@@ -17,7 +17,7 @@ function fadingPromise(timeout, callback) {
     tearDown = () => {
       if (cancel) cancel();
       clearTimeout(timeoutId);
-      logger.debug(`Promise [${promiseId}] finished`);
+      console.debug(`Promise [${promiseId}] finished`);
     }
   }).finally(tearDown);
 }
@@ -31,11 +31,11 @@ function fadingPromise(timeout, callback) {
 function intervalCallback(interval, callback) {
   return resolve => {
     const intervalId = setInterval(() => callback(resolve), interval);
-    logger.debug(`Started interval callback [${intervalId}]`);
+    console.debug(`Started interval callback [${intervalId}]`);
 
     return () => {
       clearTimeout(intervalId);
-      logger.debug(`"Started interval callback [${intervalId}]`);
+      console.debug(`"Started interval callback [${intervalId}]`);
     }
   }
 }

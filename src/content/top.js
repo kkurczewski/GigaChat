@@ -20,142 +20,216 @@ const BOTTOM_MARGIN_VAR = "--bottom-margin";
 
 const STORAGE_OPTIONS = "options";
 
-window.addEventListener("onload", () => applyOverlay("onload"));
-window.addEventListener("yt-navigate-finish", () => applyOverlay("navigate-finish"));
+const randomId = () => (37e16 * Math.random() + 37e16).toString(32);
 
-function applyOverlay(reason) {
-  try {
-    const traceId = randomId();
-    _applyOverlay(traceId, reason);
-  } catch (e) {
-    logger.info(`[${traceId}]`, e);
-  }
-}
+let currentTaskId = randomId();
+let previousTaskId = currentTaskId;
+let cleanupNeeded = false;
+let stopFullscreenObserver = null;
 
-async function _applyOverlay(traceId, reason) {
-  logger.debug(`Trace id: ${traceId}`);
-  logger.debug(`applyOverlay(${reason})`);
-  if (window.location.pathname !== "/watch") {
-    logger.debug("Not video page, skipping...");
+console.log(prefix("Initialize extension"));
+window.addEventListener("yt-navigate-start", onNavigationStarted);
+window.addEventListener("yt-navigate-finish", onNavigationFinished);
+onPageChanged();
+
+async function onPageChanged() {
+  const isVideo = isVideoPage();
+  console.log(prefix("Is Youtube video?"), isVideo);
+  if (!isVideo) {
     return;
   }
-  window.addEventListener("yt-navigate-start", cleanupStaleOverlay(traceId));
+  let { options } = await chrome.storage.local.get(STORAGE_OPTIONS);
+  prepareOverlay();
 
-  let {options} = await chrome.storage.local.get(STORAGE_OPTIONS);
-  logger.assert(options != null);
-
-  logger.group("Await nodes");
-  logger.info(options);
-  const cssRoot = document.querySelector(CSS_ROOT);
-  const appRoot = document.querySelector(APP_ROOT);
-
-  const videoContainer = await awaitNode(appRoot, VIDEO_CONTAINER);
-  const video = await awaitNode(appRoot, VIDEO);
-  const chat = await awaitNode(appRoot, CHAT, false); if (!chat) return;
-  const chatFrame = await awaitNode(appRoot, CHAT_FRAME);
-  const chatSibling = appRoot.querySelector(CHAT_SIBLING);
-
-  chat.classList.toggle(traceId);
-  logger.groupEnd();
-
-  setupListeners();
-  updateOverlay(reason);
-
-  async function updateOverlay(reason) {
-    try {
-      const chatNodes = document.querySelectorAll(CHAT);
-      logger.debug(`[${traceId}] updateOverlay`, chatNodes, Array.from(chatNodes)
-        .map(el => "chat: " + el.className + ", parent: " + el.parentNode.classList));
-      logger.group(`Update overlay(${reason})`);
-
-      updateStyleVariables();
-      updateCssPosition();
-      updateToggleButton();
-      styleFrame();
-      updateTreePosition();
-      logger.groupEnd();
-    } catch (e) {
-      console.error(traceId, e);
+  async function prepareOverlay() {
+    const isEnabled = options.enabled;
+    console.log(prefix("Is overlay enabled?"), isEnabled);
+    if (!options.enabled) {
+      return;
     }
 
-    function updateTreePosition() {
-      if (!overlayActive()) {
-        restoreOldPosition();
-      } else if (chat.parentNode !== videoContainer) {
-        logger.debug("Moving chat, old parent:", chat.parentNode);
-        videoContainer.appendChild(chat);
+    console.groupCollapsed(prefix("Prepare overlay"));
+    console.time(prefix("Prepare overlay"));
+    const appRoot = document.querySelector(APP_ROOT);
+    const chat = await queryNode(appRoot, CHAT, false);
+
+    console.log(prefix("Has live chat?"), chat != null);
+    if (!chat) {
+      return;
+    }
+
+    const chatFrame = await queryNode(appRoot, CHAT_FRAME);
+
+    updateStyles();
+
+    const videoContainer = await queryNode(appRoot, VIDEO_CONTAINER);
+    const video = await queryNode(appRoot, VIDEO);
+    console.timeEnd(prefix("Prepare overlay"));
+    console.groupEnd(prefix("Prepare overlay"));
+
+    toggleOverlay();
+    setupListeners();
+
+    function toggleOverlay() {
+      if (shouldEnableOverlay()) {
+        console.groupCollapsed(prefix("Apply overlay"));
+        chat.classList.add(currentTaskId);
+        updateTreePosition();
+        console.debug(prefix("Output state"), chat);
+        console.groupEnd(prefix("Apply overlay"));
+
+        cleanupNeeded = true;
+      } else {
+        console.log(prefix("Is cleanup needed?"), cleanupNeeded);
+        if (cleanupNeeded) {
+          cleanupOverlay();
+        }
       }
 
-      function restoreOldPosition() {
-        const originalParent = chatSibling.parentNode;
-        if (chat.parentNode !== originalParent) {
-          logger.debug("Restoring original parent node:", originalParent);
-          originalParent.insertBefore(chat, chatSibling);
+      function updateTreePosition() {
+        console.info(prefix("Moving chat node"));
+        const chatParent = chat.parentNode;
+        videoContainer.appendChild(chat);
+        console.debug(prefix("Moved chat [from] -> [to]"), chatParent, videoContainer);
+      }
+    }
+
+    function updateStyles() {
+      console.log(prefix("Update styles"));
+      updateStyleVariables();
+      updateCssChat();
+
+      function updateStyleVariables() {
+        const cssRoot = document.querySelector(CSS_ROOT);
+        cssRoot.style.setProperty(OPACITY_VAR, options.opacity);
+        cssRoot.style.setProperty(TOP_MARGIN_VAR, options.topMargin + "%");
+        cssRoot.style.setProperty(BOTTOM_MARGIN_VAR, options.bottomMargin + "%");
+      }
+
+      function updateCssChat() {
+        updateCssPosition();
+        updateToggleButton();
+
+        function updateCssPosition() {
+          switch (options.position) {
+            case LEFT_CLASS:
+              chat.classList.add(LEFT_CLASS);
+              chat.classList.remove(RIGHT_CLASS);
+              break;
+            case RIGHT_CLASS:
+              chat.classList.add(RIGHT_CLASS);
+              chat.classList.remove(LEFT_CLASS);
+              break;
+          }
+        }
+
+        function updateToggleButton() {
+          chat.querySelector(TOGGLE_BUTTON).classList.toggle(HIDDEN_CLASS, !options.toggleButton);
         }
       }
     }
 
-    function updateCssPosition() {
-      switch (options.position) {
-        case LEFT_CLASS:
-          chat.classList.add(LEFT_CLASS);
-          chat.classList.remove(RIGHT_CLASS);
-          break;
-        case RIGHT_CLASS:
-          chat.classList.add(RIGHT_CLASS);
-          chat.classList.remove(LEFT_CLASS);
-          break;
+    function setupListeners() {
+      chatFrame.onload = (event) => {
+        console.groupCollapsed(prefix("Styling iframe"));
+        const chatFrame = event.target;
+        const chatFrameBody = chatFrame.contentDocument.body;
+        chatFrameBody.classList.toggle(OVERLAY_CLASS, shouldEnableOverlay());
+        console.debug(prefix("Output"), chatFrame, chatFrameBody);
+        console.groupEnd(prefix("Styling iframe"));
+      };
+
+      stopFullscreenObserver = attributeMutationsListener(video, FULLSCREEN_ATTRIBUTE, (enabled) => {
+        console.debug(prefix(`Fullscreen ${enabled ? "enabled" : "disabled"}`));
+
+        toggleOverlay();
+      });
+
+      chrome.storage.onChanged.addListener(changes => {
+        console.debug(prefix("Previous options"), options);
+        options = changes.options.newValue;
+        console.log(prefix("Options changed"), options);
+        updateStyles();
+        toggleOverlay();
+      });
+    }
+
+    async function queryNode(parent, selector, required) {
+      const groupLabel = prefix(`Await ${selector} node`);
+      console.groupCollapsed(groupLabel);
+      const node = await awaitNode(parent, selector, required);
+      console.groupEnd(groupLabel);
+      return node;
+    }
+
+    function shouldEnableOverlay() {
+      const isFullscreen = isFullscreenEnabled();
+      console.log(prefix("Is fullscreen active?"), isFullscreen);
+      if (!isFullscreen) {
+        const isPreviewEnabled = options.preview;
+        console.log(prefix("Is preview enabled?"), isPreviewEnabled);
+        if (!isPreviewEnabled) {
+          return false;
+        }
       }
-    }
+      return true;
 
-    function updateStyleVariables() {
-      cssRoot.style.setProperty(OPACITY_VAR, options.opacity);
-      cssRoot.style.setProperty(TOP_MARGIN_VAR, options.topMargin + "%");
-      cssRoot.style.setProperty(BOTTOM_MARGIN_VAR, options.bottomMargin + "%");
-    }
-
-    function updateToggleButton() {
-      chat.querySelector(TOGGLE_BUTTON).classList.toggle(HIDDEN_CLASS, !options.toggleButton);
-    }
-
-    function styleFrame() {
-      chatFrame.contentDocument.body.classList.toggle(OVERLAY_CLASS, overlayActive());
-    }
-
-    function overlayActive() {
-      return options.enabled && (options.preview || isFullscreen());
-
-      function isFullscreen() {
+      function isFullscreenEnabled() {
         return video.hasAttribute(FULLSCREEN_ATTRIBUTE);
       }
     }
   }
 
-  async function setupListeners() {
-    chrome.storage.onChanged.addListener(changes => {
-      options = changes.options.newValue;
-      updateOverlay("optionsChanged");
-    });
-
-    attributeMutationsListener(video, FULLSCREEN_ATTRIBUTE, () => updateOverlay("fullscreenToggled"));
-
-    chatFrame.onload = () => updateOverlay("frameReloaded");
+  function isVideoPage() {
+    return window.location.pathname === "/watch";
   }
 }
 
-function cleanupStaleOverlay(traceId) {
-  logger.debug(`[${traceId}] cleanupStaleOverlay`, document.querySelectorAll(CHAT));
-  const chat = document.querySelector(CHAT);
-  if (chat != null) {
-    restoreOldPosition();
+function cleanupOverlay() {
+  console.groupCollapsed(prefix("Cleanup overlay"));
+
+  if (stopFullscreenObserver != null) {
+    stopFullscreenObserver();
   }
 
-  function restoreOldPosition() {
-    const chatSibling = document.querySelector(CHAT_SIBLING);
-    const originalParent = chatSibling.parentNode;
-    if (chat.parentNode !== originalParent) {
-      logger.debug("Restoring original parent node:", originalParent);
-      originalParent.insertBefore(chat, chatSibling);
-    }
+  const chatSibling = document.querySelector(CHAT_SIBLING);
+  console.info(prefix("Chat sibling found?"), chatSibling != null);
+
+  const chat = document.querySelector(CHAT);
+  console.info(prefix("Chat found?"), chat != null);
+
+  console.info(prefix("Moving chat node"));
+  const previousParent = chat.parentNode;
+  const originalParent = chatSibling.parentNode;
+  originalParent.insertBefore(chat, chatSibling);
+  console.debug(prefix("Moved chat [from] -> [to]"), previousParent, originalParent);
+  console.debug(prefix("Output state"), chat);
+
+  console.groupEnd(prefix("Cleanup overlay"));
+
+  cleanupNeeded = false;
+}
+
+function onNavigationStarted() {
+  assignNewTaskId();
+  if (cleanupNeeded) {
+    cleanupOverlay();
   }
+
+  function assignNewTaskId() {
+    const oldTaskId = currentTaskId;
+    currentTaskId = randomId();
+    console.log(`[${oldTaskId} -> ${currentTaskId}] Reassign task id`);
+  }
+}
+
+function onNavigationFinished() {
+  if (previousTaskId !== currentTaskId) {
+    onPageChanged();
+    previousTaskId = currentTaskId;
+  }
+}
+
+function prefix(message) {
+  return `[${currentTaskId}] ${message}`;
 }

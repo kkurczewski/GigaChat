@@ -1,46 +1,71 @@
 
 function classMutationsListener(observedNode, elementSelector, listener) {
+    let canceled = false;
     const observerId = randomId();
     const observer = new MutationObserver(onNewMutations);
 
-    logger.debug(`Starting endless observer [${observerId}] for class [${elementSelector}]`);
+    console.debug(`Starting endless observer [${observerId}] for class [${elementSelector}]`);
     observer.observe(observedNode, {
         attributes: true,
         attributeFilter: ["class"],
     });
 
+    return disconnect;
+
     function onNewMutations(mutations) {
-        logger.trace(`Observer [${observerId}] detected class mutation`);
+        console.debug(`Observer [${observerId}] detected class mutation`);
         const matches = mutations.some(mutation => mutation.target.matches(elementSelector));
-        logger.trace(`Observer [${observerId}] will trigger callback with [${matches}]`);
+        console.debug(`Observer [${observerId}] will trigger callback with [${matches}]`);
         listener(matches);
+    }
+
+    function disconnect() {
+        if (canceled) {
+            return;
+        }
+        canceled = true;
+        observer.disconnect();
+        console.debug(`Disconnected observer [${observerId}]`);
     }
 }
 
 function attributeMutationsListener(observedNode, attribute, listener) {
+    let canceled = false;
     const observerId = randomId();
     const observer = new MutationObserver(onNewMutations);
 
-    logger.debug(`Starting endless observer [${observerId}] for attribute [${attribute}]`);
+    console.debug(`Starting endless observer [${observerId}] for attribute [${attribute}]`);
     observer.observe(observedNode, {
         attributes: true,
         attributeFilter: [attribute],
     });
 
+    return disconnect;
+
     function onNewMutations(mutations) {
-        logger.trace(`Observer [${observerId}] detected attribute mutation`);
+        console.debug(`Observer [${observerId}] detected attribute mutation`);
         const matches = mutations.some(mutation => mutation.target.hasAttribute(attribute));
-        logger.trace(`Observer [${observerId}] will trigger callback with [${matches}]`);
+        console.debug(`Observer [${observerId}] will trigger callback with [${matches}]`);
         listener(matches);
+    }
+
+    function disconnect() {
+        if (canceled) {
+            return;
+        }
+        canceled = true;
+        observer.disconnect();
+        console.debug(`Disconnected observer [${observerId}]`);
     }
 }
 
 // TODO try to use query selector in order to find nodes instead checking nodes by hand
 function elementInsertedCallback(observedNode, elementSelector, callback) {
+    let canceled = false;
     const observerId = randomId();
     const observer = new MutationObserver(onNewMutations);
 
-    logger.debug(`Starting one-shot observer [${observerId}] for selector [${elementSelector}]`);
+    console.debug(`Starting one-shot observer [${observerId}] for selector [${elementSelector}]`);
     observer.observe(observedNode, {
         subtree: true,
         childList: true,
@@ -49,7 +74,7 @@ function elementInsertedCallback(observedNode, elementSelector, callback) {
     return disconnect;
 
     function onNewMutations(mutations) {
-        logger.trace(`Observer [${observerId}] detected added nodes`);
+        console.debug(`Observer [${observerId}] detected added nodes`);
         const result = mutations
             .map(mutation => mutation.addedNodes)
             .flatMap(addedNodes => Array.from(addedNodes))
@@ -63,7 +88,11 @@ function elementInsertedCallback(observedNode, elementSelector, callback) {
     }
 
     function disconnect() {
+        if (canceled) {
+            return;
+        }
+        canceled = true;
         observer.disconnect();
-        logger.debug(`Disconnected observer [${observerId}]`);
+        console.debug(`Disconnected observer [${observerId}]`);
     }
 }
