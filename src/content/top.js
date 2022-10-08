@@ -82,11 +82,16 @@ async function onPageChanged() {
       } else {
         console.log(prefix("Is cleanup needed?"), cleanupNeeded);
         if (cleanupNeeded) {
-          cleanupOverlay();
+          restoreChatPosition();
         }
       }
 
       function updateTreePosition() {
+        const isPositionUpdated = videoContainer.contains(chat);
+        console.log(prefix("Is position updated?"), isPositionUpdated);
+        if (isPositionUpdated) {
+          return;
+        }
         console.info(prefix("Moving chat node"));
         const chatParent = chat.parentNode;
         videoContainer.appendChild(chat);
@@ -192,6 +197,14 @@ function cleanupOverlay() {
     stopFullscreenObserver();
   }
 
+  restoreChatPosition();
+
+  console.groupEnd(prefix("Cleanup overlay"));
+}
+
+function restoreChatPosition() {
+  console.groupCollapsed(prefix("Restore chat position"));
+
   const chatSibling = document.querySelector(CHAT_SIBLING);
   console.info(prefix("Chat sibling found?"), chatSibling != null);
 
@@ -205,7 +218,7 @@ function cleanupOverlay() {
   console.debug(prefix("Moved chat [from] -> [to]"), previousParent, originalParent);
   console.debug(prefix("Output state"), chat);
 
-  console.groupEnd(prefix("Cleanup overlay"));
+  console.groupEnd(prefix("Restore chat position"));
 
   cleanupNeeded = false;
 }
