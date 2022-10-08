@@ -33,7 +33,7 @@ window.onload = () => {
       document
         .querySelectorAll("input[type=checkbox]")
         .forEach(cbox => {
-          cbox.oninput = event => saveProperty(event.target.id, event.target.checked);
+          cbox.onchange = event => saveProperty(event.target.id, event.target.checked);
         });
       document
         .querySelectorAll("select")
@@ -46,7 +46,7 @@ window.onload = () => {
 
       function applySliderListener(slider) {
         const convolute = document.getElementById(slider.dataset.convolute);
-        slider.oninput = event => {
+        slider.onchange = event => {
           const newValue = event.target.value;
           saveProperty(event.target.id, newValue);
           if (convolute) {
