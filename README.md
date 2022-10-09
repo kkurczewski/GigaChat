@@ -1,4 +1,4 @@
-# LeChO
+# GigaChat
 
 Live chat overlay for YT lives.
 
