@@ -61,6 +61,16 @@
       background: transparent;
 }
 
+/* subscriber only toast message */
+.overlay yt-live-chat-toast-renderer {
+      opacity: max(var(--opacity), 0.8);
+}
+
+/* support button on hover */
+.overlay #endpoint.yt-live-chat-product-button-renderer:hover {
+      background-color: transparent;
+}
+
 .overlay #live-chat-message-input {
       background: transparent;
 }
