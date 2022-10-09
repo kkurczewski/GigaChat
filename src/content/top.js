@@ -24,12 +24,12 @@ const randomId = () => (37e16 * Math.random() + 37e16).toString(32);
 
 let currentTaskId = randomId();
 let previousTaskId = currentTaskId;
-let cleanupNeeded = false;
+let isOverlayEnabled = false;
 let stopFullscreenObserver = null;
 
 console.log(prefix("Initialize extension"));
-window.addEventListener("yt-navigate-start", onNavigationStarted);
 window.addEventListener("yt-navigate-finish", onNavigationFinished);
+window.addEventListener("yt-navigate-start", onNavigationStarted);
 onPageChanged();
 
 async function onPageChanged() {
@@ -78,10 +78,10 @@ async function onPageChanged() {
         console.debug(prefix("Output state"), chat);
         console.groupEnd(prefix("Apply overlay"));
 
-        cleanupNeeded = true;
+        isOverlayEnabled = true;
       } else {
-        console.log(prefix("Is cleanup needed?"), cleanupNeeded);
-        if (cleanupNeeded) {
+        console.log(prefix("Is cleanup needed?"), isOverlayEnabled);
+        if (isOverlayEnabled) {
           restoreChatPosition();
         }
       }
@@ -143,7 +143,7 @@ async function onPageChanged() {
         console.debug(prefix("Output"), chatFrame, chatFrameBody);
         console.groupEnd(prefix("Styling iframe"));
       };
-
+      console.assert(stopFullscreenObserver == null, "Orphan observer detected");
       stopFullscreenObserver = attributeMutationsListener(video, FULLSCREEN_ATTRIBUTE, (enabled) => {
         console.debug(prefix(`Fullscreen ${enabled ? "enabled" : "disabled"}`));
 
@@ -190,14 +190,30 @@ async function onPageChanged() {
   }
 }
 
+function onNavigationStarted() {
+  const oldTaskId = currentTaskId;
+  currentTaskId = randomId();
+  console.log(`[${oldTaskId} -> ${currentTaskId}] Reassign task id`);
+  cleanupOverlay();
+}
+
+function onNavigationFinished() {
+  if (previousTaskId !== currentTaskId) {
+    onPageChanged();
+    previousTaskId = currentTaskId;
+  }
+}
+
 function cleanupOverlay() {
   console.groupCollapsed(prefix("Cleanup overlay"));
 
   if (stopFullscreenObserver != null) {
     stopFullscreenObserver();
+    stopFullscreenObserver = null;
   }
-
-  restoreChatPosition();
+  if (isOverlayEnabled) {
+    restoreChatPosition();
+  }
 
   console.groupEnd(prefix("Cleanup overlay"));
 }
@@ -220,27 +236,7 @@ function restoreChatPosition() {
 
   console.groupEnd(prefix("Restore chat position"));
 
-  cleanupNeeded = false;
-}
-
-function onNavigationStarted() {
-  assignNewTaskId();
-  if (cleanupNeeded) {
-    cleanupOverlay();
-  }
-
-  function assignNewTaskId() {
-    const oldTaskId = currentTaskId;
-    currentTaskId = randomId();
-    console.log(`[${oldTaskId} -> ${currentTaskId}] Reassign task id`);
-  }
-}
-
-function onNavigationFinished() {
-  if (previousTaskId !== currentTaskId) {
-    onPageChanged();
-    previousTaskId = currentTaskId;
-  }
+  isOverlayEnabled = false;
 }
 
 function prefix(message) {
