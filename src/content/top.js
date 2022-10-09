@@ -25,7 +25,7 @@ const randomId = () => (37e16 * Math.random() + 37e16).toString(32);
 let currentTaskId = randomId();
 let previousTaskId = currentTaskId;
 let isOverlayEnabled = false;
-let stopFullscreenObserver = null;
+let clearListeners = null;
 
 console.log(prefix("Initialize extension"));
 window.addEventListener("yt-navigate-finish", onNavigationFinished);
@@ -39,6 +39,7 @@ async function onPageChanged() {
     return;
   }
   let { options } = await chrome.storage.local.get(STORAGE_OPTIONS);
+  console.debug(prefix("Clear function is empty?"), clearListeners == null);
   prepareOverlay();
 
   async function prepareOverlay() {
@@ -135,6 +136,7 @@ async function onPageChanged() {
     }
 
     function setupListeners() {
+      console.log(prefix("Setup listeners"));
       chatFrame.onload = (event) => {
         console.groupCollapsed(prefix("Styling iframe"));
         const chatFrame = event.target;
@@ -143,20 +145,31 @@ async function onPageChanged() {
         console.debug(prefix("Output"), chatFrame, chatFrameBody);
         console.groupEnd(prefix("Styling iframe"));
       };
-      console.assert(stopFullscreenObserver == null, "Orphan observer detected");
-      stopFullscreenObserver = attributeMutationsListener(video, FULLSCREEN_ATTRIBUTE, (enabled) => {
+      const clearIframeListener = () => chatFrame.onload = null;
+
+      const clearFullscreenObserver = attributeMutationsListener(video, FULLSCREEN_ATTRIBUTE, (enabled) => {
         console.debug(prefix(`Fullscreen ${enabled ? "enabled" : "disabled"}`));
 
         toggleOverlay();
       });
 
-      chrome.storage.onChanged.addListener(changes => {
+      chrome.storage.onChanged.addListener(onOptionsChanged);
+      const clearOptionsListener = () => chrome.storage.onChanged.removeListener(onOptionsChanged);
+
+      console.assert(clearListeners == null, "Orphan listeners detected");
+      clearListeners = () => {
+        clearIframeListener();
+        clearFullscreenObserver();
+        clearOptionsListener();
+      }
+
+      function onOptionsChanged(changes) {
         console.debug(prefix("Previous options"), options);
         options = changes.options.newValue;
         console.log(prefix("Options changed"), options);
         updateStyles();
         toggleOverlay();
-      });
+      }
     }
 
     async function queryNode(parent, selector, required) {
@@ -207,9 +220,9 @@ function onNavigationFinished() {
 function cleanupOverlay() {
   console.groupCollapsed(prefix("Cleanup overlay"));
 
-  if (stopFullscreenObserver != null) {
-    stopFullscreenObserver();
-    stopFullscreenObserver = null;
+  if (clearListeners != null) {
+    clearListeners();
+    clearListeners = null;
   }
   if (isOverlayEnabled) {
     restoreChatPosition();
