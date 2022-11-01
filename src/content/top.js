@@ -20,13 +20,6 @@ const BOTTOM_MARGIN_VAR = "--bottom-margin";
 
 const STORAGE_OPTIONS = "options";
 
-const randomId = () => (37e16 * Math.random() + 37e16).toString(32);
-
-let currentTaskId = randomId();
-let previousTaskId = currentTaskId;
-let isOverlayEnabled = false;
-let clearListeners = null;
-
 configureOverlay();
 
 console.log("Extension initialized");
@@ -87,7 +80,7 @@ async function enableOverlay() {
     console.log("Set chat frame listener");
     const chatFrame = await queryNode(appRoot, CHAT_FRAME);
     chatFrame.addEventListener("load", onLoad);
-    addCleanupCallback(() => chatFrame.removeListener(onLoad));
+    addCleanupCallback(() => chatFrame.removeEventListener("load", onLoad));
 
     function onLoad(event) {
       console.groupCollapsed("Styling iframe");
@@ -128,7 +121,11 @@ function configureOverlay() {
   addOptionChangesListener(optionsHandler);
 
   addEventListener("fullscreenchange", fullscreenHandler);
-  addEventListener("yt-navigate-start", disableOverlay);
+  addEventListener("yt-navigate-start", () => {
+    overlayMode.consumeEvent("navigationChanged");
+    disableOverlay();
+  });
+  addEventListener("yt-navigate-finish", () => overlayMode.consumeEvent("onEnter"));
 
   function buildOverlayMode() {
     const overlay = buildOverlay();
@@ -143,16 +140,22 @@ function configureOverlay() {
         previewMode: (changeState) => changeState("preview"),
         fullscreenOn: () => overlay.enable(),
         fullscreenOff: () => overlay.disable(),
+        navigationChanged: () => overlay.disable(),
         onEnter: () => isFullscreenEnabled() ? overlay.enable() : overlay.disable(),
       },
       preview: {
         disabledMode: (changeState) => changeState("disabled"),
         fullscreenMode: (changeState) => changeState("fullscreen"),
+        navigationChanged: () => overlay.disable(),
         onEnter: () => overlay.enable(),
       },
     });
 
     function buildOverlay() {
+      // this fsm make sure that once chat is 
+      // enabled it is not enabled again
+      //
+      // if state is enabled further enable-actions will be omitted
       const overlayState = stateMachine({
         disabled: {
           enable: (changeState) => {

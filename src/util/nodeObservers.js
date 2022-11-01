@@ -1,3 +1,6 @@
+function randomId() {
+    return (37e16 * Math.random() + 37e16).toString(32);
+}
 
 function classMutationsListener(observedNode, elementSelector, listener) {
     let canceled = false;

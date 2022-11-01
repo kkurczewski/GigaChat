@@ -1,3 +1,7 @@
+function randomId() {
+  return (37e16 * Math.random() + 37e16).toString(32);
+}
+
 /**
  * @param {number} timeout - time after which callback will be canceled
  * @param {function} callback - cancelable promise-like function

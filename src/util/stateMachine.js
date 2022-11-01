@@ -18,13 +18,13 @@
  * fsm.consumeEvent("start");
  */
 function stateMachine(states) {
-  const initialState = Object.keys(states)[0];
-  let state = states[initialState];
+  let currentState = Object.keys(states)[0];
+  let state = states[currentState];
 
   function consumeEvent(event) {
     const callback = state[event];
     if (callback) {
-      console.log(`Consuming event [${event}]`);
+      console.log(`Consuming event [${currentState}::${event}]`);
       callback(changeState);
     }
   }
@@ -34,6 +34,7 @@ function stateMachine(states) {
       state._onExit();
     }
     state = states[name];
+    currentState = name;
     if (!state) {
       throw new Error(`State not exists: ${name}`);
     }
