@@ -23,6 +23,7 @@
         "https://www.youtube.com/*"
       ],
       "js": [
+        "util/stateMachine.js",
         "util/fadingPromise.js",
         "util/nodeObservers.js",
         "util/awaitNode.js",
