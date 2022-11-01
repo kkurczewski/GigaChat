@@ -97,7 +97,7 @@ async function enableOverlay() {
     const videoContainer = await queryNode(appRoot, VIDEO_CONTAINER);
     videoContainer.append(chat);
 
-    addCleanupCallback(cleanup);
+    addEventListener("restore-chat-position", cleanup, { once: true, capture: true });
 
     function cleanup() {
       const chatSibling = appRoot.querySelector(CHAT_SIBLING);
@@ -111,9 +111,12 @@ async function enableOverlay() {
   }
 }
 
-function disableOverlay() {
+function disableOverlay(restorePosition = true) {
   console.log("disableOverlay");
-  document.dispatchEvent(new Event("restore-chat-position"));
+  document.dispatchEvent(new Event("cleanup-listeners"));
+  if (restorePosition) {
+    document.dispatchEvent(new Event("restore-chat-position"));
+  }
 }
 
 function configureOverlay() {
@@ -122,8 +125,9 @@ function configureOverlay() {
 
   addEventListener("fullscreenchange", fullscreenHandler);
   addEventListener("yt-navigate-start", () => {
+    const shouldRestorePosition = false;
+    disableOverlay(shouldRestorePosition);
     overlayMode.consumeEvent("navigationChanged");
-    disableOverlay();
   });
   addEventListener("yt-navigate-finish", () => overlayMode.consumeEvent("onEnter"));
 
@@ -206,7 +210,7 @@ async function addOptionChangesListener(rawCallback) {
 }
 
 function addCleanupCallback(callback) {
-  addEventListener("restore-chat-position", callback, { once: true, capture: true });
+  addEventListener("cleanup-listeners", callback, { once: true, capture: true });
 }
 
 async function queryNode(parent, selector, required) {
