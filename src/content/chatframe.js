@@ -19,15 +19,19 @@ const TOP_CHAT_MODE = "topChat";
 const LIVE_CHAT_MODE = "liveChat";
 
 const STORAGE_OPTIONS = "options";
+const OVERLAY_CLASS = "overlay";
 
 window.onload = async () => {
   const cssRoot = document.querySelector(CSS_ROOT);
   const chatFrame = document.querySelector(CHAT_FRAME_ROOT);
-  const { options } = (await chrome.storage.local.get(STORAGE_OPTIONS));
+  const { options } = await chrome.storage.local.get(STORAGE_OPTIONS);
 
   console.debug("Loading options:", options);
 
   chrome.storage.onChanged.addListener(changes => {
+    if (!isOverlayEnabled()) {
+      return;
+    }
     const updatedOptions = changes.options.newValue;
     console.debug("Reloading options:", updatedOptions);
     loadOptions(updatedOptions);
@@ -35,6 +39,10 @@ window.onload = async () => {
 
   createRawColors();
   loadOptions(options);
+
+  function isOverlayEnabled() {
+    return document.body.classList.contains(OVERLAY_CLASS);
+  }
 
   function loadOptions(options) {
     updateOpacity();
