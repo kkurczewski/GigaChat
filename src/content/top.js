@@ -97,12 +97,26 @@ async function enableOverlay() {
     const videoContainer = await queryNode(appRoot, VIDEO_CONTAINER);
     videoContainer.append(chat);
 
-    addEventListener("restore-chat-position", cleanup, { once: true, capture: true });
+    addCleanupCallback(handleChatCleanup);
 
-    function cleanup() {
-      const chatSibling = appRoot.querySelector(CHAT_SIBLING);
-      chatParent.insertBefore(chat, chatSibling);
-      console.debug("Restored chat position");
+    function handleChatCleanup(params) {
+      if (params.restoreChatPosition) {
+        restoreChatPosition();
+      } else {
+        removeStaleChat();
+      }
+
+      function restoreChatPosition() {
+        const chatSibling = appRoot.querySelector(CHAT_SIBLING);
+        chatParent.insertBefore(chat, chatSibling);
+
+        console.debug("Restored chat position");
+      }
+
+      function removeStaleChat() {
+        chat.remove();
+        console.debug("Removed old chat");
+      }
     }
   }
 
@@ -111,13 +125,9 @@ async function enableOverlay() {
   }
 }
 
-function disableOverlay(restorePosition = true) {
+function disableOverlay(restoreChatPosition = true) {
   console.debug("Disable overlay");
-  document.dispatchEvent(new Event("cleanup-listeners"));
-  if (restorePosition) {
-    console.debug("Restore chat position");
-    document.dispatchEvent(new Event("restore-chat-position"));
-  }
+  document.dispatchEvent(new CustomEvent("cleanup-listeners", { detail: { restoreChatPosition } }));
 }
 
 function configureOverlay() {
@@ -212,7 +222,7 @@ async function addOptionChangesListener(rawCallback) {
 }
 
 function addCleanupCallback(callback) {
-  addEventListener("cleanup-listeners", callback, { once: true, capture: true });
+  addEventListener("cleanup-listeners", (event) => callback(event.detail), { once: true, capture: true });
 }
 
 async function queryNode(parent, selector, required) {
