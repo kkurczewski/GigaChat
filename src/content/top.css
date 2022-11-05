@@ -14,6 +14,11 @@
       border: 0;
 }
 
+/* remove rounding from chat elements */
+#ytd-player #container ytd-live-chat-frame[rounded-container] * {
+      border-radius: 0px !important;
+}
+
 #ytd-player #container #chat.left {
       left: 0;
       right: auto;
