@@ -112,9 +112,10 @@ async function enableOverlay() {
 }
 
 function disableOverlay(restorePosition = true) {
-  console.log("disableOverlay");
+  console.debug("Disable overlay");
   document.dispatchEvent(new Event("cleanup-listeners"));
   if (restorePosition) {
+    console.debug("Restore chat position");
     document.dispatchEvent(new Event("restore-chat-position"));
   }
 }
@@ -124,11 +125,7 @@ function configureOverlay() {
   addOptionChangesListener(optionsHandler);
 
   addEventListener("fullscreenchange", fullscreenHandler);
-  addEventListener("yt-navigate-start", () => {
-    const shouldRestorePosition = false;
-    disableOverlay(shouldRestorePosition);
-    overlayMode.consumeEvent("navigationChanged");
-  });
+  addEventListener("yt-navigate-start", () => overlayMode.consumeEvent("navigationChanged"));
   addEventListener("yt-navigate-finish", () => overlayMode.consumeEvent("onEnter"));
 
   function buildOverlayMode() {
@@ -144,13 +141,13 @@ function configureOverlay() {
         previewMode: (changeState) => changeState("preview"),
         fullscreenOn: () => overlay.enable(),
         fullscreenOff: () => overlay.disable(),
-        navigationChanged: () => overlay.disable(),
+        navigationChanged: () => overlay.clean(),
         onEnter: () => isFullscreenEnabled() ? overlay.enable() : overlay.disable(),
       },
       preview: {
         disabledMode: (changeState) => changeState("disabled"),
         fullscreenMode: (changeState) => changeState("fullscreen"),
-        navigationChanged: () => overlay.disable(),
+        navigationChanged: () => overlay.clean(),
         onEnter: () => overlay.enable(),
       },
     });
@@ -171,6 +168,10 @@ function configureOverlay() {
           disable: (changeState) => {
             changeState("disabled");
             disableOverlay();
+          },
+          clean: (changeState) => {
+            changeState("disabled");
+            disableOverlay(shouldRestorePosition = false);
           }
         },
       });
@@ -178,6 +179,7 @@ function configureOverlay() {
       return {
         disable: () => overlayState.consumeEvent("disable"),
         enable: () => overlayState.consumeEvent("enable"),
+        clean: () => overlayState.consumeEvent("clean"),
       }
     }
   }
