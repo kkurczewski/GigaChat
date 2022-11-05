@@ -97,26 +97,13 @@ async function enableOverlay() {
     const videoContainer = await queryNode(appRoot, VIDEO_CONTAINER);
     videoContainer.append(chat);
 
-    addCleanupCallback(handleChatCleanup);
+    addCleanupCallback(restoreChatPosition);
 
-    function handleChatCleanup(params) {
-      if (params.restoreChatPosition) {
-        restoreChatPosition();
-      } else {
-        removeStaleChat();
-      }
+    function restoreChatPosition() {
+      const chatSibling = appRoot.querySelector(CHAT_SIBLING);
+      chatParent.insertBefore(chat, chatSibling);
 
-      function restoreChatPosition() {
-        const chatSibling = appRoot.querySelector(CHAT_SIBLING);
-        chatParent.insertBefore(chat, chatSibling);
-
-        console.debug("Restored chat position");
-      }
-
-      function removeStaleChat() {
-        chat.remove();
-        console.debug("Removed old chat");
-      }
+      console.debug("Restored chat position");
     }
   }
 
@@ -125,9 +112,9 @@ async function enableOverlay() {
   }
 }
 
-function disableOverlay(restoreChatPosition = true) {
+function disableOverlay() {
   console.debug("Disable overlay");
-  document.dispatchEvent(new CustomEvent("cleanup-listeners", { detail: { restoreChatPosition } }));
+  document.dispatchEvent(new Event("cleanup-listeners"));
 }
 
 function configureOverlay() {
@@ -151,13 +138,13 @@ function configureOverlay() {
         previewMode: (changeState) => changeState("preview"),
         fullscreenOn: () => overlay.enable(),
         fullscreenOff: () => overlay.disable(),
-        navigationChanged: () => overlay.clean(),
+        navigationChanged: () => overlay.disable(),
         onEnter: () => isFullscreenEnabled() ? overlay.enable() : overlay.disable(),
       },
       preview: {
         disabledMode: (changeState) => changeState("disabled"),
         fullscreenMode: (changeState) => changeState("fullscreen"),
-        navigationChanged: () => overlay.clean(),
+        navigationChanged: () => overlay.disable(),
         onEnter: () => overlay.enable(),
       },
     });
@@ -179,17 +166,12 @@ function configureOverlay() {
             changeState("disabled");
             disableOverlay();
           },
-          clean: (changeState) => {
-            changeState("disabled");
-            disableOverlay(shouldRestorePosition = false);
-          }
         },
       });
 
       return {
         disable: () => overlayState.consumeEvent("disable"),
         enable: () => overlayState.consumeEvent("enable"),
-        clean: () => overlayState.consumeEvent("clean"),
       }
     }
   }
@@ -222,7 +204,7 @@ async function addOptionChangesListener(rawCallback) {
 }
 
 function addCleanupCallback(callback) {
-  addEventListener("cleanup-listeners", (event) => callback(event.detail), { once: true, capture: true });
+  addEventListener("cleanup-listeners", callback, { once: true, capture: true });
 }
 
 async function queryNode(parent, selector, required) {
