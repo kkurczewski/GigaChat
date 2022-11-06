@@ -26,11 +26,16 @@
         "util/stateMachine.js",
         "util/fadingPromise.js",
         "util/nodeObservers.js",
-        "util/awaitNode.js",
-        "content/top.js"
+        "util/queryNode.js",
+        "content/top/optionsListener.js",
+        "content/top/listeners.js",
+        "content/top/top.js",
+        "content/top/style.js",
+        "content/chatframe/top.chatframe.js",
+        "content/top/position.js"
       ],
       "css": [
-        "content/top.css"
+        "content/top/top.css"
       ]
     },
     {
@@ -40,10 +45,11 @@
         "https://www.youtube.com/live_chat_replay?continuation=*"
       ],
       "js": [
-        "content/chatframe.js"
+        "content/chatframe/chatframe.js",
+        "content/chatframe/top.chatframe.js"
       ],
       "css": [
-        "content/chatframe.css"
+        "content/chatframe/chatframe.css"
       ]
     }
   ],

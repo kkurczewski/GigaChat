@@ -1,6 +1,6 @@
-const awaitNode = async (parent, selector, required = true, timeout = 15_000) => {
+const queryNode = async (parent, selector, required = true, timeout = 15_000) => {
     const awaitGroup = `Await ${selector}`;
-    console.group(awaitGroup);
+    console.groupCollapsed(awaitGroup);
     console.time(`Query ${selector}`);
 
     try {

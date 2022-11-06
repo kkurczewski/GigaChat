@@ -8,61 +8,55 @@
  * @example
  * const fsm = stateMachine({
  *  idle: {
- *   start: (changeState) => { changeState("started"); }
+ *   start: (changeState) => changeState("started"),
  *  },
  *  started: {
- *   stop: (changeState) => { changeState("idle"); }
+ *   stop: (changeState) => changeState("idle"),
+*    _onEnter: () => console.log("Enter state"),
+ *   _onExit: () => console.log("Exit state"),
  *  }
  * })
  * 
  * fsm.consumeEvent("start");
  */
-function stateMachine(states) {
+function stateMachine(machineName, states) {
   let currentState = Object.keys(states)[0];
-  let state = states[currentState];
 
   function consumeEvent(event) {
-    const callback = state[event];
+    const callback = states[currentState][event];
     if (callback) {
-      console.log(`Consuming event [${currentState}::${event}]`);
       callback(changeState);
+      console.log(`Consumed event: [${machineName}::${currentState}::${event}]`);
     }
   }
 
   function changeState(name) {
-    if (state._onExit) {
-      state._onExit();
-    }
-    state = states[name];
+    onStateExit(currentState);
     currentState = name;
-    if (!state) {
+    const newState = states[currentState];
+    if (!newState) {
       throw new Error(`State not exists: ${name}`);
     }
-    console.log(`Changed state to {${name}}`);
+    console.log(`Changed state to: [${machineName}::${name}]`);
+    onStateEnter(currentState);
+  }
+
+  function onStateEnter(name) {
+    const state = states[name];
     if (state._onEnter) {
       state._onEnter();
     }
   }
 
-  function registerEnterCallback(name, callback) {
-    const state = states[name]
-    if (!state) {
-      throw new Error(`State not exists: ${name}`);
+  function onStateExit(name) {
+    const state = states[name];
+    if (state._onExit) {
+      state._onExit();
     }
-    state._onEnter = callback;
-  }
-
-  function registerExitCallback(name, callback) {
-    const state = states[name]
-    if (!state) {
-      throw new Error(`State not exists: ${name}`);
-    }
-    state._onExit = callback;
   }
 
   return {
     consumeEvent,
-    registerEnterCallback,
-    registerExitCallback,
+    changeState,
   };
 }
