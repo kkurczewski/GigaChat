@@ -25,6 +25,10 @@
       left: 0;
 }
 
+#chat.overlay.right {
+      right: 0;
+}
+
 #chat.overlay #show-hide-button {
       opacity: calc(var(--opacity) + 0.1);
 }
