@@ -2,8 +2,8 @@ const CSS_ROOT = ":root";
 const TOGGLE_BUTTON = "#show-hide-button";
 
 const HIDDEN_CLASS = "x-hidden";
-const LEFT_CLASS = "left";
-const RIGHT_CLASS = "right";
+const POSITION_LEFT_CLASS = "left";
+const POSITION_RIGHT_CLASS = "right";
 
 const OPACITY_VAR = "--opacity";
 const TOP_MARGIN_VAR = "--top-margin";
@@ -24,13 +24,13 @@ function updateChatContainerStyle(chat, options) {
 
   function updateCssPosition() {
     switch (options.position) {
-      case LEFT_CLASS:
-        chat.classList.add(LEFT_CLASS);
-        chat.classList.remove(RIGHT_CLASS);
+      case POSITION_LEFT_CLASS:
+        chat.classList.add(POSITION_LEFT_CLASS);
+        chat.classList.remove(POSITION_RIGHT_CLASS);
         break;
-      case RIGHT_CLASS:
-        chat.classList.add(RIGHT_CLASS);
-        chat.classList.remove(LEFT_CLASS);
+      case POSITION_RIGHT_CLASS:
+        chat.classList.add(POSITION_RIGHT_CLASS);
+        chat.classList.remove(POSITION_LEFT_CLASS);
         break;
     }
   }

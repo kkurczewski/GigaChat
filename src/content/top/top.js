@@ -1,60 +1,64 @@
-const CHAT = "#chat";
-const PLAYER = "#ytd-player #container #movie_player";
-const CHAT_FRAME = "#chatframe";
-const CHAT_PARENT = "#secondary-inner"
+const STORAGE_OPTIONS = "options";
+const OVERLAY_CLASS = "overlay";
 
-// never runs on first visit
-addEventListener("yt-navigate-start", (event) => {
-  console.debug("Navigation start:", event.detail);
-  disableOverlay();
+let overlay = null;
+
+chrome.storage.onChanged.addListener((changes) => {
+  const options = changes[STORAGE_OPTIONS].newValue;
+  overlay?.onOptionsChanged(options);
 });
-// runs on every page transition
-addEventListener("yt-page-data-updated", async () => {
-  if (!isVideoPage()) {
-    return;
-  }
-  console.debug("Page data updated");
 
-  const chat = await queryNode(document, CHAT, false);
-  if (chat) {
-    setupChatListeners();
-  } else {
-    console.log("No chat found");
-  }
-
-  async function setupChatListeners() {
-    const chatFrame = await queryNode(chat, CHAT_FRAME);
-    const player = await queryNode(document, PLAYER);
-
-    addOverlayDisabledCallback(await addOptionChangesListener((options) => updateChatContainerStyle(chat, options)));
-    addEventListener(ENABLE_OVERLAY, enableOverlay);
-    addEventListener(DESTROY_OVERLAY, destroy, { once: true, capture: true });
-
-    console.assert(chat != null, "Chat is null");
-
-    dispatchEvent(new Event("chat-ready"));
-    console.log("Setup chat listeners");
-
-    function enableOverlay() {
-      addOverlayDisabledCallback(updateChatFrameStyle(chatFrame));
-      addOverlayDisabledCallback(updateChatPosition(chat, player));
-    }
-
-    function destroy() {
-      removeEventListener(ENABLE_OVERLAY, enableOverlay);
-      disableOverlay();
-    }
-  }
-
-  function isVideoPage() {
-    return window.location.pathname === "/watch";
+addEventListener("yt-navigate-start", () => { overlay = null; });
+addEventListener("fullscreenchange", () => overlay?.onFullscreenChanged());
+addEventListener("yt-page-data-fetched", async (event) => {
+  const isLive = event.detail.pageData.playerResponse.videoDetails.isLiveContent;
+  console.log(`Is live? ${isLive}`);
+  if (isLive) {
+    overlay = await newOverlay();
   }
 });
 
-function disableOverlay() {
-  dispatchEvent(new Event(DISABLE_OVERLAY));
-}
+async function newOverlay() {
+  console.log("Creating new overlay");
 
-function addOverlayDisabledCallback(callback) {
-  addEventListener(DISABLE_OVERLAY, callback, { once: true, capture: true });
+  const chat = await queryNode(document, "#chat");
+  const { options } = await chrome.storage.local.get(STORAGE_OPTIONS);
+
+  onOptionsChanged(chat, options);
+  onFullscreenChanged(chat, options);
+
+  await styleNestedFrame(chat);
+
+  return {
+    onFullscreenChanged: () => onFullscreenChanged(chat, options),
+    onOptionsChanged: (newOptions) => onOptionsChanged(chat, newOptions),
+  }
+
+  function onFullscreenChanged(chat, options) {
+    const isFullscreen = document.fullscreenElement != null;
+    console.debug(`Fullscren enabled? ${isFullscreen}`);
+
+    const isEnabled = options.enabled;
+    console.debug(`Overlay enabled? ${isEnabled}`);
+
+    chat.classList.toggle(OVERLAY_CLASS, isFullscreen && isEnabled);
+  }
+
+  function onOptionsChanged(chat, options) {
+    console.debug("Options changed");
+
+    const isEnabled = options.enabled;
+    console.debug(`Overlay enabled? ${isEnabled}`);
+
+    chat.classList.toggle(OVERLAY_CLASS, isEnabled);
+
+    updateChatContainerStyle(chat, options);
+  }
+
+  async function styleNestedFrame(chat) {
+    const chatFrame = await queryNode(chat, "#chatframe");
+    chatFrame.addEventListener("load", (event) => {
+      event.target.contentDocument.body.classList.toggle(OVERLAY_CLASS, true);
+    });
+  }
 }

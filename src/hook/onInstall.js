@@ -1,7 +1,6 @@
 const STORAGE_OPTIONS = "options";
 const DEFAULT_OPTIONS = {
     enabled: true,
-    preview: true,
     topMargin: 0,
     bottomMargin: 0,
     opacity: 0.6,
