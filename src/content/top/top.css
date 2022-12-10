@@ -1,38 +1,34 @@
-#ytd-player #container #chat {
+#chat.overlay {
       --player-bar: 60px;
       --min-height-ratio: 0.3;
       --total-margin-ratio: calc(1 - var(--min-height-ratio));
 
-      position: absolute;
+      position: fixed;
       top: max(calc(var(--total-margin-ratio) * var(--top-margin, 0%) - var(--player-bar)), 0%);
       bottom: max(calc(var(--total-margin-ratio) * var(--bottom-margin, 0%)), var(--player-bar));
-      height: auto;
+
+      height: auto !important;
+      min-width: 460px;
       min-height: auto !important;
-      width: 400px;
-      z-index: 10;
+      
       margin: 0 !important;
       border: 0;
 }
 
 /* remove rounding from chat elements */
-#ytd-player #container ytd-live-chat-frame[rounded-container] * {
+#chat.overlay,
+#chat.overlay * {
       border-radius: 0px !important;
 }
 
-#ytd-player #container #chat.left {
+#chat.overlay.left {
       left: 0;
-      right: auto;
 }
 
-#ytd-player #container #chat.right {
-      left: auto;
-      right: 0;
-}
-
-#ytd-player #container #chat #show-hide-button {
+#chat.overlay #show-hide-button {
       opacity: calc(var(--opacity) + 0.1);
 }
 
-#ytd-player #container #chat #show-hide-button.x-hidden {
+#chat.overlay #show-hide-button.x-hidden {
       display: none;
 }
