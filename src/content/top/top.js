@@ -22,43 +22,36 @@ async function newOverlay() {
   console.log("Creating new overlay");
 
   const chat = await queryNode(document, "#chat");
-  const { options } = await chrome.storage.local.get(STORAGE_OPTIONS);
+  const chatFrame = await queryNode(chat, "#chatframe");
+  let { options } = await chrome.storage.local.get(STORAGE_OPTIONS);
 
-  onOptionsChanged(chat, options);
-  onFullscreenChanged(chat, options);
+  onOptionsChanged(options);
 
-  await styleNestedFrame(chat);
+  chatFrame.addEventListener("load", (event) => {
+    event.target.contentDocument.body.classList.toggle(OVERLAY_CLASS, chat.classList.contains(OVERLAY_CLASS));
+  });
 
   return {
-    onFullscreenChanged: () => onFullscreenChanged(chat, options),
-    onOptionsChanged: (newOptions) => onOptionsChanged(chat, newOptions),
+    onFullscreenChanged: () => updateStateOverlay(options),
+    onOptionsChanged: (newOptions) => onOptionsChanged(newOptions),
   }
 
-  function onFullscreenChanged(chat, options) {
+  function onOptionsChanged(newOptions) {
+    options = newOptions;
+    console.debug("Options changed");
+
+    updateStateOverlay(newOptions);
+    updateChatContainerStyle(chat, newOptions);
+  }
+
+  function updateStateOverlay(options) {
+    const isEnabled = options.enabled;
+    console.debug(`Overlay enabled? ${isEnabled}`);
+
     const isFullscreen = document.fullscreenElement != null;
     console.debug(`Fullscren enabled? ${isFullscreen}`);
 
-    const isEnabled = options.enabled;
-    console.debug(`Overlay enabled? ${isEnabled}`);
-
     chat.classList.toggle(OVERLAY_CLASS, isFullscreen && isEnabled);
-  }
-
-  function onOptionsChanged(chat, options) {
-    console.debug("Options changed");
-
-    const isEnabled = options.enabled;
-    console.debug(`Overlay enabled? ${isEnabled}`);
-
-    chat.classList.toggle(OVERLAY_CLASS, isEnabled);
-
-    updateChatContainerStyle(chat, options);
-  }
-
-  async function styleNestedFrame(chat) {
-    const chatFrame = await queryNode(chat, "#chatframe");
-    chatFrame.addEventListener("load", (event) => {
-      event.target.contentDocument.body.classList.toggle(OVERLAY_CLASS, true);
-    });
+    chatFrame.contentDocument.body.classList.toggle(OVERLAY_CLASS, isFullscreen && isEnabled);
   }
 }
