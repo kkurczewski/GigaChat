@@ -11,15 +11,24 @@ chrome.storage.onChanged.addListener((changes) => {
 addEventListener("yt-navigate-start", () => { overlay = null; });
 addEventListener("fullscreenchange", () => overlay?.onFullscreenChanged());
 addEventListener("yt-page-data-fetched", async (event) => {
-  const isLive = event.detail.pageData.playerResponse.videoDetails.isLiveContent;
+  console.log("[yt-page-data-fetched]");
+  console.debug("Got event: ", event.detail);
+
+  const pageData = event.detail.pageData;
+  const isLive = pageData.playerResponse.videoDetails.isLiveContent;
+
   console.log(`Is live? ${isLive}`);
   if (isLive) {
-    overlay = await newOverlay();
+    const videoId = pageData.endpoint.watchEndpoint.videoId;
+    overlay = await newOverlay(videoId);
+  } else {
+    overlay = null;
   }
+  console.log("Current overlay state: ", overlay);
 });
 
-async function newOverlay() {
-  console.log("Creating new overlay");
+async function newOverlay(videoId) {
+  console.log(`Creating new overlay for ${videoId}`);
 
   const chat = await queryNode(document, "#chat");
   const chatFrame = await queryNode(chat, "#chatframe");
@@ -27,18 +36,26 @@ async function newOverlay() {
 
   onOptionsChanged(options);
 
-  chatFrame.addEventListener("load", (event) => {
-    event.target.contentDocument.body.classList.toggle(OVERLAY_CLASS, chat.classList.contains(OVERLAY_CLASS));
-  });
+  chatFrame.onload = (event) => {
+    console.log("[chatFrame.onload]");
+    const chatFrame = event.target;
+    toggleNestedFrameState(chatFrame, chat.classList.contains(OVERLAY_CLASS));
+  }
 
   return {
-    onFullscreenChanged: () => updateStateOverlay(options),
-    onOptionsChanged: (newOptions) => onOptionsChanged(newOptions),
+    videoId,
+    onFullscreenChanged: () => {
+      console.log("[onFullscreenChanged]");
+      updateStateOverlay(options);
+    },
+    onOptionsChanged: (newOptions) => {
+      onOptionsChanged(newOptions);
+    },
   }
 
   function onOptionsChanged(newOptions) {
+    console.log("[onOptionsChanged]");
     options = newOptions;
-    console.debug("Options changed");
 
     updateStateOverlay(newOptions);
     updateChatContainerStyle(chat, newOptions);
@@ -46,12 +63,17 @@ async function newOverlay() {
 
   function updateStateOverlay(options) {
     const isEnabled = options.enabled;
-    console.debug(`Overlay enabled? ${isEnabled}`);
+    console.log(`Overlay enabled? ${isEnabled}`);
 
     const isFullscreen = document.fullscreenElement != null;
-    console.debug(`Fullscren enabled? ${isFullscreen}`);
+    console.log(`Fullscren enabled? ${isFullscreen}`);
 
     chat.classList.toggle(OVERLAY_CLASS, isFullscreen && isEnabled);
-    chatFrame.contentDocument.body.classList.toggle(OVERLAY_CLASS, isFullscreen && isEnabled);
+    toggleNestedFrameState(chatFrame, isFullscreen && isEnabled);
+  }
+
+  function toggleNestedFrameState(chatFrame, enabled) {
+    console.log(`Nested frame enabled? ${enabled}`);
+    chatFrame.contentDocument.body.classList.toggle(OVERLAY_CLASS, enabled);
   }
 }
