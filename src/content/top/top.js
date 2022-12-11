@@ -11,16 +11,19 @@ chrome.storage.onChanged.addListener((changes) => {
 addEventListener("yt-navigate-start", () => { overlay = null; });
 addEventListener("fullscreenchange", () => overlay?.onFullscreenChanged());
 addEventListener("yt-page-data-fetched", async (event) => {
-  const pageData = event.detail.pageData;
-  const isLive = pageData?.playerResponse?.videoDetails?.isLiveContent;
-  if (isLive == null) {
-    return;
-  }
-  console.log("[yt-page-data-fetched]");
   console.debug("Got event: ", event.detail);
 
-  console.log(`Is live? ${isLive}`);
-  if (isLive) {
+  const pageData = event.detail.pageData;
+  if (!pageData) {
+    return;
+  }
+
+  console.log("[yt-page-data-fetched]");
+  
+  const isLiveOrReplay = pageData?.response?.contents?.twoColumnWatchNextResults?.conversationBar != null;
+  console.log(`Is live? ${isLiveOrReplay}`);
+
+  if (isLiveOrReplay) {
     const videoId = pageData.endpoint.watchEndpoint.videoId;
     overlay = await newOverlay(videoId);
   } else {
