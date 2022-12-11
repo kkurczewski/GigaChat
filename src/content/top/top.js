@@ -11,11 +11,13 @@ chrome.storage.onChanged.addListener((changes) => {
 addEventListener("yt-navigate-start", () => { overlay = null; });
 addEventListener("fullscreenchange", () => overlay?.onFullscreenChanged());
 addEventListener("yt-page-data-fetched", async (event) => {
+  const pageData = event.detail.pageData;
+  const isLive = pageData?.playerResponse?.videoDetails?.isLiveContent;
+  if (isLive == null) {
+    return;
+  }
   console.log("[yt-page-data-fetched]");
   console.debug("Got event: ", event.detail);
-
-  const pageData = event.detail.pageData;
-  const isLive = pageData.playerResponse.videoDetails.isLiveContent;
 
   console.log(`Is live? ${isLive}`);
   if (isLive) {
