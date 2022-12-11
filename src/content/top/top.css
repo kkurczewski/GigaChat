@@ -1,4 +1,9 @@
-#chat.overlay {
+#secondary.ytd-watch-flexy.overlay {
+      /* paired along with `position: absolute` attribute in #chat keeps chat at fixed position on fullscreen */
+      position: static !important;
+}
+
+.overlay #chat {
       --player-bar: 60px;
       --min-height-ratio: 0.3;
       --total-margin-ratio: calc(1 - var(--min-height-ratio));
@@ -16,28 +21,23 @@
 }
 
 /* remove rounding from chat elements */
-#chat.overlay,
-#chat.overlay * {
+.overlay #chat,
+.overlay #chat * {
       border-radius: 0px !important;
 }
 
-#chat.overlay.left {
+.overlay #chat.left {
       left: 0;
 }
 
-/* paired along with `position: absolute` attribute in #chat keeps chat at fixed position on fullscreen */
-#secondary {
-      position: static !important;
-}
-
-#chat.overlay.right {
+.overlay #chat.right {
       right: 0;
 }
 
-#chat.overlay #show-hide-button {
+.overlay #chat #show-hide-button {
       opacity: calc(var(--opacity) + 0.1);
 }
 
-#chat.overlay #show-hide-button.x-hidden {
+.overlay #chat #show-hide-button.x-hidden {
       display: none;
 }

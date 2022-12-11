@@ -19,7 +19,7 @@ addEventListener("yt-page-data-fetched", async (event) => {
   }
 
   console.log("[yt-page-data-fetched]");
-  
+
   const isLiveOrReplay = pageData?.response?.contents?.twoColumnWatchNextResults?.conversationBar != null;
   console.log(`Is live? ${isLiveOrReplay}`);
 
@@ -35,16 +35,17 @@ addEventListener("yt-page-data-fetched", async (event) => {
 async function newOverlay(videoId) {
   console.log(`Creating new overlay for ${videoId}`);
 
-  const chat = await queryNode(document, "#chat");
+  const chatParent = await queryNode(document, "#secondary.ytd-watch-flexy");
+  const chat = await queryNode(chatParent, "#chat");
   const chatFrame = await queryNode(chat, "#chatframe");
   let { options } = await chrome.storage.local.get(STORAGE_OPTIONS);
 
   onOptionsChanged(options);
 
-  chatFrame.onload = (event) => {
+  chatFrame.onload = async (event) => {
     console.log("[chatFrame.onload]");
     const chatFrame = event.target;
-    toggleNestedFrameState(chatFrame, chat.classList.contains(OVERLAY_CLASS));
+    await toggleNestedFrameState(chatFrame, chatParent.classList.contains(OVERLAY_CLASS));
   }
 
   return {
@@ -73,12 +74,13 @@ async function newOverlay(videoId) {
     const isFullscreen = document.fullscreenElement != null;
     console.log(`Fullscren enabled? ${isFullscreen}`);
 
-    chat.classList.toggle(OVERLAY_CLASS, isFullscreen && isEnabled);
+    chatParent.classList.toggle(OVERLAY_CLASS, isFullscreen && isEnabled);
     toggleNestedFrameState(chatFrame, isFullscreen && isEnabled);
   }
 
-  function toggleNestedFrameState(chatFrame, enabled) {
+  async function toggleNestedFrameState(chatFrame, enabled) {
     console.log(`Nested frame enabled? ${enabled}`);
-    chatFrame.contentDocument.body.classList.toggle(OVERLAY_CLASS, enabled);
+    const body = await queryNode(chatFrame.contentDocument, "body");
+    body.classList.toggle(OVERLAY_CLASS, enabled);
   }
 }
