@@ -3,14 +3,14 @@
       --min-height-ratio: 0.3;
       --total-margin-ratio: calc(1 - var(--min-height-ratio));
 
-      position: fixed;
+      position: absolute;
       top: max(calc(var(--total-margin-ratio) * var(--top-margin, 0%) - var(--player-bar)), 0%);
       bottom: max(calc(var(--total-margin-ratio) * var(--bottom-margin, 0%)), var(--player-bar));
 
       height: auto !important;
       min-width: 460px;
       min-height: auto !important;
-      
+
       margin: 0 !important;
       border: 0;
 }
@@ -23,6 +23,11 @@
 
 #chat.overlay.left {
       left: 0;
+}
+
+/* paired along with `position: absolute` attribute in #chat keeps chat at fixed position on fullscreen */
+#secondary {
+      position: static !important;
 }
 
 #chat.overlay.right {
