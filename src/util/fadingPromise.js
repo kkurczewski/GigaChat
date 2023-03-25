@@ -25,21 +25,3 @@ function fadingPromise(timeout, callback) {
     }
   }).finally(tearDown);
 }
-
-/**
- * @param {number} interval - interval between subsequent callback calls
- * @param {function} callback - cancelable promise-like function
- * 
- * @returns cancelable promise-like function that repeats given callback with given interval
- */
-function intervalCallback(interval, callback) {
-  return resolve => {
-    const intervalId = setInterval(() => callback(resolve), interval);
-    console.debug(`Started interval callback [${intervalId}]`);
-
-    return () => {
-      clearTimeout(intervalId);
-      console.debug(`"Started interval callback [${intervalId}]`);
-    }
-  }
-}

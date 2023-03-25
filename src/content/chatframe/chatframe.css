@@ -1,102 +1,102 @@
 /* chat */
-.overlay yt-live-chat-renderer {
+.overlay.fullscreen yt-live-chat-renderer {
       background: rgba(var(--yt-live-chat-background-color-raw), var(--opacity));
 }
 
 /* streamer message */
-.overlay yt-live-chat-text-message-renderer[author-is-owner] {
+.overlay.fullscreen yt-live-chat-text-message-renderer[author-is-owner] {
       background: transparent;
 }
 
-.overlay yt-live-chat-ticker-renderer {
+.overlay.fullscreen yt-live-chat-ticker-renderer {
       background: rgba(var(--yt-live-chat-header-background-color-raw), var(--opacity));
 }
 
 /* banner shadow */
-.overlay yt-live-chat-banner-manager[has-active-banner] {
+.overlay.fullscreen yt-live-chat-banner-manager[has-active-banner] {
       background: none !important;
 }
 
 /* banner background image */
-.overlay yt-live-interactivity-component-background {
+.overlay.fullscreen yt-live-interactivity-component-background {
       opacity: var(--opacity);
 }
 
 /* welcome message card */
-.overlay #card.yt-live-chat-viewer-engagement-message-renderer {
+.overlay.fullscreen #card.yt-live-chat-viewer-engagement-message-renderer {
       display: none !important;
 }
 
 /* donate card */
-.overlay #card #header.yt-live-chat-paid-message-renderer {
+.overlay.fullscreen #card #header.yt-live-chat-paid-message-renderer {
       /* color is defined outside root css hence hardcoded directly here */
       --yt-live-chat-paid-message-header-background-color-raw: 0, 191, 165;
       background: rgba(var(--yt-live-chat-paid-message-header-background-color-raw), max(var(--opacity), 0.5));
 }
 
 /* donate card */
-.overlay #card #content.yt-live-chat-paid-message-renderer {
+.overlay.fullscreen #card #content.yt-live-chat-paid-message-renderer {
       /* color is defined outside root css hence hardcoded directly here */
       --yt-live-chat-paid-message-background-color-raw: 29, 233, 182;
       background-color: rgba(var(--yt-live-chat-paid-message-background-color-raw), max(var(--opacity), 0.5));
 }
 
 /* donate card */
-.overlay #card #header.yt-live-chat-paid-message-renderer #header-content #menu {
+.overlay.fullscreen #card #header.yt-live-chat-paid-message-renderer #header-content #menu {
       background: none !important;
 }
 
-.overlay yt-live-chat-header-renderer {
+.overlay.fullscreen yt-live-chat-header-renderer {
       background: rgba(var(--yt-spec-brand-background-primary-raw), var(--opacity));
 }
 
 /* donate expiration bar */
-.overlay #ticker.yt-live-chat-renderer {
+.overlay.fullscreen #ticker.yt-live-chat-renderer {
       /* style is updated by script hence it is easier to hide rather than applying regular opacity */
       display: none;
 }
 
 /* restricted chat message */
-.overlay #container.yt-live-chat-restricted-participation-renderer {
+.overlay.fullscreen #container.yt-live-chat-restricted-participation-renderer {
       background: transparent;
 }
 
 /* subscriber only toast message */
-.overlay yt-live-chat-toast-renderer {
+.overlay.fullscreen yt-live-chat-toast-renderer {
       opacity: max(var(--opacity), 0.8);
 }
 
 /* support button on hover */
-.overlay #endpoint.yt-live-chat-product-button-renderer:hover {
+.overlay.fullscreen #endpoint.yt-live-chat-product-button-renderer:hover {
       background-color: transparent;
 }
 
-.overlay #live-chat-message-input {
+.overlay.fullscreen #live-chat-message-input {
       background: transparent;
 }
 
-.overlay #chat-messages.x-hidden yt-live-chat-header-renderer {
+.overlay.fullscreen #chat-messages.x-hidden yt-live-chat-header-renderer {
       display: none;
 }
 
-.overlay #chat-messages.x-hidden #separator {
+.overlay.fullscreen #chat-messages.x-hidden #separator {
       display: none;
 }
 
-.overlay #input-panel.x-hidden {
+.overlay.fullscreen #input-panel.x-hidden {
       display: none;
 }
 
 /* 1 px separator between chat and toggle button */
-.overlay #input-panel.x-hidden::after {
+.overlay.fullscreen #input-panel.x-hidden::after {
       display: none;
 }
 
 /* gradient background visible on hover */
-.overlay #menu.yt-live-chat-text-message-renderer {
+.overlay.fullscreen #menu.yt-live-chat-text-message-renderer {
       background: none !important;
 }
 
-.overlay ::-webkit-scrollbar {
+.overlay.fullscreen ::-webkit-scrollbar {
       display: none;
 }

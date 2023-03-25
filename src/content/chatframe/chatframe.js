@@ -1,112 +1,62 @@
-const CSS_ROOT = ":root";
-const CHAT_FRAME_ROOT = "yt-live-chat-app";
-const CHAT = "#chat-messages";
-const CHAT_SEPARATOR = "#input-panel";
-const CHAT_HEADER_MENU = "#trigger #label";
-const CHAT_HEADER_OPTIONS = "#menu a";
-const CHAT_INPUT = "#input-panel";
+const HIDDEN_CLASS = "x-hidden"
 
-const CHAT_MSG_BG_COLOR = "--yt-live-chat-background-color";
-const CHAT_HEADER_COLOR = "--yt-live-chat-header-background-color";
+window.addEventListener("load", async () => {
+  const chatFrame = document.querySelector("yt-live-chat-app")
+  const cssRoot = document.querySelector(":root")
 
-const RAW_COLOR_POSTFIX = "-raw";
+  options.opacity(opacity => {
+    cssRoot.style.setProperty("--opacity", opacity)
+  })
+  options.header(header => {
+    chatFrame.querySelector("#chat-messages").classList.toggle(HIDDEN_CLASS, !header)
+  })
+  options.chatInput(chatInput => {
+    chatFrame.querySelector("#input-panel").classList.toggle(HIDDEN_CLASS, !chatInput)
+  })
+  options.chatMode(chatMode => {
+    const chatMenu = chatFrame.querySelector("#trigger #label")
+    chatMenu.click()
 
-const OPACITY_VAR = "--opacity";
+    const index = ["topChat", "liveChat"].indexOf(chatMode)
+    chatFrame.querySelectorAll("#menu a")[index].click()
+  })
+  options.enabled(enabled => {
+    document.body.classList.toggle("overlay", enabled)
+  })
 
-const HIDDEN_CLASS = "x-hidden";
+  createRawColorProperty("--yt-live-chat-background-color")
+  createRawColorProperty("--yt-live-chat-header-background-color")
 
-const TOP_CHAT_MODE = "topChat";
-const LIVE_CHAT_MODE = "liveChat";
+  const topDocument = window.parent.document
+  topDocument.addEventListener("fullscreenchange", ({ target }) => {
+    document.body.classList.toggle("fullscreen", target.ownerDocument.fullscreenElement != null)
+  })
+  document.body.classList.toggle("fullscreen", topDocument.fullscreenElement != null)
 
-const STORAGE_OPTIONS = "options";
-const OVERLAY_CLASS = "overlay";
+  function createRawColorProperty(property) {
+    const color = getComputedStyle(cssRoot).getPropertyValue(property).trim()
+    cssRoot.style.setProperty(property + "-raw", extractRawColor(color))
 
-window.onload = async () => {
-  const cssRoot = document.querySelector(CSS_ROOT);
-  const chatFrame = document.querySelector(CHAT_FRAME_ROOT);
-  const { options } = await chrome.storage.local.get(STORAGE_OPTIONS);
+    function extractRawColor(color) {
+      return color.startsWith("#")
+        ? extractRawColorFromHex(color)
+        : extractRawColorFromRgb(color)
 
-  chrome.storage.onChanged.addListener(changes => {
-    const updatedOptions = changes.options.newValue;
-    loadOptions(updatedOptions);
-  });
-
-  createRawColors();
-  loadOptions(options);
-
-  function loadOptions(options) {
-    if (!options.enabled) {
-      return;
-    }
-    console.debug("Loading options:", options);
-
-    updateOpacity();
-    updateChatHeader();
-    updateChatMode();
-    updateChatInput();
-
-    function updateChatMode() {
-      const chatMenu = chatFrame.querySelector(CHAT_HEADER_MENU);
-      chatMenu.click();
-
-      const index = getOptionIndex(options.chatMode);
-      chatFrame.querySelectorAll(CHAT_HEADER_OPTIONS)[index].click();
-
-      function getOptionIndex(chatMode) {
-        switch (chatMode) {
-          case TOP_CHAT_MODE:
-            return 0;
-          case LIVE_CHAT_MODE:
-            return 1;
-        }
+      function extractRawColorFromHex(hexColor) {
+        return hexColor
+          .replace("#", "")
+          .split(/(..)/)
+          .filter(String)
+          .map(s => parseInt(s, 16))
+          .join(',')
       }
-    }
 
-    function updateChatHeader() {
-      chatFrame.querySelector(CHAT).classList.toggle(HIDDEN_CLASS, !options.header);
-      chatFrame.querySelector(CHAT_SEPARATOR).classList.toggle(HIDDEN_CLASS, !options.toggleButton);
-    }
-
-    function updateChatInput() {
-      chatFrame.querySelector(CHAT_INPUT).classList.toggle(HIDDEN_CLASS, !options.chatInput);
-    }
-
-    function updateOpacity() {
-      cssRoot.style.setProperty(OPACITY_VAR, options.opacity);
-    }
-  }
-
-  function createRawColors() {
-    [
-      CHAT_MSG_BG_COLOR,
-      CHAT_HEADER_COLOR,
-    ].forEach(createRawColorProperty);
-
-    function createRawColorProperty(property) {
-      const color = getComputedStyle(cssRoot).getPropertyValue(property).trim();
-      cssRoot.style.setProperty(property + RAW_COLOR_POSTFIX, extractRawColor(color));
-
-      function extractRawColor(color) {
-        return color.startsWith("#")
-          ? extractRawColorFromHex(color)
-          : extractRawColorFromRgb(color);
-
-        function extractRawColorFromHex(hexColor) {
-          return hexColor
-            .replace("#", "")
-            .split(/(..)/)
-            .filter(String)
-            .map(s => parseInt(s, 16))
-            .join(',');
-        }
-
-        function extractRawColorFromRgb(rgbColor) {
-          return rgbColor
-            .replace("rgba(", "")
-            .replace(/,[^,]*[)]/, "")
-            .trim();
-        }
+      function extractRawColorFromRgb(rgbColor) {
+        return rgbColor
+          .replace("rgba(", "")
+          .replace(/,[^,]*[)]/, "")
+          .trim()
       }
     }
   }
-}
+})

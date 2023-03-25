@@ -1,70 +1,61 @@
-const STORAGE_OPTIONS = "options";
+window.onload = async () => {
+  const options = await chrome.storage.local.get()
 
-window.onload = () => {
-  const options = {};
+  preloadData()
+  addListeners()
+  console.info("Loaded options:", options)
 
-  chrome.storage.local.get(STORAGE_OPTIONS, loadOptions);
-
-  function loadOptions(data) {
-    console.debug("Load options:", data.options);
-    syncForm();
-    addListeners();
-
-    function syncForm() {
-      Object.assign(options, data.options);
-      document.querySelectorAll("input[type=checkbox]")
-        .forEach(cbox => {
-          cbox.checked = options[cbox.id];
-        });
-      document
-        .querySelectorAll("input[type=range]")
-        .forEach(slider => {
-          slider.value = options[slider.id];
-        });
-      document
-        .querySelectorAll("select")
-        .forEach(select => {
-          select.value = options[select.id];
-        });
-      console.debug("Form synced");
-    }
-
-    function addListeners() {
-      document
-        .querySelectorAll("input[type=checkbox]")
-        .forEach(cbox => {
-          cbox.onchange = event => saveProperty(event.target.id, event.target.checked);
-        });
-      document
-        .querySelectorAll("select")
-        .forEach(select => {
-          select.onchange = (event) => saveProperty(event.target.id, event.target.value);
-        });
-      document
-        .querySelectorAll("input[type=range]")
-        .forEach(slider => applySliderListener(slider));
-
-      function applySliderListener(slider) {
-        const convolute = document.getElementById(slider.dataset.convolute);
-        slider.onchange = event => {
-          const newValue = event.target.value;
-          saveProperty(event.target.id, newValue);
-          if (convolute) {
-            convolute.value = Math.min(slider.max - newValue, convolute.value);
-            saveProperty(convolute.id, convolute.value);
-          }
-        };
-      }
-
-      function saveProperty(nodeId, nodeValue) {
-        options[nodeId] = nodeValue;
-        saveOptions();
-      }
-    }
+  function preloadData() {
+    document.querySelectorAll("input[type=checkbox]")
+      .forEach(cbox => {
+        cbox.checked = options[cbox.id]
+      })
+    document
+      .querySelectorAll("input[type=range]")
+      .forEach(slider => {
+        slider.value = options[slider.id]
+      })
+    document
+      .querySelectorAll("select")
+      .forEach(select => {
+        select.value = options[select.id]
+      })
   }
 
-  function saveOptions() {
-    console.debug("Save options:", options);
-    chrome.storage.local.set({ options });
+  function addListeners() {
+    document
+      .querySelectorAll("input[type=checkbox]")
+      .forEach(cbox => {
+        cbox.onchange = ({ target }) => saveOption({ [target.id]: target.checked })
+      })
+    document
+      .querySelectorAll("select")
+      .forEach(select => {
+        select.onchange = ({ target }) => saveOption({ [target.id]: target.value })
+      })
+    document
+      .querySelectorAll("input[type=range]:not([data-convolute])")
+      .forEach(slider => {
+        slider.onchange = ({ target }) => saveOption({ [target.id]: target.value })
+      })
+    document
+      .querySelectorAll("input[type=range][data-convolute]")
+      .forEach(addConvolutedListeners)
+
+    function addConvolutedListeners(slider) {
+      const convolutedElement = document.getElementById(slider.dataset.convolute)
+      slider.onchange = ({ target }) => {
+        const newValue = target.value
+        convolutedElement.value = Math.min(slider.max - newValue, convolutedElement.value)
+        saveOption({
+          [convolutedElement.id]: convolutedElement.value,
+          [target.id]: newValue,
+        })
+      }
+    }
+
+    function saveOption(option) {
+      chrome.storage.local.set(option)
+    }
   }
 }

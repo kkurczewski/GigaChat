@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "GigaChat",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Add live chat overlay on fullscreen video",
   "icons": {
     "16": "icons/icon16.png",
@@ -19,6 +19,15 @@
   },
   "content_scripts": [
     {
+      "all_frames": true,
+      "matches": [
+        "https://www.youtube.com/*"
+      ],
+      "js": [
+        "content/options.js"
+      ]
+    },
+    {
       "matches": [
         "https://www.youtube.com/*"
       ],
@@ -26,8 +35,7 @@
         "util/fadingPromise.js",
         "util/nodeObservers.js",
         "util/queryNode.js",
-        "content/top/top.js",
-        "content/top/style.js"
+        "content/top/top.js"
       ],
       "css": [
         "content/top/top.css"
