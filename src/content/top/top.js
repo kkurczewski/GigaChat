@@ -12,7 +12,6 @@ addEventListener("load", async () => {
     document.body.classList.toggle("left", position === "left")
   })
   options.toggleButton(toggleButton => {
-    console.log(chat)
     chat.querySelector("#show-hide-button").classList.toggle(HIDDEN_CLASS, !toggleButton)
   })
   options.opacity(opacity => {
