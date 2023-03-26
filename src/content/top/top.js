@@ -2,8 +2,10 @@ const HIDDEN_CLASS = "x-hidden"
 
 addEventListener("load", async () => {
   const cssRoot = document.querySelector(":root")
-  const container = await queryNode(document, "ytd-watch-flexy");
-  const chat = await queryNode(container, "#chat");
+  const root = document.querySelector("#content #page-manager");
+  const videoContainer = await find(root, "ytd-watch-flexy");
+  const chatContainer = videoContainer.querySelector("#secondary #secondary-inner");
+  const chat = await find(chatContainer, "#chat");
 
   options.enabled(enabled => {
     document.body.classList.toggle("overlay", enabled)

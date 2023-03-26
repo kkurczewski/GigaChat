@@ -32,9 +32,7 @@
         "https://www.youtube.com/*"
       ],
       "js": [
-        "util/fadingPromise.js",
-        "util/nodeObservers.js",
-        "util/queryNode.js",
+        "content/mutationObserver.js",
         "content/top/top.js"
       ],
       "css": [
