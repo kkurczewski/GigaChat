@@ -1,18 +1,27 @@
 const options = (() => {
-  async function propertyCallback(property, callback) {
+  const callbacksRegistry = {};
+  chrome.storage.onChanged.addListener(options => {
+    for (let [property, change] of Object.entries(options)) {
+      callbacksRegistry?.[property]?.(change.newValue)
+    }
+  })
+  async function registerCallback(property, callback) {
+    callbacksRegistry[property] = callback
     const options = await chrome.storage.local.get(property)
-    chrome.storage.onChanged.addListener(options => callback(options[property].newValue))
-    callback(options[property])
+    const currentValue = options[property]
+    if (currentValue != null) {
+      callback(currentValue)
+    }
   }
   return {
-    enabled: (callback) => propertyCallback("enabled", callback),
-    position: (callback) => propertyCallback("position", callback),
-    topMargin: (callback) => propertyCallback("topMargin", callback),
-    bottomMargin: (callback) => propertyCallback("bottomMargin", callback),
-    opacity: (callback) => propertyCallback("opacity", callback),
-    chatMode: (callback) => propertyCallback("chatMode", callback),
-    header: (callback) => propertyCallback("header", callback),
-    chatInput: (callback) => propertyCallback("chatInput", callback),
-    toggleButton: (callback) => propertyCallback("toggleButton", callback),
+    enabled: (callback) => registerCallback("enabled", callback),
+    position: (callback) => registerCallback("position", callback),
+    topMargin: (callback) => registerCallback("topMargin", callback),
+    bottomMargin: (callback) => registerCallback("bottomMargin", callback),
+    opacity: (callback) => registerCallback("opacity", callback),
+    chatMode: (callback) => registerCallback("chatMode", callback),
+    header: (callback) => registerCallback("header", callback),
+    chatInput: (callback) => registerCallback("chatInput", callback),
+    toggleButton: (callback) => registerCallback("toggleButton", callback),
   }
 })()
