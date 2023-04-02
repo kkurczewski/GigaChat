@@ -1,4 +1,4 @@
-.overlay [fullscreen] #secondary.ytd-watch-flexy {
+.overlay:has(#chat) [fullscreen] #secondary.ytd-watch-flexy {
       /* paired along with `position: absolute` attribute in #chat keeps chat at fixed position on fullscreen */
       position: static !important;
 }
@@ -35,7 +35,7 @@
 }
 
 /* quality settings */
-.overlay:not(.left) [fullscreen] .ytp-settings-menu {
+.overlay:has(#chat):not(.left) [fullscreen] .ytp-settings-menu {
       left: 70px;
 }
 
