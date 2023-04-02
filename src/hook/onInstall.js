@@ -2,7 +2,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     await migrateLegacyStorageFormat()
 
     const options = await chrome.storage.local.get()
-    if (!options) {
+    if (Object.entries(options).length === 0) {
         loadDefaultOptions()
     }
 
