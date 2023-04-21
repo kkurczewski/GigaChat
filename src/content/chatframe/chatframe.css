@@ -1,6 +1,14 @@
 /* chat */
 .overlay.fullscreen yt-live-chat-renderer {
+      --yt-live-chat-background-color-raw: 15, 15, 15;
+      --yt-live-chat-primary-text-color: #fff;
       background: rgba(var(--yt-live-chat-background-color-raw), var(--opacity));
+      color: var(--yt-live-chat-primary-text-color);
+}
+
+.overlay.fullscreen #author-name {
+      --yt-live-chat-secondary-text-color: 255, 255, 255, 0.7;
+      color: rgba(var(--yt-live-chat-secondary-text-color));
 }
 
 /* streamer message */
@@ -9,6 +17,7 @@
 }
 
 .overlay.fullscreen yt-live-chat-ticker-renderer {
+      --yt-live-chat-header-background-color-raw: 15, 15, 15;
       background: rgba(var(--yt-live-chat-header-background-color-raw), var(--opacity));
 }
 
@@ -29,14 +38,12 @@
 
 /* donate card */
 .overlay.fullscreen #card #header.yt-live-chat-paid-message-renderer {
-      /* color is defined outside root css hence hardcoded directly here */
       --yt-live-chat-paid-message-header-background-color-raw: 0, 191, 165;
       background: rgba(var(--yt-live-chat-paid-message-header-background-color-raw), max(var(--opacity), 0.5));
 }
 
 /* donate card */
 .overlay.fullscreen #card #content.yt-live-chat-paid-message-renderer {
-      /* color is defined outside root css hence hardcoded directly here */
       --yt-live-chat-paid-message-background-color-raw: 29, 233, 182;
       background-color: rgba(var(--yt-live-chat-paid-message-background-color-raw), max(var(--opacity), 0.5));
 }
@@ -47,6 +54,7 @@
 }
 
 .overlay.fullscreen yt-live-chat-header-renderer {
+      --yt-spec-brand-background-primary-raw: 33, 33, 33;
       background: rgba(var(--yt-spec-brand-background-primary-raw), var(--opacity));
 }
 

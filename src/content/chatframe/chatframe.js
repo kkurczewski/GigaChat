@@ -24,39 +24,9 @@ window.addEventListener("load", async () => {
     document.body.classList.toggle("overlay", enabled)
   })
 
-  createRawColorProperty("--yt-live-chat-background-color")
-  createRawColorProperty("--yt-live-chat-header-background-color")
-
   const topDocument = window.parent.document
   topDocument.addEventListener("fullscreenchange", ({ target }) => {
     document.body.classList.toggle("fullscreen", target.ownerDocument.fullscreenElement != null)
   })
   document.body.classList.toggle("fullscreen", topDocument.fullscreenElement != null)
-
-  function createRawColorProperty(property) {
-    const color = getComputedStyle(cssRoot).getPropertyValue(property).trim()
-    cssRoot.style.setProperty(property + "-raw", extractRawColor(color))
-
-    function extractRawColor(color) {
-      return color.startsWith("#")
-        ? extractRawColorFromHex(color)
-        : extractRawColorFromRgb(color)
-
-      function extractRawColorFromHex(hexColor) {
-        return hexColor
-          .replace("#", "")
-          .split(/(..)/)
-          .filter(String)
-          .map(s => parseInt(s, 16))
-          .join(',')
-      }
-
-      function extractRawColorFromRgb(rgbColor) {
-        return rgbColor
-          .replace("rgba(", "")
-          .replace(/,[^,]*[)]/, "")
-          .trim()
-      }
-    }
-  }
 })
