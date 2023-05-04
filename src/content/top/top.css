@@ -13,7 +13,7 @@
   bottom: max(calc(var(--total-margin-ratio) * var(--bottom-margin, 0%)), var(--player-bar));
 
   height: auto !important;
-  min-width: 460px;
+  width: 460px;
   min-height: auto !important;
 
   margin: 0 !important;
@@ -21,7 +21,7 @@
 }
 
 /* remove rounding from chat elements */
-.overlay [fullscreen] :is(#chat, #chat *) {
+.overlay [fullscreen] :is(#chat, #chat > *) {
   border-radius: 0px !important;
 }
 

@@ -2,7 +2,9 @@ const options = (() => {
   const callbacksRegistry = {}
   chrome.storage.onChanged.addListener(options => {
     for (let [property, change] of Object.entries(options)) {
-      callbacksRegistry?.[property]?.(change.newValue)
+      if (change.newValue != null) {
+        callbacksRegistry?.[property]?.(change.newValue)
+      }
     }
   })
   async function registerCallback(property, callback) {
@@ -20,6 +22,7 @@ const options = (() => {
     enabled: (callback) => registerCallback("enabled", callback),
     header: (callback) => registerCallback("header", callback),
     opacity: (callback) => registerCallback("opacity", callback),
+    placement: (callback) => registerCallback("placement", callback),
     position: (callback) => registerCallback("position", callback),
     settings: (callback) => registerCallback("settings", callback),
     toggleButton: (callback) => registerCallback("toggleButton", callback),

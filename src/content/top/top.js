@@ -1,11 +1,18 @@
 const HIDDEN_CLASS = "x-hidden"
 
-addEventListener("load", async () => {
+window.addEventListener("load", async () => {
   const cssRoot = document.querySelector(":root")
   const root = document.querySelector("#content #page-manager")
 
   options.enabled(enabled => {
     document.body.classList.toggle("overlay", enabled)
+    document.body.classList.toggle("drag-mode", enabled)
+    document.body.classList.toggle("manual-placement", enabled)
+  })
+  options.placement(placement => {
+    const dragMode = placement == "drag"
+    document.body.classList.toggle("drag-mode", dragMode)
+    document.body.classList.toggle("manual-placement", dragMode)
   })
   options.position(position => {
     document.body.classList.toggle("left", position === "left")
@@ -26,9 +33,10 @@ addEventListener("load", async () => {
   const videoContainer = await find(root, "ytd-watch-flexy")
   const chatContainer = videoContainer.querySelector("#secondary #secondary-inner")
 
-  observe(chatContainer, "#chat", chat => {
-    options.toggleButton(toggleButton => {
-      chat.querySelector("#show-hide-button").classList.toggle(HIDDEN_CLASS, !toggleButton)
-    })
+  const chat = await find(chatContainer, "#chat")
+  options.toggleButton(toggleButton => {
+    chat.querySelector("#show-hide-button").classList.toggle(HIDDEN_CLASS, !toggleButton)
   })
+
+  installDragActions(chat)
 })

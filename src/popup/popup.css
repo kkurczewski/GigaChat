@@ -1,7 +1,7 @@
 html {
   background-color: #f6f6f6;
   color: #484848;
-  width: 200px;
+  width: 220px;
 }
 
 #version {
@@ -53,6 +53,20 @@ fieldset > :first-child {
  * If chat is on left side settings doesn't collide with it hence this setting doesn't apply
  */
 #position:has(option[value=left]:checked) ~ :is(#settings, label[for=settings]) {
+  display: none;
+}
+
+/**
+ * If chat is on left side settings doesn't collide with it hence this setting doesn't apply
+ */
+#position:has(option[value=left]:checked) ~ :is(#settings, label[for=settings]) {
+  display: none;
+}
+
+/**
+ * If placement is set to drag hide preset-related options
+ */
+fieldset:has(#placement option[value=drag]:checked) #placement ~ * {
   display: none;
 }
 
