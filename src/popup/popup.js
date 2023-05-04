@@ -42,6 +42,8 @@ window.onload = async () => {
       .querySelectorAll("input[type=range][data-convolute]")
       .forEach(addConvolutedListeners)
 
+    forceUpdatePlacement()
+
     function addConvolutedListeners(slider) {
       const convolutedElement = document.getElementById(slider.dataset.convolute)
       slider.onchange = ({ target }) => {
@@ -54,8 +56,17 @@ window.onload = async () => {
       }
     }
 
+    function forceUpdatePlacement() {
+      const placementSelect = document.getElementById("placement")
+      if (placementSelect.value == "drag") {
+        // force refresh flag value
+        saveOption({ [placementSelect.id]: null })
+        saveOption({ [placementSelect.id]: placementSelect.value })
+      }
+    }
+
     function saveOption(option) {
-      console.log("Saving: ", option)
+      console.log("Saving:", option)
       chrome.storage.local.set(option)
     }
   }

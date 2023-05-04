@@ -33,10 +33,14 @@
       ],
       "js": [
         "content/mutationObserver.js",
+        "content/drag/dragListener.js",
+        "content/drag/dragElement.js",
+        "content/drag/dragActions.js",
         "content/top/top.js"
       ],
       "css": [
-        "content/top/top.css"
+        "content/top/top.css",
+        "content/top/drag.css"
       ]
     },
     {
