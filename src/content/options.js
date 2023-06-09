@@ -1,5 +1,5 @@
 const options = (() => {
-  const callbacksRegistry = {};
+  const callbacksRegistry = {}
   chrome.storage.onChanged.addListener(options => {
     for (let [property, change] of Object.entries(options)) {
       callbacksRegistry?.[property]?.(change.newValue)

@@ -1,110 +1,110 @@
 /* chat */
 .overlay.fullscreen yt-live-chat-renderer {
-      --yt-live-chat-background-color-raw: 15, 15, 15;
-      --yt-live-chat-primary-text-color: #fff;
-      background: rgba(var(--yt-live-chat-background-color-raw), var(--opacity));
-      color: var(--yt-live-chat-primary-text-color);
+  --yt-live-chat-background-color-raw: 15, 15, 15;
+  --yt-live-chat-primary-text-color: #fff;
+  background: rgba(var(--yt-live-chat-background-color-raw), var(--opacity));
+  color: var(--yt-live-chat-primary-text-color);
 }
 
 .overlay.fullscreen #author-name {
-      --yt-live-chat-secondary-text-color: 255, 255, 255, 0.7;
-      color: rgba(var(--yt-live-chat-secondary-text-color));
+  --yt-live-chat-secondary-text-color: 255, 255, 255, 0.7;
+  color: rgba(var(--yt-live-chat-secondary-text-color));
 }
 
 /* streamer message */
 .overlay.fullscreen yt-live-chat-text-message-renderer[author-is-owner] {
-      background: transparent;
+  background: transparent;
 }
 
 .overlay.fullscreen yt-live-chat-ticker-renderer {
-      --yt-live-chat-header-background-color-raw: 15, 15, 15;
-      background: rgba(var(--yt-live-chat-header-background-color-raw), var(--opacity));
+  --yt-live-chat-header-background-color-raw: 15, 15, 15;
+  background: rgba(var(--yt-live-chat-header-background-color-raw), var(--opacity));
 }
 
 /* banner shadow */
 .overlay.fullscreen yt-live-chat-banner-manager[has-active-banner] {
-      background: none !important;
+  background: none !important;
 }
 
 /* banner background image */
 .overlay.fullscreen yt-live-interactivity-component-background {
-      opacity: var(--opacity);
+  opacity: var(--opacity);
 }
 
 /* welcome message card */
 .overlay.fullscreen #card.yt-live-chat-viewer-engagement-message-renderer {
-      display: none !important;
+  display: none !important;
 }
 
 /* donate card */
 .overlay.fullscreen #card #header.yt-live-chat-paid-message-renderer {
-      --yt-live-chat-paid-message-header-background-color-raw: 0, 191, 165;
-      background: rgba(var(--yt-live-chat-paid-message-header-background-color-raw), max(var(--opacity), 0.5));
+  --yt-live-chat-paid-message-header-background-color-raw: 0, 191, 165;
+  background: rgba(var(--yt-live-chat-paid-message-header-background-color-raw), max(var(--opacity), 0.5));
 }
 
 /* donate card */
 .overlay.fullscreen #card #content.yt-live-chat-paid-message-renderer {
-      --yt-live-chat-paid-message-background-color-raw: 29, 233, 182;
-      background-color: rgba(var(--yt-live-chat-paid-message-background-color-raw), max(var(--opacity), 0.5));
+  --yt-live-chat-paid-message-background-color-raw: 29, 233, 182;
+  background-color: rgba(var(--yt-live-chat-paid-message-background-color-raw), max(var(--opacity), 0.5));
 }
 
 /* donate card */
 .overlay.fullscreen #card #header.yt-live-chat-paid-message-renderer #header-content #menu {
-      background: none !important;
+  background: none !important;
 }
 
 .overlay.fullscreen yt-live-chat-header-renderer {
-      --yt-spec-brand-background-primary-raw: 33, 33, 33;
-      background: rgba(var(--yt-spec-brand-background-primary-raw), var(--opacity));
+  --yt-spec-brand-background-primary-raw: 33, 33, 33;
+  background: rgba(var(--yt-spec-brand-background-primary-raw), var(--opacity));
 }
 
 /* donate expiration bar */
 .overlay.fullscreen #ticker.yt-live-chat-renderer {
-      /* style is updated by script hence it is easier to hide rather than applying regular opacity */
-      display: none;
+  /* style is updated by script hence it is easier to hide rather than applying regular opacity */
+  display: none;
 }
 
 /* restricted chat message */
 .overlay.fullscreen #container.yt-live-chat-restricted-participation-renderer {
-      background: transparent;
+  background: transparent;
 }
 
 /* subscriber only toast message */
 .overlay.fullscreen yt-live-chat-toast-renderer {
-      opacity: max(var(--opacity), 0.8);
+  opacity: max(var(--opacity), 0.8);
 }
 
 /* support button on hover */
 .overlay.fullscreen #endpoint.yt-live-chat-product-button-renderer:hover {
-      background-color: transparent;
+  background-color: transparent;
 }
 
 .overlay.fullscreen #live-chat-message-input {
-      background: transparent;
+  background: transparent;
 }
 
 .overlay.fullscreen #chat-messages.x-hidden yt-live-chat-header-renderer {
-      display: none;
+  display: none;
 }
 
 .overlay.fullscreen #chat-messages.x-hidden #separator {
-      display: none;
+  display: none;
 }
 
 .overlay.fullscreen #input-panel.x-hidden {
-      display: none;
+  display: none;
 }
 
 /* 1 px separator between chat and toggle button */
 .overlay.fullscreen #input-panel.x-hidden::after {
-      display: none;
+  display: none;
 }
 
 /* gradient background visible on hover */
 .overlay.fullscreen #menu.yt-live-chat-text-message-renderer {
-      background: none !important;
+  background: none !important;
 }
 
 .overlay.fullscreen ::-webkit-scrollbar {
-      display: none;
+  display: none;
 }

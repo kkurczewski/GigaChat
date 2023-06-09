@@ -2,64 +2,64 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="popup.css" />
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="popup.css" />
 </head>
 
 <body>
-    <p id="version">GigaChat - Version 1.4.7</p>
-    <form>
-        <fieldset>
-            <span>Settings</span>
+  <p id="version">GigaChat - Version 1.4.7</p>
+  <form>
+    <fieldset>
+      <span>Settings</span>
 
-            <label for="enabled">Enabled</label>
-            <input id="enabled" type="checkbox" checked />
-        </fieldset>
+      <label for="enabled">Enabled</label>
+      <input id="enabled" type="checkbox" checked />
+    </fieldset>
 
-        <fieldset>
-            <span>Position</span>
+    <fieldset>
+      <span>Position</span>
 
-            <label for="topMargin">Top margin</label>
-            <input id="topMargin" type="range" data-convolute="bottomMargin" min="0" max="100" step="5" value="0" />
+      <label for="topMargin">Top margin</label>
+      <input id="topMargin" type="range" data-convolute="bottomMargin" min="0" max="100" step="5" value="0" />
 
-            <label for="bottomMargin">Bottom margin</label>
-            <input id="bottomMargin" type="range" data-convolute="topMargin" min="0" max="100" step="5" value="0" />
+      <label for="bottomMargin">Bottom margin</label>
+      <input id="bottomMargin" type="range" data-convolute="topMargin" min="0" max="100" step="5" value="0" />
 
-            <label for="position">Position</label>
-            <select id="position">
-                <option value="left">Left</option>
-                <option value="right" selected>Right</option>
-            </select>
-        </fieldset>
+      <label for="position">Position</label>
+      <select id="position">
+        <option value="left">Left</option>
+        <option value="right" selected>Right</option>
+      </select>
+    </fieldset>
 
-        <fieldset>
-            <span>Style</span>
+    <fieldset>
+      <span>Style</span>
 
-            <label for="opacity">Opacity</label>
-            <input id="opacity" type="range" min="0.0" max="1.0" step="0.1" value="0.6" />
+      <label for="opacity">Opacity</label>
+      <input id="opacity" type="range" min="0.0" max="1.0" step="0.1" value="0.6" />
 
-            <label for="chatMode">Chat mode</label>
-            <select id="chatMode">
-                <option value="topChat" selected>Top chat</option>
-                <option value="liveChat">Live chat</option>
-            </select>
-        </fieldset>
+      <label for="chatMode">Chat mode</label>
+      <select id="chatMode">
+        <option value="topChat" selected>Top chat</option>
+        <option value="liveChat">Live chat</option>
+      </select>
+    </fieldset>
 
-        <fieldset>
-            <span>Visibility</span>
+    <fieldset>
+      <span>Visibility</span>
 
-            <label for="header">Chat header</label>
-            <input id="header" type="checkbox" />
+      <label for="header">Chat header</label>
+      <input id="header" type="checkbox" />
 
-            <label for="toggleButton">Collapse button</label>
-            <input id="toggleButton" type="checkbox" checked />
+      <label for="toggleButton">Collapse button</label>
+      <input id="toggleButton" type="checkbox" checked />
 
-            <label for="chatInput">Chat input</label>
-            <input id="chatInput" type="checkbox" checked />
-        </fieldset>
-    </form>
+      <label for="chatInput">Chat input</label>
+      <input id="chatInput" type="checkbox" checked />
+    </fieldset>
+  </form>
 
-    <script type="text/javascript" src="popup.js"></script>
+  <script type="text/javascript" src="popup.js"></script>
 </body>
 
 </html>

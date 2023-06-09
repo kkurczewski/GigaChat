@@ -39,7 +39,7 @@ fieldset {
   background-color: white;
 }
 
-fieldset> :first-child {
+fieldset > :first-child {
   grid-column: 1 / 3;
   font-size: small;
   font-weight: bolder;
