@@ -21,8 +21,7 @@
 }
 
 /* remove rounding from chat elements */
-.overlay [fullscreen] #chat,
-.overlay [fullscreen] #chat * {
+.overlay [fullscreen] :is(#chat, #chat *) {
   border-radius: 0px !important;
 }
 
@@ -34,9 +33,14 @@
   right: 0;
 }
 
-/* quality settings */
-.overlay:has(#chat):not(.left) [fullscreen] .ytp-settings-menu {
+/* move quality settings to left */
+.overlay:not([data-settings=hide]):not(.left):has(#chat) [fullscreen] .ytp-settings-menu {
   left: 70px;
+}
+
+/* hide chat when quality settings open */
+.overlay[data-settings=hide]:not(.left):has(.ytp-settings-menu:not([style*="display: none"])) [fullscreen] #chat {
+  display: none;
 }
 
 .overlay [fullscreen] #chat #show-hide-button {

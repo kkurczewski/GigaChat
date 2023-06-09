@@ -10,6 +10,9 @@ addEventListener("load", async () => {
   options.position(position => {
     document.body.classList.toggle("left", position === "left")
   })
+  options.settings(settings => {
+    document.body.dataset.settings = settings
+  })
   options.opacity(opacity => {
     cssRoot.style.setProperty("--opacity", opacity)
   })

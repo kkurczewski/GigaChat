@@ -31,6 +31,7 @@ select {
 
 fieldset {
   display: grid;
+  grid-row-gap: 3px;
   grid-column-gap: 15px;
   border-radius: 6px;
   border: none;
@@ -46,4 +47,11 @@ fieldset > :first-child {
   border-bottom: 1px #d8d8d8 solid;
   padding-bottom: 3px;
   margin-bottom: 5px;
+}
+
+/**
+ * If chat is on left side settings doesn't collide with it hence this setting doesn't apply
+ */
+#position:has(option[value=left]:checked) ~ :is(#settings, label[for=settings]) {
+  display: none;
 }

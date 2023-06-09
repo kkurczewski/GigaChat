@@ -14,14 +14,15 @@ const options = (() => {
     }
   }
   return {
-    enabled: (callback) => registerCallback("enabled", callback),
-    position: (callback) => registerCallback("position", callback),
-    topMargin: (callback) => registerCallback("topMargin", callback),
     bottomMargin: (callback) => registerCallback("bottomMargin", callback),
-    opacity: (callback) => registerCallback("opacity", callback),
-    chatMode: (callback) => registerCallback("chatMode", callback),
-    header: (callback) => registerCallback("header", callback),
     chatInput: (callback) => registerCallback("chatInput", callback),
+    chatMode: (callback) => registerCallback("chatMode", callback),
+    enabled: (callback) => registerCallback("enabled", callback),
+    header: (callback) => registerCallback("header", callback),
+    opacity: (callback) => registerCallback("opacity", callback),
+    position: (callback) => registerCallback("position", callback),
+    settings: (callback) => registerCallback("settings", callback),
     toggleButton: (callback) => registerCallback("toggleButton", callback),
+    topMargin: (callback) => registerCallback("topMargin", callback),
   }
 })()

@@ -55,6 +55,7 @@ window.onload = async () => {
     }
 
     function saveOption(option) {
+      console.log("Saving: ", option)
       chrome.storage.local.set(option)
     }
   }
