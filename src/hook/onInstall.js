@@ -1,6 +1,4 @@
 chrome.runtime.onInstalled.addListener(async () => {
-  await migrateLegacyStorageFormat()
-
   const options = await chrome.storage.local.get()
   if (Object.entries(options).length === 0) {
     loadDefaultOptions()
@@ -19,13 +17,5 @@ chrome.runtime.onInstalled.addListener(async () => {
       chatInput: true,
     }
     chrome.storage.local.set(defaultOptions)
-  }
-
-  async function migrateLegacyStorageFormat() {
-    const { options } = await chrome.storage.local.get()
-    if (options) {
-      chrome.storage.local.remove("options")
-      chrome.storage.local.set(options)
-    }
   }
 })

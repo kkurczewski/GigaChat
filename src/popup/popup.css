@@ -69,7 +69,3 @@ fieldset > :first-child {
 fieldset:has(#placement option[value=drag]:checked) #placement ~ * {
   display: none;
 }
-
-.preview {
-  display: none;
-}
