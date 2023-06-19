@@ -3,6 +3,7 @@ chrome.runtime.onInstalled.addListener(async () => {
   if (Object.entries(options).length === 0) {
     loadDefaultOptions()
   }
+  console.log(await chrome.storage.local.get())
 
   function loadDefaultOptions() {
     const defaultOptions = {
@@ -15,6 +16,8 @@ chrome.runtime.onInstalled.addListener(async () => {
       header: false,
       toggleButton: true,
       chatInput: true,
+      placement: "preset",
+      settings: "hide",
     }
     chrome.storage.local.set(defaultOptions)
   }
