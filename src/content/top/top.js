@@ -31,9 +31,7 @@ window.addEventListener("load", async () => {
   })
 
   const videoContainer = await find(root, "ytd-watch-flexy")
-  const chatContainer = videoContainer.querySelector("#secondary #secondary-inner")
-
-  const chat = await find(chatContainer, "#chat")
+  const chat = await find(videoContainer, "#chat")
   options.toggleButton(toggleButton => {
     chat.querySelector("#show-hide-button").classList.toggle(HIDDEN_CLASS, !toggleButton)
   })
