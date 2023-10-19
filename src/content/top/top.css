@@ -1,9 +1,9 @@
-.overlay:has(#chat) [fullscreen] #secondary.ytd-watch-flexy {
+.overlay:has(#chat):not(:has(iframe#chatframe[src="about:blank"])) [fullscreen] #secondary.ytd-watch-flexy {
   /* paired along with `position: absolute` attribute in #chat keeps chat at fixed position on fullscreen */
   position: static !important;
 }
 
-.overlay [fullscreen] #chat {
+.overlay:not(:has(iframe#chatframe[src="about:blank"])) [fullscreen] #chat {
   --player-bar: 60px;
   --min-height-ratio: 0.3;
   --total-margin-ratio: calc(1 - var(--min-height-ratio));
