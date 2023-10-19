@@ -24,6 +24,7 @@ const options = (() => {
     opacity: (callback) => registerCallback("opacity", callback),
     placement: (callback) => registerCallback("placement", callback),
     position: (callback) => registerCallback("position", callback),
+    reactions: (callback) => registerCallback("reactions", callback),
     settings: (callback) => registerCallback("settings", callback),
     toggleButton: (callback) => registerCallback("toggleButton", callback),
     topMargin: (callback) => registerCallback("topMargin", callback),

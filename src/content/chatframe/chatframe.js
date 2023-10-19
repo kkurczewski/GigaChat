@@ -4,6 +4,9 @@ window.addEventListener("load", async () => {
   const chatFrame = document.querySelector("yt-live-chat-app")
   const cssRoot = document.querySelector(":root")
 
+  options.enabled(enabled => {
+    document.body.classList.toggle("overlay", enabled)
+  })
   options.opacity(opacity => {
     cssRoot.style.setProperty("--opacity", opacity)
   })
@@ -20,8 +23,8 @@ window.addEventListener("load", async () => {
     const index = ["topChat", "liveChat"].indexOf(chatMode)
     chatFrame.querySelectorAll("#menu a")[index].click()
   })
-  options.enabled(enabled => {
-    document.body.classList.toggle("overlay", enabled)
+  options.reactions(reactions => {
+    chatFrame.querySelector("#reaction-control-panel-overlay").classList.toggle(HIDDEN_CLASS, !reactions)
   })
 
   const topDocument = window.parent.document

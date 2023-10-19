@@ -18,6 +18,7 @@ chrome.runtime.onInstalled.addListener(async () => {
       chatInput: true,
       placement: "preset",
       settings: "hide",
+      reactions: true,
     }
     chrome.storage.local.set(defaultOptions)
   }
