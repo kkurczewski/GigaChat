@@ -62,10 +62,3 @@ fieldset > :first-child {
 #position:has(option[value=left]:checked) ~ :is(#settings, label[for=settings]) {
   display: none;
 }
-
-/**
- * If placement is set to drag hide preset-related options
- */
-fieldset:has(#placement option[value=drag]:checked) #placement ~ * {
-  display: none;
-}

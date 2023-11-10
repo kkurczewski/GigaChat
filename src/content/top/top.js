@@ -5,13 +5,6 @@ window.addEventListener("load", async () => {
 
   options.enabled(enabled => {
     document.body.classList.toggle("overlay", enabled)
-    document.body.classList.toggle("drag-mode", enabled)
-    document.body.classList.toggle("manual-placement", enabled)
-  })
-  options.placement(placement => {
-    const dragMode = placement == "drag"
-    document.body.classList.toggle("drag-mode", dragMode)
-    document.body.classList.toggle("manual-placement", dragMode)
   })
   options.position(position => {
     document.body.classList.toggle("left", position === "left")
@@ -36,6 +29,4 @@ window.addEventListener("load", async () => {
   options.toggleButton(toggleButton => {
     chat.querySelector("#show-hide-button").classList.toggle(HIDDEN_CLASS, !toggleButton)
   })
-
-  installDragActions(chat)
 })

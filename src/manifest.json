@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "GigaChat",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "Add live chat overlay on fullscreen video",
   "icons": {
     "16": "icons/icon16.png",
@@ -33,14 +33,10 @@
       ],
       "js": [
         "content/mutationObserver.js",
-        "content/drag/dragListener.js",
-        "content/drag/dragElement.js",
-        "content/drag/dragActions.js",
         "content/top/top.js"
       ],
       "css": [
-        "content/top/top.css",
-        "content/top/drag.css"
+        "content/top/top.css"
       ]
     },
     {

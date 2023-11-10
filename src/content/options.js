@@ -22,7 +22,6 @@ const options = (() => {
     enabled: (callback) => registerCallback("enabled", callback),
     header: (callback) => registerCallback("header", callback),
     opacity: (callback) => registerCallback("opacity", callback),
-    placement: (callback) => registerCallback("placement", callback),
     position: (callback) => registerCallback("position", callback),
     reactions: (callback) => registerCallback("reactions", callback),
     settings: (callback) => registerCallback("settings", callback),

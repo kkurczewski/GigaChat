@@ -16,7 +16,6 @@ chrome.runtime.onInstalled.addListener(async () => {
       header: false,
       toggleButton: true,
       chatInput: true,
-      placement: "preset",
       settings: "hide",
       reactions: true,
     }
