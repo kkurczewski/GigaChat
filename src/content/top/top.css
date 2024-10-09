@@ -21,7 +21,7 @@
 }
 
 /* remove rounding from chat elements */
-.overlay [fullscreen] :is(#chat, #chat *) {
+.overlay [fullscreen] ytd-live-chat-frame#chat {
   border-radius: 0px !important;
 }
 
