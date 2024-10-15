@@ -19,23 +19,23 @@ window.addEventListener("DOMContentLoaded", async () => {
     window.performance.mark("settings-changed")
     document.body.dataset.settings = settings
   })
-  options.opacity(opacity => {
-    window.performance.mark("opacity-changed")
-    cssRoot.style.setProperty("--opacity", opacity)
-  })
-  options.topMargin(topMargin => {
-    window.performance.mark("top-margin-changed")
-    cssRoot.style.setProperty("--top-margin", topMargin + "%")
-  })
-  options.bottomMargin(bottomMargin => {
-    window.performance.mark("bottom-margin-changed")
-    cssRoot.style.setProperty("--bottom-margin", bottomMargin + "%")
-  })
 
   const root = await find(document, "#content #page-manager")
   const videoContainer = await find(root, "ytd-watch-flexy")
   const chat = await find(videoContainer, "#chat")
 
+  options.opacity(opacity => {
+    window.performance.mark("opacity-changed")
+    chat.style.setProperty("--opacity", opacity)
+  })
+  options.topMargin(topMargin => {
+    window.performance.mark("top-margin-changed")
+    chat.style.setProperty("--top-margin", topMargin + "%")
+  })
+  options.bottomMargin(bottomMargin => {
+    window.performance.mark("bottom-margin-changed")
+    chat.style.setProperty("--bottom-margin", bottomMargin + "%")
+  })
   options.toggleButton(toggleButton => {
     chat.querySelector("#show-hide-button").classList.toggle(HIDDEN_CLASS, !toggleButton)
   })
