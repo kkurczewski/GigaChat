@@ -1,3 +1,4 @@
+// @ts-nocheck
 const HIDDEN_CLASS = "x-hidden"
 
 window.addEventListener("load", async () => {
