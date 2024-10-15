@@ -25,7 +25,8 @@
       ],
       "js": [
         "content/options.js"
-      ]
+      ],
+      "run_at": "document_start"
     },
     {
       "matches": [
@@ -37,7 +38,8 @@
       ],
       "css": [
         "content/top/top.css"
-      ]
+      ],
+      "run_at": "document_start"
     },
     {
       "all_frames": true,

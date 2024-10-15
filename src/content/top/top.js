@@ -1,25 +1,34 @@
 // @ts-nocheck
 const HIDDEN_CLASS = "x-hidden"
 
-window.addEventListener("load", async () => {
-  const cssRoot = document.querySelector(":root")
+// requires "run_at" in manifest to be set to "document_start" in order to not miss event
+// "DOMContentLoaded" causes CSS recalculation to take less time (order of 1ms instead of ~50ms)
+window.addEventListener("DOMContentLoaded", async () => {
+  window.performance.mark("top-loaded")
+  const cssRoot = document.querySelector(":root") // accessing :root causes recalculation but it doesn't adds up a lot on initial load
 
   options.enabled(enabled => {
+    window.performance.mark("enabled-changed")
     document.body.classList.toggle("overlay", enabled)
   })
   options.position(position => {
+    window.performance.mark("position-changed")
     document.body.classList.toggle("left", position === "left")
   })
   options.settings(settings => {
+    window.performance.mark("settings-changed")
     document.body.dataset.settings = settings
   })
   options.opacity(opacity => {
+    window.performance.mark("opacity-changed")
     cssRoot.style.setProperty("--opacity", opacity)
   })
   options.topMargin(topMargin => {
+    window.performance.mark("top-margin-changed")
     cssRoot.style.setProperty("--top-margin", topMargin + "%")
   })
   options.bottomMargin(bottomMargin => {
+    window.performance.mark("bottom-margin-changed")
     cssRoot.style.setProperty("--bottom-margin", bottomMargin + "%")
   })
 
