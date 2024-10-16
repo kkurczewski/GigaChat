@@ -105,8 +105,8 @@
   background: none !important;
 }
 
-.overlay.fullscreen ::-webkit-scrollbar {
-  display: none;
+.overlay.fullscreen #item-scroller {
+  scrollbar-width: none;
 }
 
 /* reaction overlay */
