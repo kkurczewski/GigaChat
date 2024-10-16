@@ -1,3 +1,4 @@
+// @ts-nocheck
 window.onload = async () => {
   const options = await chrome.storage.local.get()
 

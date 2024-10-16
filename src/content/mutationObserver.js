@@ -1,3 +1,8 @@
+/**
+ * @param {Element} target 
+ * @param {string} selector 
+ * @returns {Promise<Element>}
+ */
 async function find(target, selector) {
   return new Promise(resolve => {
     const observer = new MutationObserver((_, observer) => {
@@ -8,7 +13,7 @@ async function find(target, selector) {
     observer.observe(target, config)
     tryResolve(observer)
 
-    function tryResolve(observer) {
+    function tryResolve(/** @type {MutationObserver} */ observer) {
       const node = target.querySelector(selector)
       if (node) {
         observer.disconnect()
@@ -18,15 +23,21 @@ async function find(target, selector) {
   })
 }
 
+/**
+ * @param {Element} target 
+ * @param {string} selector 
+ * @param {function} callback
+ */
 function observe(target, selector, callback) {
   const observer = new MutationObserver(onMutation)
   const config = { childList: true }
   observer.observe(target, config)
 
-  function onMutation(mutations) {
+  function onMutation(/** @type {Array<MutationRecord>} */ mutations) {
     mutations.forEach(({ addedNodes }) => {
       addedNodes.forEach(node => {
-        if (node.matches?.(selector)) {
+        // @ts-ignore
+        if (node?.matches?.(selector)) {
           callback(node)
         }
       })
