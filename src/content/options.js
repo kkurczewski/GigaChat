@@ -15,17 +15,18 @@ const options = (() => {
       callback(currentValue)
     }
   }
-  return {
-    bottomMargin: (callback) => registerCallback("bottomMargin", callback),
-    chatInput: (callback) => registerCallback("chatInput", callback),
-    chatMode: (callback) => registerCallback("chatMode", callback),
-    enabled: (callback) => registerCallback("enabled", callback),
-    header: (callback) => registerCallback("header", callback),
-    opacity: (callback) => registerCallback("opacity", callback),
-    position: (callback) => registerCallback("position", callback),
-    reactions: (callback) => registerCallback("reactions", callback),
-    settings: (callback) => registerCallback("settings", callback),
-    toggleButton: (callback) => registerCallback("toggleButton", callback),
-    topMargin: (callback) => registerCallback("topMargin", callback),
-  }
+  return Object.assign({}, ...[
+    "bottomMargin",
+    "chatInput",
+    "chatMode",
+    "enabled",
+    "header",
+    "opacity",
+    "position",
+    "reactions",
+    "settings",
+    "topMargin",
+  ].map(property => ({
+    [property]: (/** @type {function} */ callback) => registerListener(property, callback)
+  })))
 })()
