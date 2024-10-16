@@ -42,11 +42,3 @@
 .overlay[data-settings=hide]:not(.left):has(.ytp-settings-menu:not([style*="display: none"])) [fullscreen] #chat {
   visibility: hidden;
 }
-
-.overlay [fullscreen] #chat #show-hide-button {
-  opacity: calc(var(--opacity) + 0.1);
-}
-
-.overlay [fullscreen] #chat #show-hide-button.x-hidden {
-  display: none;
-}
