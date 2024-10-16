@@ -1,14 +1,17 @@
+// Note: every iframe has separate options object
 const options = (() => {
-  const callbacksRegistry = {}
-  chrome.storage.onChanged.addListener(options => {
-    for (let [property, change] of Object.entries(options)) {
+  const listeners = {}
+  // @ts-ignore
+  chrome.storage.onChanged.addListener((/** @type {any} */ options) => {
+    for (const [property, change] of Object.entries(options)) {
       if (change.newValue != null) {
-        callbacksRegistry?.[property]?.(change.newValue)
+        listeners?.[property]?.(change.newValue)
       }
     }
   })
-  async function registerCallback(property, callback) {
-    callbacksRegistry[property] = callback
+  async function registerListener(/** @type {string} */ property, /** @type {function} */ callback) {
+    listeners[property] = callback
+    // @ts-ignore
     const options = await chrome.storage.local.get(property)
     const currentValue = options[property]
     if (currentValue != null) {
