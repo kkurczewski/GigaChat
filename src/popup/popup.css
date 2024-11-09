@@ -62,3 +62,7 @@ fieldset > :first-child {
 #position:has(option[value=left]:checked) ~ :is(#settings, label[for=settings]) {
   display: none;
 }
+
+svg:has(symbol) {
+  display: none;
+}
