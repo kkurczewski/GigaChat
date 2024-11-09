@@ -26,7 +26,6 @@ const options = (() => {
     "header",
     "opacity",
     "position",
-    "reactions",
     "settings",
     "topMargin",
   ].map(property => ({

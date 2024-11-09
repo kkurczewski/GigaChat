@@ -24,9 +24,6 @@ window.addEventListener("load", async () => {
     const index = ["topChat", "liveChat"].indexOf(chatMode)
     chatFrame.querySelectorAll("#menu a")[index].click()
   })
-  options.reactions(reactions => {
-    chatFrame.querySelector("#reaction-control-panel-overlay").classList.toggle(HIDDEN_CLASS, !reactions)
-  })
 
   const topDocument = window.parent.document
   topDocument.addEventListener("fullscreenchange", ({ target }) => {

@@ -108,8 +108,3 @@
 .overlay.fullscreen #item-scroller {
   scrollbar-width: none;
 }
-
-/* reaction overlay */
-#chat #reaction-control-panel-overlay.x-hidden {
-  display: none;
-}
