@@ -12,7 +12,7 @@ window.addEventListener("load", async () => {
     cssRoot.style.setProperty("--opacity", opacity)
   })
   options.header(header => {
-    chatFrame.querySelector("#chat-messages").classList.toggle(HIDDEN_CLASS, !header)
+    chatFrame.querySelector("yt-live-chat-header-renderer").classList.toggle(HIDDEN_CLASS, !header)
   })
   options.chatInput(chatInput => {
     chatFrame.querySelector("#input-panel").classList.toggle(HIDDEN_CLASS, !chatInput)

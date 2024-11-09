@@ -8,106 +8,59 @@
     color: var(--yt-live-chat-primary-text-color);
   }
 
-  #author-name {
-    --yt-live-chat-secondary-text-color: 255, 255, 255, 0.7;
-    color: rgba(var(--yt-live-chat-secondary-text-color));
-  }
-
-  /* streamer message */
-  yt-live-chat-text-message-renderer[author-is-owner] {
-    background: transparent;
-  }
-
-  yt-live-chat-ticker-renderer {
-    --yt-live-chat-header-background-color-raw: 15, 15, 15;
-    background: rgba(var(--yt-live-chat-header-background-color-raw), var(--opacity));
-  }
-
-  /* banner shadow */
-  yt-live-chat-banner-manager[has-active-banner] {
-    background: none !important;
-  }
-
-  /* banner background image */
-  yt-live-interactivity-component-background {
-    opacity: var(--opacity);
-  }
-
-  /* welcome message card */
-  #card.yt-live-chat-viewer-engagement-message-renderer {
-    display: none !important;
-  }
-
-  /* donate card */
-  #card #header.yt-live-chat-paid-message-renderer {
-    --yt-live-chat-paid-message-header-background-color-raw: 0, 191, 165;
-    background: rgba(var(--yt-live-chat-paid-message-header-background-color-raw), max(var(--opacity), 0.5));
-  }
-
-  /* donate card */
-  #card #content.yt-live-chat-paid-message-renderer {
-    --yt-live-chat-paid-message-background-color-raw: 29, 233, 182;
-    background-color: rgba(var(--yt-live-chat-paid-message-background-color-raw), max(var(--opacity), 0.5));
-  }
-
-  /* donate card */
-  #card #header.yt-live-chat-paid-message-renderer #header-content #menu {
-    background: none !important;
-  }
-
+  /* chat header */
   yt-live-chat-header-renderer {
+    &:is(.x-hidden) {
+      display: none;
+    }
+
     --yt-spec-brand-background-primary-raw: 33, 33, 33;
     background: rgba(var(--yt-spec-brand-background-primary-raw), var(--opacity));
   }
 
   /* donate expiration bar */
-  #ticker.yt-live-chat-renderer {
-    /* style is updated by script hence it is easier to hide rather than applying regular opacity */
+  #ticker {
     display: none;
   }
 
-  /* restricted chat message */
-  #container.yt-live-chat-restricted-participation-renderer {
-    background: transparent;
-  }
-
-  /* subscriber only toast message */
-  yt-live-chat-toast-renderer {
-    opacity: max(var(--opacity), 0.8);
-  }
-
-  /* support button on hover */
-  #endpoint.yt-live-chat-product-button-renderer:hover {
-    background-color: transparent;
-  }
-
-  #live-chat-message-input {
-    background: transparent;
-  }
-
-  #chat-messages.x-hidden yt-live-chat-header-renderer {
-    display: none;
-  }
-
-  #chat-messages.x-hidden #separator {
-    display: none;
-  }
-
-  #input-panel.x-hidden {
-    display: none;
-  }
-
-  /* 1 px separator between chat and toggle button */
-  #input-panel.x-hidden::after {
-    display: none;
-  }
-
-  /* gradient background visible on hover */
-  #menu.yt-live-chat-text-message-renderer {
-    background: none !important;
-  }
-
+  /* chat scroll */
   #item-scroller {
     scrollbar-width: none;
+
+    /* community banner */
+    yt-live-chat-viewer-engagement-message-renderer {
+      display: none;
+    }
+  }
+
+  /* chat input box */
+  #input-panel {
+    &:is(.x-hidden) {
+      display: none;
+    }
+
+    /* chat input box */
+    #live-chat-message-input {
+      background: transparent;
+    }
+
+    /* chat input login box (incognito) */
+    yt-live-chat-message-renderer {
+      background: transparent;
+    }
+
+    /* subscriber-only mode */
+    yt-live-chat-restricted-participation-renderer {
+      opacity: var(--opacity);
+    }
+  }
+
+  /* clear chat separators */
+  #panel-pages {
+    border-bottom: 0;
+
+    &:has(#input-panel.x-hidden) {
+      border: 0;
+    }
   }
 }
