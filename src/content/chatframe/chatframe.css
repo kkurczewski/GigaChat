@@ -1,110 +1,113 @@
-/* chat */
-.overlay.fullscreen yt-live-chat-renderer {
-  --yt-live-chat-background-color-raw: 15, 15, 15;
-  --yt-live-chat-primary-text-color: #fff;
-  background: rgba(var(--yt-live-chat-background-color-raw), var(--opacity));
-  color: var(--yt-live-chat-primary-text-color);
-}
+.overlay.fullscreen {
 
-.overlay.fullscreen #author-name {
-  --yt-live-chat-secondary-text-color: 255, 255, 255, 0.7;
-  color: rgba(var(--yt-live-chat-secondary-text-color));
-}
+  /* chat */
+  yt-live-chat-renderer {
+    --yt-live-chat-background-color-raw: 15, 15, 15;
+    --yt-live-chat-primary-text-color: #fff;
+    background: rgba(var(--yt-live-chat-background-color-raw), var(--opacity));
+    color: var(--yt-live-chat-primary-text-color);
+  }
 
-/* streamer message */
-.overlay.fullscreen yt-live-chat-text-message-renderer[author-is-owner] {
-  background: transparent;
-}
+  #author-name {
+    --yt-live-chat-secondary-text-color: 255, 255, 255, 0.7;
+    color: rgba(var(--yt-live-chat-secondary-text-color));
+  }
 
-.overlay.fullscreen yt-live-chat-ticker-renderer {
-  --yt-live-chat-header-background-color-raw: 15, 15, 15;
-  background: rgba(var(--yt-live-chat-header-background-color-raw), var(--opacity));
-}
+  /* streamer message */
+  yt-live-chat-text-message-renderer[author-is-owner] {
+    background: transparent;
+  }
 
-/* banner shadow */
-.overlay.fullscreen yt-live-chat-banner-manager[has-active-banner] {
-  background: none !important;
-}
+  yt-live-chat-ticker-renderer {
+    --yt-live-chat-header-background-color-raw: 15, 15, 15;
+    background: rgba(var(--yt-live-chat-header-background-color-raw), var(--opacity));
+  }
 
-/* banner background image */
-.overlay.fullscreen yt-live-interactivity-component-background {
-  opacity: var(--opacity);
-}
+  /* banner shadow */
+  yt-live-chat-banner-manager[has-active-banner] {
+    background: none !important;
+  }
 
-/* welcome message card */
-.overlay.fullscreen #card.yt-live-chat-viewer-engagement-message-renderer {
-  display: none !important;
-}
+  /* banner background image */
+  yt-live-interactivity-component-background {
+    opacity: var(--opacity);
+  }
 
-/* donate card */
-.overlay.fullscreen #card #header.yt-live-chat-paid-message-renderer {
-  --yt-live-chat-paid-message-header-background-color-raw: 0, 191, 165;
-  background: rgba(var(--yt-live-chat-paid-message-header-background-color-raw), max(var(--opacity), 0.5));
-}
+  /* welcome message card */
+  #card.yt-live-chat-viewer-engagement-message-renderer {
+    display: none !important;
+  }
 
-/* donate card */
-.overlay.fullscreen #card #content.yt-live-chat-paid-message-renderer {
-  --yt-live-chat-paid-message-background-color-raw: 29, 233, 182;
-  background-color: rgba(var(--yt-live-chat-paid-message-background-color-raw), max(var(--opacity), 0.5));
-}
+  /* donate card */
+  #card #header.yt-live-chat-paid-message-renderer {
+    --yt-live-chat-paid-message-header-background-color-raw: 0, 191, 165;
+    background: rgba(var(--yt-live-chat-paid-message-header-background-color-raw), max(var(--opacity), 0.5));
+  }
 
-/* donate card */
-.overlay.fullscreen #card #header.yt-live-chat-paid-message-renderer #header-content #menu {
-  background: none !important;
-}
+  /* donate card */
+  #card #content.yt-live-chat-paid-message-renderer {
+    --yt-live-chat-paid-message-background-color-raw: 29, 233, 182;
+    background-color: rgba(var(--yt-live-chat-paid-message-background-color-raw), max(var(--opacity), 0.5));
+  }
 
-.overlay.fullscreen yt-live-chat-header-renderer {
-  --yt-spec-brand-background-primary-raw: 33, 33, 33;
-  background: rgba(var(--yt-spec-brand-background-primary-raw), var(--opacity));
-}
+  /* donate card */
+  #card #header.yt-live-chat-paid-message-renderer #header-content #menu {
+    background: none !important;
+  }
 
-/* donate expiration bar */
-.overlay.fullscreen #ticker.yt-live-chat-renderer {
-  /* style is updated by script hence it is easier to hide rather than applying regular opacity */
-  display: none;
-}
+  yt-live-chat-header-renderer {
+    --yt-spec-brand-background-primary-raw: 33, 33, 33;
+    background: rgba(var(--yt-spec-brand-background-primary-raw), var(--opacity));
+  }
 
-/* restricted chat message */
-.overlay.fullscreen #container.yt-live-chat-restricted-participation-renderer {
-  background: transparent;
-}
+  /* donate expiration bar */
+  #ticker.yt-live-chat-renderer {
+    /* style is updated by script hence it is easier to hide rather than applying regular opacity */
+    display: none;
+  }
 
-/* subscriber only toast message */
-.overlay.fullscreen yt-live-chat-toast-renderer {
-  opacity: max(var(--opacity), 0.8);
-}
+  /* restricted chat message */
+  #container.yt-live-chat-restricted-participation-renderer {
+    background: transparent;
+  }
 
-/* support button on hover */
-.overlay.fullscreen #endpoint.yt-live-chat-product-button-renderer:hover {
-  background-color: transparent;
-}
+  /* subscriber only toast message */
+  yt-live-chat-toast-renderer {
+    opacity: max(var(--opacity), 0.8);
+  }
 
-.overlay.fullscreen #live-chat-message-input {
-  background: transparent;
-}
+  /* support button on hover */
+  #endpoint.yt-live-chat-product-button-renderer:hover {
+    background-color: transparent;
+  }
 
-.overlay.fullscreen #chat-messages.x-hidden yt-live-chat-header-renderer {
-  display: none;
-}
+  #live-chat-message-input {
+    background: transparent;
+  }
 
-.overlay.fullscreen #chat-messages.x-hidden #separator {
-  display: none;
-}
+  #chat-messages.x-hidden yt-live-chat-header-renderer {
+    display: none;
+  }
 
-.overlay.fullscreen #input-panel.x-hidden {
-  display: none;
-}
+  #chat-messages.x-hidden #separator {
+    display: none;
+  }
 
-/* 1 px separator between chat and toggle button */
-.overlay.fullscreen #input-panel.x-hidden::after {
-  display: none;
-}
+  #input-panel.x-hidden {
+    display: none;
+  }
 
-/* gradient background visible on hover */
-.overlay.fullscreen #menu.yt-live-chat-text-message-renderer {
-  background: none !important;
-}
+  /* 1 px separator between chat and toggle button */
+  #input-panel.x-hidden::after {
+    display: none;
+  }
 
-.overlay.fullscreen #item-scroller {
-  scrollbar-width: none;
+  /* gradient background visible on hover */
+  #menu.yt-live-chat-text-message-renderer {
+    background: none !important;
+  }
+
+  #item-scroller {
+    scrollbar-width: none;
+  }
 }
