@@ -3,7 +3,7 @@
   position: static !important;
 }
 
-[fullscreen] .overlay #chat:not(:has(#chatframe[src="about:blank"])) {
+[fullscreen] .overlay #chat {
   --player-bar: 60px;
   --min-height-ratio: 0.3;
   --total-margin-ratio: calc(1 - var(--min-height-ratio));
