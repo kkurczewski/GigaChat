@@ -21,18 +21,15 @@
 }
 
 /* remove rounding from chat elements */
-[fullscreen] .overlay :is(#chat, #chatframe) {
-  border-top-left-radius: 12px !important;
-  border-bottom-left-radius: 12px !important;
-  border-top-right-radius: 0px !important;
-  border-bottom-right-radius: 0px !important;
+[fullscreen] .overlay:not(.left) :is(#chat, #chatframe) {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
 
-  .left & {
-    border-top-right-radius: 12px !important;
-    border-bottom-right-radius: 12px !important;
-    border-top-left-radius: 0px !important;
-    border-bottom-left-radius: 0px !important;
-  }
+/* remove rounding from chat elements (left) */
+[fullscreen] .overlay.left :is(#chat, #chatframe) {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 
 [fullscreen] .overlay.left #chat {
