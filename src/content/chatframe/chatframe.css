@@ -1,12 +1,8 @@
-.overlay.fullscreen {
-
-  /* chat */
-  yt-live-chat-renderer {
-    --yt-live-chat-background-color-raw: 15, 15, 15;
-    --yt-live-chat-primary-text-color: #fff;
-    background: rgba(var(--yt-live-chat-background-color-raw), var(--opacity));
-    color: var(--yt-live-chat-primary-text-color);
-  }
+yt-live-chat-renderer.overlay.fullscreen {
+  --yt-live-chat-background-color-raw: 15, 15, 15;
+  --yt-live-chat-primary-text-color: #fff;
+  background: rgba(var(--yt-live-chat-background-color-raw), var(--opacity));
+  color: var(--yt-live-chat-primary-text-color);
 
   /* chat header */
   yt-live-chat-header-renderer {

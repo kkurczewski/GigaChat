@@ -2,14 +2,15 @@
 const HIDDEN_CLASS = "x-hidden"
 
 window.addEventListener("load", async () => {
-  const chatFrame = document.querySelector("yt-live-chat-app")
-  const cssRoot = document.querySelector(":root")
+  window.performance.mark("frame-loaded")
+  const chatFrame = document.querySelector("yt-live-chat-renderer")
 
   options.enabled(enabled => {
-    document.body.classList.toggle("overlay", enabled)
+    chatFrame.classList.toggle("overlay", enabled)
   })
   options.opacity(opacity => {
-    cssRoot.style.setProperty("--opacity", opacity)
+    window.performance.mark("opacity-changed")
+    chatFrame.style.setProperty("--opacity", opacity)
   })
   options.header(header => {
     chatFrame.querySelector("yt-live-chat-header-renderer").classList.toggle(HIDDEN_CLASS, !header)
@@ -27,7 +28,7 @@ window.addEventListener("load", async () => {
 
   const topDocument = window.parent.document
   topDocument.addEventListener("fullscreenchange", ({ target }) => {
-    document.body.classList.toggle("fullscreen", target.ownerDocument.fullscreenElement != null)
+    chatFrame.classList.toggle("fullscreen", target.ownerDocument.fullscreenElement != null)
   })
-  document.body.classList.toggle("fullscreen", topDocument.fullscreenElement != null)
+  chatFrame.classList.toggle("fullscreen", topDocument.fullscreenElement != null)
 })
