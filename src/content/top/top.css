@@ -1,9 +1,9 @@
-.overlay:has(#chat):not(:has(iframe#chatframe[src="about:blank"])) [fullscreen] #secondary.ytd-watch-flexy {
+[fullscreen] #secondary.ytd-watch-flexy:has(.overlay) {
   /* paired along with `position: absolute` attribute in #chat keeps chat at fixed position on fullscreen */
   position: static !important;
 }
 
-.overlay:not(:has(iframe#chatframe[src="about:blank"])) [fullscreen] #chat {
+[fullscreen] .overlay #chat:not(:has(#chatframe[src="about:blank"])) {
   --player-bar: 60px;
   --min-height-ratio: 0.3;
   --total-margin-ratio: calc(1 - var(--min-height-ratio));
@@ -21,24 +21,24 @@
 }
 
 /* remove rounding from chat elements */
-.overlay [fullscreen] ytd-live-chat-frame#chat {
+[fullscreen] .overlay #chat {
   border-radius: 0px !important;
 }
 
-.overlay.left [fullscreen] #chat {
+[fullscreen] .overlay.left #chat {
   left: 0;
 }
 
-.overlay:not(.left) [fullscreen] #chat {
+[fullscreen] .overlay:not(.left) #chat {
   right: 0;
 }
 
-/* move quality settings to left */
-.overlay:not([data-settings=hide]):not(.left):has(#chat) [fullscreen] .ytp-settings-menu {
+/* move quality settings to left when chat is on right and "hide" option is off */
+:has(.overlay:not([data-settings=hide]):not(.left) #chat) [fullscreen] .ytp-settings-menu {
   left: 70px;
 }
 
-/* hide chat when quality settings open */
-.overlay[data-settings=hide]:not(.left):has(.ytp-settings-menu:not([style*="display: none"])) [fullscreen] #chat {
+/* hide chat when video quality settings are open and chat is placed on right side and "hide" option is on */
+:has(.ytp-settings-menu:not([style*="display: none"])) [fullscreen] .overlay[data-settings=hide]:not(.left) #chat {
   visibility: hidden;
 }
