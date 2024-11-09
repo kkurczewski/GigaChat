@@ -3,13 +3,13 @@
  * @param {string} selector 
  * @returns {Promise<Element>}
  */
-async function find(target, selector) {
+async function find(target, selector, subtree = false) {
   return new Promise(resolve => {
     const observer = new MutationObserver((_, observer) => {
       tryResolve(observer)
     })
 
-    const config = { childList: true, attributes: true }
+    const config = { childList: true, attributes: true, subtree }
     observer.observe(target, config)
     tryResolve(observer)
 

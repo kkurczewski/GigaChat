@@ -3,7 +3,7 @@
 window.addEventListener("load", async () => {
   console.debug("Lookup nodes...")
 
-  const root = await find(document, "#page-manager")
+  const root = await find(document, "#page-manager", true) // deep search prevents node miss
   console.debug("Found", root)
 
   const videoContainer = await find(root, "ytd-watch-flexy")
