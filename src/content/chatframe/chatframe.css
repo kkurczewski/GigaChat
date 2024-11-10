@@ -21,6 +21,7 @@ yt-live-chat-renderer.overlay.fullscreen {
 
   /* chat scroll */
   #item-scroller {
+    --scrollbar-width: 0;
     scrollbar-width: none;
 
     /* community banner */
