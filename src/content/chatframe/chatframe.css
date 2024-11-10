@@ -51,7 +51,12 @@ yt-live-chat-renderer.overlay.fullscreen {
     }
   }
 
-  /* clear chat separators */
+  /* clear header separator */
+  yt-live-chat-header-renderer.x-hidden ~ #contents > #separator {
+    border-bottom: 0;
+  }
+
+  /* clear chat separator */
   #panel-pages {
     border-bottom: 0;
 
