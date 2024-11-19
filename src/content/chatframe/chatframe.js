@@ -5,6 +5,11 @@ window.addEventListener("load", async () => {
   window.performance.mark("frame-loaded")
   const chatFrame = document.querySelector("yt-live-chat-renderer")
 
+  if (!chatFrame) {
+    // ended premiere doesn't contains chat frame
+    return
+  }
+
   options.enabled(enabled => {
     chatFrame.classList.toggle("overlay", enabled)
   })

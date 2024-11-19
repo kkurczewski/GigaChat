@@ -18,6 +18,11 @@
 
   margin: 0 !important;
   border: 0;
+
+  /* hide message about disabled replay */
+  & > ytd-message-renderer {
+    display: none;
+  }
 }
 
 /* remove rounding from chat elements */
