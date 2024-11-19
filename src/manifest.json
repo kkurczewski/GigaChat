@@ -8,9 +8,6 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "host_permissions": [
-    "https://www.youtube.com/*"
-  ],
   "action": {
     "default_popup": "popup/index.html"
   },
