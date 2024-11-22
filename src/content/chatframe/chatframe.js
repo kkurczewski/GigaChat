@@ -3,7 +3,8 @@ const HIDDEN_CLASS = "x-hidden"
 
 window.addEventListener("load", async () => {
   window.performance.mark("frame-loaded")
-  const chatFrame = document.querySelector("yt-live-chat-renderer")
+  const chat = document.querySelector("yt-live-chat-app")
+  const chatFrame = chat.querySelector("yt-live-chat-renderer")
 
   if (!chatFrame) {
     // ended premiere doesn't contains chat frame
@@ -33,7 +34,7 @@ window.addEventListener("load", async () => {
 
   const topDocument = window.parent.document
   topDocument.addEventListener("fullscreenchange", ({ target }) => {
-    chatFrame.classList.toggle("fullscreen", target.ownerDocument.fullscreenElement != null)
+    chat.classList.toggle("fullscreen", target.ownerDocument.fullscreenElement != null)
   })
-  chatFrame.classList.toggle("fullscreen", topDocument.fullscreenElement != null)
+  chat.classList.toggle("fullscreen", topDocument.fullscreenElement != null)
 })

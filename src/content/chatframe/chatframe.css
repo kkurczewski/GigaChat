@@ -1,4 +1,4 @@
-yt-live-chat-renderer.overlay.fullscreen {
+.fullscreen yt-live-chat-renderer.overlay {
   --yt-live-chat-background-color-raw: 15, 15, 15;
   --yt-live-chat-primary-text-color: #fff;
   background: rgba(var(--yt-live-chat-background-color-raw), var(--opacity));
@@ -65,4 +65,9 @@ yt-live-chat-renderer.overlay.fullscreen {
       border: 0;
     }
   }
+}
+
+/* hide message about disabled chat after livestream */
+yt-live-chat-app.fullscreen:not(:has(.overlay)) {
+  display: none;
 }
