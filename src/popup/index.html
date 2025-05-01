@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="popup.css" />
+  <link rel="stylesheet" type="text/css" href="drag.css" />
 </head>
 
 <body>
@@ -15,42 +16,23 @@
       </path>
     </symbol>
   </svg>
-  <p id="version">GigaChat - Version 1.5.6</p>
+  <p id="version">GigaChat - Version 1.6.0</p>
   <form>
     <fieldset>
-      <span>Settings</span>
+      <span>Overlay</span>
 
       <label for="enabled">Enabled</label>
       <input id="enabled" type="checkbox" checked />
-    </fieldset>
-
-    <fieldset>
-      <span>Position</span>
-
-      <label for="topMargin">Top margin</label>
-      <input id="topMargin" type="range" data-convolute="bottomMargin" min="0" max="100" step="5" value="0" />
-
-      <label for="bottomMargin">Bottom margin</label>
-      <input id="bottomMargin" type="range" data-convolute="topMargin" min="0" max="100" step="5" value="0" />
-
-      <label for="position">Chat</label>
-      <select id="position">
-        <option value="left">Left edge</option>
-        <option value="right" selected>Right edge</option>
-      </select>
-
-      <label for="settings">Settings</label>
-      <select id="settings">
-        <option value="hide" selected>Hide chat</option>
-        <option value="left">Left edge</option>
-      </select>
-    </fieldset>
-
-    <fieldset>
-      <span>Style</span>
 
       <label for="opacity">Opacity</label>
-      <input id="opacity" type="range" min="0.0" max="1.0" step="0.1" value="0.6" />
+      <input id="opacity" type="range" min="0.0" max="1.0" step="0.1" value="0.5" />
+    </fieldset>
+
+    <fieldset>
+      <span>Header</span>
+
+      <label for="header">Show</label>
+      <input id="header" type="checkbox" />
 
       <label for="chatMode">Chat mode</label>
       <select id="chatMode">
@@ -60,13 +42,21 @@
     </fieldset>
 
     <fieldset>
-      <span>Visibility</span>
+      <span>Position</span>
 
-      <label for="header">Chat header</label>
-      <input id="header" type="checkbox" />
+      <div id="area">
+        <div id="box">
+          <div class="handle"></div>
+          <div class="handle"></div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <span>Chat input</span>
 
       <label title="Live broadcast only" for="chatInput">
-        Chat input
+        Show
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14">
           <use xlink:href="#broadcast" />
         </svg>
@@ -75,6 +65,7 @@
     </fieldset>
   </form>
 
+  <script type="text/javascript" src="drag.js"></script>
   <script type="text/javascript" src="popup.js"></script>
 </body>
 

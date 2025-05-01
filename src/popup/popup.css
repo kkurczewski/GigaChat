@@ -1,7 +1,11 @@
 html {
   background-color: #f6f6f6;
   color: #484848;
-  width: 220px;
+  min-width: 300px;
+}
+
+body {
+  margin-bottom: 15px;
 }
 
 #version {
@@ -38,6 +42,11 @@ fieldset {
   margin: 10px 3px 0px 3px;
   box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0, rgba(60, 64, 67, .15) 0 2px 6px 2px;
   background-color: white;
+
+  &:has(label) {
+    width: 200px;
+    margin-left: 12px;
+  }
 }
 
 fieldset > :first-child {

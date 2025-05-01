@@ -7,13 +7,15 @@
   }
 
   .overlay #chat {
-    position: absolute;
-    top: var(--top-margin, 0);
-
     --player-bar: 60px;
-    height: var(--chat-height, auto) !important;
+    --max-height: calc(100% - var(--player-bar));
+
+    position: absolute;
+    top: calc(var(--top-margin, 0) * var(--max-height));
+
+    height: calc(var(--chat-height, auto) * var(--max-height)) !important;
     min-height: 150px !important;
-    max-height: calc(100% - var(--player-bar));
+    max-height: var(--max-height);
     width: 460px;
 
     border: 0;

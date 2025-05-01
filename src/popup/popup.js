@@ -1,12 +1,40 @@
-// @ts-nocheck
 window.onload = async () => {
+  // @ts-ignore
   const options = await chrome.storage.local.get()
+  const box = /** @type {HTMLElement} */ (document.getElementById("box"))
+  const maxHeight = /** @type {number} */ (box.offsetParent?.clientHeight) - 6
 
   preloadData()
   addListeners()
+
   console.info("Loaded options:", options)
 
+  /** 
+   * @param {HTMLElement} box
+   * @param {(draggable: HTMLElement) => void} callback
+   **/
+  dragElement(box, (draggable) => {
+    // @ts-ignore
+    chrome.storage.local.set({
+      chatHeight: draggable.offsetHeight / maxHeight,
+      topMargin: draggable.offsetTop / maxHeight,
+      position: draggable.offsetLeft > 0 ? "right" : "left",
+    })
+  })
+
+  // @ts-ignore
+  chrome.storage.onChanged.addListener((/** @type {any} */ options) => {
+    const opacity = options?.opacity?.newValue
+    if (opacity) {
+      box.style.setProperty("--opacity", opacity)
+    }
+  })
+
   function preloadData() {
+    if (!options) {
+      return
+    }
+
     document.querySelectorAll("input[type=checkbox]")
       .forEach(cbox => {
         cbox.checked = options[cbox.id]
@@ -21,6 +49,11 @@ window.onload = async () => {
       .forEach(select => {
         select.value = options[select.id]
       })
+
+    box.style.top = `${options.topMargin * maxHeight}px`
+    box.style.height = `${Math.min(maxHeight - options.topMargin * maxHeight, options.chatHeight * maxHeight)}px`
+    box.style.right = options.position == "right" ? "0" : ""
+    box.style.setProperty("--opacity", options.opacity)
   }
 
   function addListeners() {
@@ -35,25 +68,10 @@ window.onload = async () => {
         select.onchange = ({ target }) => saveOption({ [target.id]: target.value })
       })
     document
-      .querySelectorAll("input[type=range]:not([data-convolute])")
+      .querySelectorAll("input[type=range]")
       .forEach(slider => {
         slider.onchange = ({ target }) => saveOption({ [target.id]: target.value })
       })
-    document
-      .querySelectorAll("input[type=range][data-convolute]")
-      .forEach(addConvolutedListeners)
-
-    function addConvolutedListeners(slider) {
-      const convolutedElement = document.getElementById(slider.dataset.convolute)
-      slider.onchange = ({ target }) => {
-        const newValue = target.value
-        convolutedElement.value = Math.min(slider.max - newValue, convolutedElement.value)
-        saveOption({
-          [convolutedElement.id]: convolutedElement.value,
-          [target.id]: newValue,
-        })
-      }
-    }
 
     function saveOption(option) {
       console.log("Saving:", option)
