@@ -11,9 +11,6 @@ window.addEventListener("load", async () => {
     return
   }
 
-  options.enabled(enabled => {
-    chatFrame.classList.toggle("overlay", enabled)
-  })
   options.opacity(opacity => {
     window.performance.mark("opacity-changed")
     chatFrame.style.setProperty("--opacity", opacity)
@@ -22,7 +19,7 @@ window.addEventListener("load", async () => {
     chatFrame.querySelector("yt-live-chat-header-renderer").classList.toggle(HIDDEN_CLASS, !header)
   })
   options.chatInput(chatInput => {
-    chatFrame.querySelector("#input-panel").classList.toggle(HIDDEN_CLASS, !chatInput)
+    chatFrame.querySelector("#panel-pages").classList.toggle(HIDDEN_CLASS, !chatInput)
   })
   options.chatMode(chatMode => {
     const chatMenu = chatFrame.querySelector("#trigger #label")

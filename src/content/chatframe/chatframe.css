@@ -1,73 +1,62 @@
-.fullscreen yt-live-chat-renderer.overlay {
-  --yt-live-chat-background-color-raw: 15, 15, 15;
-  --yt-live-chat-primary-text-color: #fff;
-  background: rgba(var(--yt-live-chat-background-color-raw), var(--opacity));
-  color: var(--yt-live-chat-primary-text-color);
+body:has(.fullscreen) {
+  height: 100%;
+}
+
+yt-live-chat-app.fullscreen {
+  min-height: unset;
+
+  /* scroll container */
+  yt-live-chat-renderer {
+    background-color: rgb(15 15 15 / var(--opacity));
+  }
 
   /* chat header */
   yt-live-chat-header-renderer {
-    &:is(.x-hidden) {
-      display: none;
-    }
-
-    --yt-spec-brand-background-primary-raw: 33, 33, 33;
-    background: rgba(var(--yt-spec-brand-background-primary-raw), var(--opacity));
+    background-color: transparent;
   }
 
-  /* donate expiration bar */
-  #ticker {
+  /* chat input */
+  yt-live-chat-message-input-renderer {
+    background-color: transparent;
+
+    /* chat input login box (incognito) */
+    yt-live-chat-message-renderer {
+      background-color: transparent;
+    }
+  }
+
+  /* subscriber mode */
+  yt-live-chat-restricted-participation-renderer #container {
+    background-color: transparent;
+  }
+
+  /* toggle chat header */
+  yt-live-chat-header-renderer.x-hidden {
+    display: none;
+
+    /* clear header separator */
+    & ~ #contents > #separator {
+      border-bottom: 0;
+    }
+  }
+
+  /* toggle chat input */
+  #panel-pages.x-hidden {
     display: none;
   }
 
-  /* chat scroll */
+  /* hide chat scroll */
   #item-scroller {
-    --scrollbar-width: 0;
     scrollbar-width: none;
 
-    /* community banner */
+    /* hide community rules banner */
     yt-live-chat-viewer-engagement-message-renderer {
       display: none;
     }
   }
 
-  /* chat input box */
-  #input-panel {
-    &:is(.x-hidden) {
-      display: none;
-    }
-
-    /* chat input box */
-    #live-chat-message-input {
-      background: transparent;
-    }
-
-    /* chat input login box (incognito) */
-    yt-live-chat-message-renderer {
-      background: transparent;
-    }
-
-    /* subscriber-only mode */
-    yt-live-chat-restricted-participation-renderer {
-      opacity: var(--opacity);
-    }
+  /* hide donate expiration bar (full color bar under header) */
+  #ticker {
+    display: none;
   }
-
-  /* clear header separator */
-  yt-live-chat-header-renderer.x-hidden ~ #contents > #separator {
-    border-bottom: 0;
-  }
-
-  /* clear chat separator */
-  #panel-pages {
-    border-bottom: 0;
-
-    &:has(#input-panel.x-hidden) {
-      border: 0;
-    }
-  }
-}
-
-/* hide message about disabled chat after livestream */
-yt-live-chat-app.fullscreen:not(:has(.overlay)) {
-  display: none;
 }

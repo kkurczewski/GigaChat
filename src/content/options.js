@@ -19,15 +19,14 @@ const options = (() => {
     }
   }
   return Object.assign({}, ...[
-    "bottomMargin",
     "chatInput",
     "chatMode",
     "enabled",
     "header",
     "opacity",
     "position",
-    "settings",
     "topMargin",
+    "chatHeight",
   ].map(property => ({
     [property]: (/** @type {function} */ callback) => registerListener(property, callback)
   })))

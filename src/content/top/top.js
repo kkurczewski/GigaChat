@@ -20,16 +20,10 @@ window.addEventListener("load", async () => {
     window.performance.mark("position-changed")
     chatContainer.classList.toggle("left", position === "left")
   })
-  options.settings(settings => {
-    window.performance.mark("settings-changed")
-    chatContainer.dataset.settings = settings
-  })
   options.topMargin(topMargin => {
-    window.performance.mark("top-margin-changed")
     chatContainer.style.setProperty("--top-margin", `${topMargin}%`)
   })
-  options.bottomMargin(bottomMargin => {
-    window.performance.mark("bottom-margin-changed")
-    chatContainer.style.setProperty("--bottom-margin", `${bottomMargin}%`)
+  options.chatHeight(chatHeight => {
+    chatContainer.style.setProperty("--chat-height", `${chatHeight}%`)
   })
 })

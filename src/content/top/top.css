@@ -1,56 +1,59 @@
-[fullscreen] #secondary.ytd-watch-flexy:has(.overlay) {
-  /* paired along with `position: absolute` attribute in #chat keeps chat at fixed position on fullscreen */
-  position: static !important;
-}
+[fullscreen] {
 
-[fullscreen] .overlay #chat {
-  --player-bar: 60px;
-  --min-height-ratio: 0.3;
-  --total-margin-ratio: calc(1 - var(--min-height-ratio));
+  /* NOTE: #secondary is not unique hence class selector is needed */
+  #secondary.ytd-watch-flexy:has(.overlay) {
+    /* paired along with `position: absolute` attribute in #chat keeps chat at fixed position on fullscreen */
+    position: static;
+  }
 
-  position: absolute;
-  top: max(calc(var(--total-margin-ratio) * var(--top-margin, 0%) - var(--player-bar)), 0%);
-  bottom: max(calc(var(--total-margin-ratio) * var(--bottom-margin, 0%)), var(--player-bar));
+  .overlay #chat {
+    position: absolute;
+    top: var(--top-margin, 0);
 
-  height: auto !important;
-  width: 460px;
-  min-height: auto !important;
+    --player-bar: 60px;
+    height: var(--chat-height, auto) !important;
+    min-height: 150px !important;
+    max-height: calc(100% - var(--player-bar));
+    width: 460px;
 
-  margin: 0 !important;
-  border: 0;
+    border: 0;
 
-  /* hide message about disabled replay */
-  & > ytd-message-renderer {
-    display: none;
+    /* hide when replay is disabled */
+    &:has(> ytd-message-renderer) {
+      display: none;
+    }
+  }
+
+  .overlay.left {
+
+    /* move chat to the left edge */
+    #chat {
+      left: 0;
+    }
+
+    /* remove rounding from chat elements on left edge */
+    :is(#chat, #chatframe) {
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
+  }
+
+  .overlay:not(.left) {
+
+    /* move chat to the right edge */
+    #chat {
+      right: 0;
+    }
+
+    /* remove rounding from chat elements on right edge */
+    :is(#chat, #chatframe) {
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
   }
 }
 
-/* remove rounding from chat elements */
-[fullscreen] .overlay:not(.left) :is(#chat, #chatframe) {
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-}
-
-/* remove rounding from chat elements (left) */
-[fullscreen] .overlay.left :is(#chat, #chatframe) {
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-}
-
-[fullscreen] .overlay.left #chat {
-  left: 0;
-}
-
-[fullscreen] .overlay:not(.left) #chat {
-  right: 0;
-}
-
-/* move quality settings to left when chat is on right and "hide" option is off */
-:has(.overlay:not([data-settings=hide]):not(.left) #chat) [fullscreen] .ytp-settings-menu {
-  left: 70px;
-}
-
 /* hide chat when video quality settings are open and chat is placed on right side and "hide" option is on */
-:has(.ytp-settings-menu:not([style*="display: none"])) [fullscreen] .overlay[data-settings=hide]:not(.left) #chat {
+:has(.ytp-settings-menu:not([style*="display: none"])) [fullscreen] .overlay:not(.left) #chat {
   visibility: hidden;
 }
