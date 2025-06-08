@@ -2,7 +2,7 @@ window.onload = async () => {
   // @ts-ignore
   const options = await chrome.storage.local.get()
   const box = /** @type {HTMLElement} */ (document.getElementById("box"))
-  const maxHeight = /** @type {number} */ (box.offsetParent?.clientHeight) - 6
+  const maxHeight = /** @type {number} */ (box.offsetParent?.clientHeight)
 
   preloadData()
   addListeners()
@@ -50,8 +50,8 @@ window.onload = async () => {
         select.value = options[select.id]
       })
 
-    box.style.top = `${options.topMargin * maxHeight}px`
-    box.style.height = `${Math.min(maxHeight - options.topMargin * maxHeight, options.chatHeight * maxHeight)}px`
+    box.style.top = `calc(${options.topMargin} * ${maxHeight}px)`
+    box.style.height = `calc(${options.chatHeight} * ${maxHeight}px - 6px)` // subtract borders
     box.style.right = options.position == "right" ? "0" : ""
     box.style.setProperty("--opacity", options.opacity)
   }
