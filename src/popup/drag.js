@@ -54,7 +54,7 @@ function dragElement(draggable, callback) {
     const h1 = Math.max(h0 + delta, minHeight)
 
     draggable.style.top = Math.max(0, t0 + h0 - h1) + "px"
-    draggable.style.height = h0 + Math.min(delta, t0) + "px"
+    draggable.style.height = `calc(${h0 + Math.min(delta, t0)}px)`
   }
 
   function dragBottomHandle(/** @type MouseEvent */ e) {
