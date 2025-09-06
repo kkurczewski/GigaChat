@@ -1,5 +1,9 @@
 [fullscreen] {
 
+  #columns:has(#chat) {
+    display: block;
+  }
+
   /* NOTE: #secondary is not unique hence class selector is needed */
   #secondary.ytd-watch-flexy:has(.overlay) {
     /* paired along with `position: absolute` attribute in #chat keeps chat at fixed position on fullscreen */
@@ -8,7 +12,7 @@
 
   .overlay #chat {
     --player-bar: 60px;
-    --max-height: calc(100% - var(--player-bar));
+    --max-height: calc(100vh - var(--player-bar));
 
     position: absolute;
     top: calc(var(--top-margin, 0) * var(--max-height));
