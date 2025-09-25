@@ -59,6 +59,11 @@ yt-live-chat-app.fullscreen {
   #ticker {
     display: none;
   }
+
+  /* streamer message */
+  yt-live-chat-text-message-renderer[author-is-owner] {
+    background-color: transparent;
+  }
 }
 
 /* hide chat when live ended recently and before tab was refreshed */
