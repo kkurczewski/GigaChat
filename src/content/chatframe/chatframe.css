@@ -53,6 +53,11 @@ yt-live-chat-app.fullscreen {
     yt-live-chat-viewer-engagement-message-renderer {
       display: none;
     }
+
+    /* streamer message (floating) */
+    #docked-item, #undocking-item {
+      display: none;
+    }
   }
 
   /* hide donate expiration bar (full color bar under header) */
