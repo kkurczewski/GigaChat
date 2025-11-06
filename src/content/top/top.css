@@ -1,65 +1,65 @@
-[fullscreen] {
+/* comments & chat overlay */
+[fullscreen] #panels-full-bleed-container.overlay {
+  --player-bar: var(--yt-delhi-bottom-controls-height, 60px);
+  --max-height: calc(100vh - var(--player-bar));
 
-  #columns:has(#chat) {
-    display: block;
+  position: absolute;
+  min-height: 150px !important;
+  max-height: var(--max-height);
+  right: 0;
+
+  top: calc(var(--top-margin, 0) * var(--max-height));
+  height: calc(var(--chat-height, auto) * var(--max-height)) !important;
+
+  &.left {
+    right: unset;
   }
 
-  /* NOTE: #secondary is not unique hence class selector is needed */
-  #secondary.ytd-watch-flexy:has(.overlay) {
-    /* paired along with `position: absolute` attribute in #chat keeps chat at fixed position on fullscreen */
-    position: static;
-  }
+  transition: 0.5s ease-out;
 
-  .overlay #chat {
-    --player-bar: 60px;
-    --max-height: calc(100vh - var(--player-bar));
-
-    position: absolute;
-    top: calc(var(--top-margin, 0) * var(--max-height));
-
-    height: calc(var(--chat-height, auto) * var(--max-height)) !important;
-    min-height: 150px !important;
-    max-height: var(--max-height);
-    width: 460px;
-
+  /* fix sizing, visuals */
+  #chat, #panels > * {
+    min-height: unset;
+    margin: 0;
     border: 0;
 
-    /* hide when replay is disabled */
-    &:has(> ytd-message-renderer) {
-      display: none;
+    /* aling comments on right side */
+    width: 100%;
+
+    /* iframe border fix for chat */
+    /* rounded corners (left) */
+    iframe, .overlay.left & {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    /* iframe border fix for chat */
+    /* rounded corners (right) */
+    iframe, .overlay:not(.left) & {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
     }
   }
 
-  .overlay.left {
+  /* comments panel */
+  #panels :is(#content, #header) {
+    --yt-bg-color: var(--yt-spec-raised-background, #212121);
 
-    /* move chat to the left edge */
-    #chat {
-      left: 0;
-    }
+    background-color: color-mix(in srgb, var(--yt-bg-color) calc(var(--opacity) * 100%), transparent);
 
-    /* remove rounding from chat elements on left edge */
-    :is(#chat, #chatframe) {
-      border-top-left-radius: 0px;
-      border-bottom-left-radius: 0px;
+    /* nested elements */
+    #content, #header {
+      background-color: transparent;
     }
   }
 
-  .overlay:not(.left) {
-
-    /* move chat to the right edge */
-    #chat {
-      right: 0;
-    }
-
-    /* remove rounding from chat elements on right edge */
-    :is(#chat, #chatframe) {
-      border-top-right-radius: 0px;
-      border-bottom-right-radius: 0px;
-    }
+  /* comments header */
+  #panels .x-hidden {
+    display: none;
   }
-}
 
-/* hide chat when video quality settings are open and chat is placed on right side and "hide" option is on */
-:has(.ytp-settings-menu:not([style*="display: none"])) [fullscreen] .overlay:not(.left) #chat {
-  visibility: hidden;
+  /* hide three dots on comments (less distraction) */
+  #panels #action-menu:not(:hover) {
+    opacity: 0;
+  }
 }
